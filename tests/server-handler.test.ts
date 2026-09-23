@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 vi.mock("server-only", () => ({}));
 
-import { clientHash, handleIntent, type IntentDependencies } from "../lib/server/handler";
+import { clientHash, handleIntent, isSameOrigin, type IntentDependencies } from "../lib/server/handler";
 import type { LiveConfig } from "../lib/server/config";
 import type { IntentResult } from "../lib/intent";
 
@@ -171,5 +171,42 @@ describe("anonymous rate-limit identity", () => {
 
   it("fails closed for missing production edge identity", () => {
     expect(() => clientHash(request(), { ...config, onVercel: true })).toThrow();
+  });
+});
+
+
+describe("same-origin validation behind Next", () => {
+  it("accepts the actual host when Next normalizes the URL to localhost", async () => {
+    const deps = setup();
+    const req = new Request("http://localhost:3000/api/intent", {
+      method: "POST",
+      headers: { host: "127.0.0.1:3000", origin: "http://127.0.0.1:3000", "content-type": "application/json" },
+      body: JSON.stringify({ draft: "Make an image of a moon" }),
+    });
+    expect((await handleIntent(req, deps)).status).toBe(200);
+    expect(deps.classify).toHaveBeenCalledTimes(1);
+  });
+
+  it.each([
+    { host: "127.0.0.1:3000", origin: "http://localhost:3000" },
+    { host: "127.0.0.1:3000", origin: "http://127.0.0.1:3001" },
+    { host: "127.0.0.1:3000", origin: "https://127.0.0.1:3000" },
+    { host: "127.0.0.1:3000", origin: "http://evil.example", "x-forwarded-host": "evil.example" },
+    { host: "127.0.0.1:3000", origin: "https://127.0.0.1:3000", "x-forwarded-proto": "https" },
+    { host: "evil.example/path", origin: "http://evil.example" },
+    { host: "user@evil.example", origin: "http://evil.example" },
+    { host: "evil.example,127.0.0.1:3000", origin: "http://evil.example" },
+    { host: "127.0.0.1:3000", origin: "http://127.0.0.1:3000", "sec-fetch-site": "cross-site" },
+  ])("rejects mismatched or malformed origins and untrusted proxy headers", (headers) => {
+    const requestHeaders = new Headers();
+    for (const [key, value] of Object.entries(headers)) {
+      if (typeof value === "string") requestHeaders.set(key, value);
+    }
+    const req = new Request("http://localhost:3000/api/intent", { headers: requestHeaders });
+    expect(isSameOrigin(req)).toBe(false);
+  });
+
+  it("uses the URL authority when a synthetic Request has no Host", () => {
+    expect(isSameOrigin(request())).toBe(true);
   });
 });

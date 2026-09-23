@@ -27,6 +27,6 @@ Optional flags:
 
 The default output filename contains the run timestamp and split. Reports include completion and error counts, accuracy, per-mode accuracy, an expected-versus-predicted confusion matrix, probabilities, model identity, and timing summaries. Nearest-rank p50/p95 include all completed calls, including cold starts. Failed calls have individual elapsed times but are excluded from success latency aggregates. A configured server is not necessarily an available provider; the request result remains authoritative.
 
-Interpret the two latency measures separately: client round trip includes HTTP and application work; server-reported latency covers the server's Jev request, not pure model compute. Publish the sample size, completion count, split, model, date, and timing definition next to any result. Never present a fixture, a partial run, or an authored expected label as a live Jev result.
+Interpret the two latency measures separately: client round trip includes HTTP and application work; server-reported latency includes validation, budget reservation, Jev, and settlement, not pure model compute. Publish the sample size, completion count, split, model, date, and timing definition next to any result. Never present a fixture, a partial run, or an authored expected label as a live Jev result.
 
 No live evaluation has been claimed by the dataset authors. A real report is required before reporting accuracy or latency numbers.

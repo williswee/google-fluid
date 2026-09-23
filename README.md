@@ -2,9 +2,9 @@
 
 An independent interaction demo of a composer that adapts as you type. TypeSafe Jev predicts whether a draft is an ordinary request, an image request, a web lookup, a request to draw or attach visual input, or a research task. The composer exposes the relevant capability and changes its background subtly, before submission.
 
-The interface takes inspiration from ChatGPT and has its own identity. This project is not affiliated with OpenAI. It does not run ChatGPT skills: submission produces an explicitly labeled illustrative preview, not a generated image, live search, or research report.
+The interface takes inspiration from ChatGPT and has its own identity. This project is not affiliated with OpenAI or TypeSafe. It does not run ChatGPT skills: submission only confirms the selected route and states that no tool is running. It produces no generated content or mock answers.
 
-The intended public address is [chatgptfluid.vercel.app](https://chatgptfluid.vercel.app). This address is a deployment target, not a statement that the site is already deployed. The repository starts private and can be made public after review.
+The public interface is deployed at [chatgptfluid.vercel.app](https://chatgptfluid.vercel.app). It currently offers explicitly labelled example transitions and manual selection while approval to store the working TypeSafe key in Vercel is pending. The repository is private and will only be made public on an explicit request. See [delivery status](docs/DELIVERY.md) for verified checks and remaining live-inference work.
 
 ## Run locally
 
@@ -84,9 +84,9 @@ npm run evaluate -- --split held-out --base-url http://localhost:3000
 
 Use the same origin the server is listening on; `http://127.0.0.1:3000` is also supported. Run `npm run evaluate -- --help` for options. The harness sends requests sequentially through the normal protected API, stops at the first error, and does not retry. It writes a uniquely named JSON report under `evaluation/results/`; an existing report is never overwritten. Reports contain authored case IDs, labels, predictions, probability distributions, and timings, not private visitor drafts or raw error responses.
 
-Accuracy is reported on completed live responses, with failures and completion counts shown separately. Latency includes cold starts and uses nearest-rank p50/p95: client timing includes HTTP round trip, while server timing covers the Jev request measured by the server. A partial run is explicitly labeled and is not a full-set result.
+Accuracy is reported on completed live responses, with failures and completion counts shown separately. Latency includes cold starts and uses nearest-rank p50/p95: client timing includes HTTP round trip, while server timing covers validation, budget reservation, Jev, and settlement. A partial run is explicitly labeled and is not a full-set result.
 
-The development and held-out sets are separate. Do not tune on held-out failures and continue calling the same set unseen. These small English-only sets check the demo; they do not establish broad model accuracy. **No live accuracy or latency result is claimed until a real evaluation report exists.** See [evaluation notes](evaluation/README.md).
+The development and held-out sets are separate. Do not tune on held-out failures and continue calling the same set unseen. These small English-only sets check the demo; they do not establish broad model accuracy. The measured acceptance run classified all 15 development and 15 held-out prompts correctly. Held-out client p50/p95 was 726.29/1262.93 ms, including cold starts; these small authored sets are not a general accuracy benchmark. See [delivery status](docs/DELIVERY.md) and the committed reports for the exact context. See [evaluation notes](evaluation/README.md).
 
 ## Sharing the work
 

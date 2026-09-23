@@ -1,0 +1,367 @@
+{
+  "schemaVersion": 1,
+  "startedAt": "2026-09-23T13:07:17.590Z",
+  "finishedAt": "2026-09-23T13:07:30.460Z",
+  "endpointOrigin": "http://localhost:3000",
+  "split": "development",
+  "datasetCases": 15,
+  "requestedCases": 15,
+  "partialSample": false,
+  "status": "completed",
+  "methodology": "Sequential live requests through /api/intent. Accuracy excludes failed requests, which are reported separately. Latency uses completed requests and includes cold starts; percentiles use nearest rank. Client timing includes HTTP overhead; server timing is reported by the endpoint. No retries or budget bypasses.",
+  "summary": {
+    "attempted": 15,
+    "completed": 15,
+    "failed": 0,
+    "correct": 15,
+    "accuracy": 1,
+    "perMode": {
+      "general": {
+        "completed": 3,
+        "correct": 3,
+        "accuracy": 1
+      },
+      "image": {
+        "completed": 3,
+        "correct": 3,
+        "accuracy": 1
+      },
+      "web": {
+        "completed": 3,
+        "correct": 3,
+        "accuracy": 1
+      },
+      "research": {
+        "completed": 3,
+        "correct": 3,
+        "accuracy": 1
+      },
+      "sketch": {
+        "completed": 3,
+        "correct": 3,
+        "accuracy": 1
+      }
+    },
+    "confusionMatrix": {
+      "general": {
+        "general": 3,
+        "image": 0,
+        "web": 0,
+        "research": 0,
+        "sketch": 0
+      },
+      "image": {
+        "general": 0,
+        "image": 3,
+        "web": 0,
+        "research": 0,
+        "sketch": 0
+      },
+      "web": {
+        "general": 0,
+        "image": 0,
+        "web": 3,
+        "research": 0,
+        "sketch": 0
+      },
+      "research": {
+        "general": 0,
+        "image": 0,
+        "web": 0,
+        "research": 3,
+        "sketch": 0
+      },
+      "sketch": {
+        "general": 0,
+        "image": 0,
+        "web": 0,
+        "research": 0,
+        "sketch": 3
+      }
+    },
+    "clientRoundTripMs": {
+      "count": 15,
+      "p50": 773.01,
+      "p95": 2100.33,
+      "max": 2100.33
+    },
+    "serverReportedMs": {
+      "count": 15,
+      "p50": 768,
+      "p95": 2094,
+      "max": 2094
+    }
+  },
+  "observations": [
+    {
+      "id": "dev-general-01",
+      "expected": "general",
+      "scenario": "ordinary writing",
+      "elapsedMs": 2100.33,
+      "actual": "general",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 1,
+        "image": 0,
+        "web": 0,
+        "research": 0,
+        "sketch": 0
+      },
+      "serverLatencyMs": 2094
+    },
+    {
+      "id": "dev-general-02",
+      "expected": "general",
+      "scenario": "negated tool request",
+      "elapsedMs": 1036.93,
+      "actual": "general",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 1,
+        "image": 0,
+        "web": 0,
+        "research": 0,
+        "sketch": 0
+      },
+      "serverLatencyMs": 1026
+    },
+    {
+      "id": "dev-general-03",
+      "expected": "general",
+      "scenario": "figurative sketch",
+      "elapsedMs": 805.75,
+      "actual": "general",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 1,
+        "image": 0,
+        "web": 0,
+        "research": 0,
+        "sketch": 0
+      },
+      "serverLatencyMs": 794
+    },
+    {
+      "id": "dev-image-01",
+      "expected": "image",
+      "scenario": "explicit image",
+      "elapsedMs": 630.93,
+      "actual": "image",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0.08,
+        "image": 0.92,
+        "web": 0,
+        "research": 0,
+        "sketch": 0
+      },
+      "serverLatencyMs": 620
+    },
+    {
+      "id": "dev-image-02",
+      "expected": "image",
+      "scenario": "generated sketch",
+      "elapsedMs": 773.01,
+      "actual": "image",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0.03,
+        "image": 0.97,
+        "web": 0,
+        "research": 0,
+        "sketch": 0
+      },
+      "serverLatencyMs": 768
+    },
+    {
+      "id": "dev-image-03",
+      "expected": "image",
+      "scenario": "poster design",
+      "elapsedMs": 690.23,
+      "actual": "image",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0.01,
+        "image": 0.99,
+        "web": 0,
+        "research": 0,
+        "sketch": 0
+      },
+      "serverLatencyMs": 682
+    },
+    {
+      "id": "dev-web-01",
+      "expected": "web",
+      "scenario": "fresh information",
+      "elapsedMs": 696.7,
+      "actual": "web",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0,
+        "image": 0,
+        "web": 1,
+        "research": 0,
+        "sketch": 0
+      },
+      "serverLatencyMs": 686
+    },
+    {
+      "id": "dev-web-02",
+      "expected": "web",
+      "scenario": "official lookup",
+      "elapsedMs": 762.49,
+      "actual": "web",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0,
+        "image": 0,
+        "web": 1,
+        "research": 0,
+        "sketch": 0
+      },
+      "serverLatencyMs": 750
+    },
+    {
+      "id": "dev-web-03",
+      "expected": "web",
+      "scenario": "current software version",
+      "elapsedMs": 713.53,
+      "actual": "web",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0,
+        "image": 0,
+        "web": 1,
+        "research": 0,
+        "sketch": 0
+      },
+      "serverLatencyMs": 703
+    },
+    {
+      "id": "dev-sketch-01",
+      "expected": "sketch",
+      "scenario": "user draws spatial context",
+      "elapsedMs": 795.95,
+      "actual": "sketch",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0.01,
+        "image": 0.01,
+        "web": 0,
+        "research": 0,
+        "sketch": 0.98
+      },
+      "serverLatencyMs": 787
+    },
+    {
+      "id": "dev-sketch-02",
+      "expected": "sketch",
+      "scenario": "user drawing canvas",
+      "elapsedMs": 792.31,
+      "actual": "sketch",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0,
+        "image": 0,
+        "web": 0,
+        "research": 0,
+        "sketch": 1
+      },
+      "serverLatencyMs": 784
+    },
+    {
+      "id": "dev-sketch-03",
+      "expected": "sketch",
+      "scenario": "user attaches drawing",
+      "elapsedMs": 838.34,
+      "actual": "sketch",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0.01,
+        "image": 0,
+        "web": 0,
+        "research": 0,
+        "sketch": 0.99
+      },
+      "serverLatencyMs": 829
+    },
+    {
+      "id": "dev-research-01",
+      "expected": "research",
+      "scenario": "evidence synthesis",
+      "elapsedMs": 713.92,
+      "actual": "research",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0,
+        "image": 0,
+        "web": 0,
+        "research": 1,
+        "sketch": 0
+      },
+      "serverLatencyMs": 704
+    },
+    {
+      "id": "dev-research-02",
+      "expected": "research",
+      "scenario": "multi-source investigation",
+      "elapsedMs": 717.38,
+      "actual": "research",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0.01,
+        "image": 0,
+        "web": 0,
+        "research": 0.99,
+        "sketch": 0
+      },
+      "serverLatencyMs": 709
+    },
+    {
+      "id": "dev-research-03",
+      "expected": "research",
+      "scenario": "mixed intent with research first",
+      "elapsedMs": 780.05,
+      "actual": "research",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0,
+        "image": 0,
+        "web": 0,
+        "research": 1,
+        "sketch": 0
+      },
+      "serverLatencyMs": 773
+    }
+  ]
+}

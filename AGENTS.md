@@ -2,7 +2,7 @@
 
 Standalone project. Follow PRODUCT.md and DESIGN.md. The user explicitly approved TypeSafe Jev inference with a US$5 total launch budget and isolated counters in the existing Supabase Free project. This exception is specific to this demo, not the parent venture board.
 
-Never print or commit credentials, drafts, or parent board data. No extra AI providers, accounts, paid hosting, automatic refills, or tool execution. Keep the GitHub repository private until explicitly asked to publish it. Apply migrations only to the isolated chatgptfluid tables/functions.
+Never print or commit credentials, drafts, or parent board data. No extra AI providers, accounts, paid hosting, automatic refills, or tool execution. Keep the GitHub repository private until explicitly asked to publish it. Migrations are limited to the isolated fluid_private schema and public.fluid_reserve / public.fluid_settle functions.
 
 Run npm test and npm run build. Browser-test the interaction and the real endpoint. Mark samples, outages, and measured results honestly. Do not modify the parent repository.
 

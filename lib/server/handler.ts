@@ -32,6 +32,25 @@ function failure(code: string, error: string, status: number, headers?: HeadersI
   });
 }
 
+export function isSameOrigin(request: Request): boolean {
+  if (request.headers.get("sec-fetch-site") === "cross-site") return false;
+  const origin = request.headers.get("origin");
+  if (!origin || origin === "null") return false;
+  try {
+    const requestUrl = new URL(request.url);
+    // Next can normalize the URL hostname (127.0.0.1 -> localhost). The actual
+    // HTTP Host preserves the browser's destination, including its port.
+    // Do not accept arbitrary x-forwarded-host or x-forwarded-proto headers.
+    const host = request.headers.get("host") ?? requestUrl.host;
+    if (!/^[a-zA-Z0-9.\-:[\]]+$/.test(host)) return false;
+    if (requestUrl.protocol !== "https:" && requestUrl.protocol !== "http:") return false;
+    const target = new URL(`${requestUrl.protocol}//${host}`);
+    return origin === target.origin;
+  } catch {
+    return false;
+  }
+}
+
 export function clientHash(request: Request, config: LiveConfig): string {
   // Vercel overwrites these edge headers. Outside Vercel, ignore spoofable headers.
   const ip = config.onVercel
@@ -86,8 +105,7 @@ export async function handleIntent(
 ): Promise<Response> {
   const startedAt = performance.now();
   if (request.method !== "POST") return failure("METHOD_NOT_ALLOWED", "Use POST for live routing.", 405, { Allow: "POST" });
-  if (request.headers.get("origin") !== new URL(request.url).origin ||
-    request.headers.get("sec-fetch-site") === "cross-site") {
+  if (!isSameOrigin(request)) {
     return failure("INVALID_ORIGIN", "Open this demo directly to use live routing.", 403);
   }
   if (request.headers.get("content-type")?.split(";")[0].trim().toLowerCase() !== "application/json") {

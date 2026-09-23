@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "startedAt": "2026-09-23T13:02:42.177Z",
+  "finishedAt": "2026-09-23T13:02:42.310Z",
+  "endpointOrigin": "http://127.0.0.1:3000",
+  "split": "development",
+  "datasetCases": 15,
+  "requestedCases": 15,
+  "partialSample": false,
+  "status": "interrupted",
+  "stopReason": "INVALID_ORIGIN",
+  "methodology": "Sequential live requests through /api/intent. Accuracy excludes failed requests, which are reported separately. Latency uses completed requests and includes cold starts; percentiles use nearest rank. Client timing includes HTTP overhead; server timing is reported by the endpoint. No retries or budget bypasses.",
+  "summary": {
+    "attempted": 1,
+    "completed": 0,
+    "failed": 1,
+    "correct": 0,
+    "accuracy": null,
+    "perMode": {
+      "general": {
+        "completed": 0,
+        "correct": 0,
+        "accuracy": null
+      },
+      "image": {
+        "completed": 0,
+        "correct": 0,
+        "accuracy": null
+      },
+      "web": {
+        "completed": 0,
+        "correct": 0,
+        "accuracy": null
+      },
+      "research": {
+        "completed": 0,
+        "correct": 0,
+        "accuracy": null
+      },
+      "sketch": {
+        "completed": 0,
+        "correct": 0,
+        "accuracy": null
+      }
+    },
+    "confusionMatrix": {
+      "general": {
+        "general": 0,
+        "image": 0,
+        "web": 0,
+        "research": 0,
+        "sketch": 0
+      },
+      "image": {
+        "general": 0,
+        "image": 0,
+        "web": 0,
+        "research": 0,
+        "sketch": 0
+      },
+      "web": {
+        "general": 0,
+        "image": 0,
+        "web": 0,
+        "research": 0,
+        "sketch": 0
+      },
+      "research": {
+        "general": 0,
+        "image": 0,
+        "web": 0,
+        "research": 0,
+        "sketch": 0
+      },
+      "sketch": {
+        "general": 0,
+        "image": 0,
+        "web": 0,
+        "research": 0,
+        "sketch": 0
+      }
+    },
+    "clientRoundTripMs": {
+      "count": 0,
+      "p50": null,
+      "p95": null,
+      "max": null
+    },
+    "serverReportedMs": {
+      "count": 0,
+      "p50": null,
+      "p95": null,
+      "max": null
+    }
+  },
+  "observations": [
+    {
+      "id": "dev-general-01",
+      "expected": "general",
+      "scenario": "ordinary writing",
+      "elapsedMs": 100.55,
+      "error": {
+        "code": "INVALID_ORIGIN",
+        "httpStatus": 403
+      }
+    }
+  ]
+}
