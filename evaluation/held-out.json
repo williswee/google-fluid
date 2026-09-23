@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "split": "held-out",
+  "language": "en",
+  "description": "Authored held-out acceptance examples. Keep separate from classifier prompt tuning; once used for tuning they are no longer held out. This small set is a demo check, not a general benchmark.",
+  "cases": [
+    { "id": "hold-general-01", "expected": "general", "scenario": "ordinary planning", "draft": "Create a packing checklist for a three-day hiking trip.", "rationale": "The word create does not make a text checklist an image request." },
+    { "id": "hold-general-02", "expected": "general", "scenario": "figurative sketch with negated drawing", "draft": "Sketch out a plan for a community book club in words; I don't want to draw or attach anything.", "rationale": "The phrase means outline a written plan, and user drawing is explicitly negated." },
+    { "id": "hold-general-03", "expected": "general", "scenario": "tool-name explanation", "draft": "Explain what web search means to someone who has never used the internet.", "rationale": "The task is an explanation of a term, not a search." },
+    { "id": "hold-image-01", "expected": "image", "scenario": "photorealistic art", "draft": "Generate a photorealistic picture of an orange cat sleeping in a sunlit train carriage.", "rationale": "The deliverable is a finished image." },
+    { "id": "hold-image-02", "expected": "image", "scenario": "assistant-generated rough visual", "draft": "Draw a rough wireframe of a dashboard with a left sidebar and a sales chart for me.", "rationale": "The assistant is asked to generate a visual output; the user is not asking to draw or attach their own input." },
+    { "id": "hold-image-03", "expected": "image", "scenario": "sketch word as subject", "draft": "Create a polished editorial illustration of a designer sketching at a desk.", "rationale": "Sketching describes the subject of the generated illustration, not a request for user drawing input." },
+    { "id": "hold-web-01", "expected": "web", "scenario": "recent news lookup", "draft": "Find this week's official launch announcements from the European Space Agency.", "rationale": "The task requests bounded, fresh information." },
+    { "id": "hold-web-02", "expected": "web", "scenario": "event details", "draft": "Check the official dates and venue for the next Singapore Writers Festival.", "rationale": "The user wants current event details rather than a synthesized report." },
+    { "id": "hold-web-03", "expected": "web", "scenario": "source discovery", "draft": "Search for the official documentation page explaining CSS container queries.", "rationale": "Finding a specific source is a web lookup." },
+    { "id": "hold-sketch-01", "expected": "sketch", "scenario": "user draws visual explanation", "draft": "I can explain the shelf arrangement better by drawing it myself. Give me a place to draw and send it to you.", "rationale": "The user wants to provide visual context through their own drawing." },
+    { "id": "hold-sketch-02", "expected": "sketch", "scenario": "user attaches annotated sketch", "draft": "Let me attach the annotated sketch I made of our checkout screen.", "rationale": "Attaching an existing user drawing is an input action, not generated visual output." },
+    { "id": "hold-sketch-03", "expected": "sketch", "scenario": "research word as drawing subject", "draft": "Can I draw how our research team reviews a paper and add that drawing to this message?", "rationale": "Research names the team; the requested capability is user drawing input." },
+    { "id": "hold-research-01", "expected": "research", "scenario": "comparative investigation", "draft": "Investigate the long-term outcomes of remote versus office work, comparing credible studies and explaining their limitations.", "rationale": "The task requires evidence comparison and synthesis." },
+    { "id": "hold-research-02", "expected": "research", "scenario": "historical synthesis", "draft": "Prepare an in-depth, source-backed report on why major urban cycling programs have succeeded or failed across several cities.", "rationale": "The user requests broad comparative research rather than one lookup." },
+    { "id": "hold-research-03", "expected": "research", "scenario": "mixed intent with synthesis first", "draft": "First investigate the evidence on ocean plastic removal technologies and compare tradeoffs in a cited report; suggest a chart only after the analysis.", "rationale": "Research is the immediate primary task; charting is explicitly secondary." }
+  ]
+}

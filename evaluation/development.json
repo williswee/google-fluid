@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "split": "development",
+  "language": "en",
+  "description": "Public development examples for iterating on the five-mode routing contract. These are authored evaluation prompts, not user data.",
+  "cases": [
+    { "id": "dev-general-01", "expected": "general", "scenario": "ordinary writing", "draft": "Help me write a warm birthday note to my sister.", "rationale": "Writing prose does not need one of the specialized demo modes." },
+    { "id": "dev-general-02", "expected": "general", "scenario": "negated tool request", "draft": "Don't create an image. Explain how diffusion models work in plain English.", "rationale": "The image action is explicitly negated; the requested output is an explanation." },
+    { "id": "dev-general-03", "expected": "general", "scenario": "figurative sketch", "draft": "Sketch out a plan for launching my newsletter, as a short checklist.", "rationale": "Sketch out is figurative; the requested output is a written plan, not drawing input." },
+    { "id": "dev-image-01", "expected": "image", "scenario": "explicit image", "draft": "Create an image of a quiet rooftop garden at sunrise.", "rationale": "The requested output is a finished image." },
+    { "id": "dev-image-02", "expected": "image", "scenario": "generated sketch", "draft": "Generate a pencil sketch of a cat sleeping beside a window.", "rationale": "The assistant is asked to generate the visual; a sketch style does not request user drawing input." },
+    { "id": "dev-image-03", "expected": "image", "scenario": "poster design", "draft": "Make a minimal poster for a community rooftop garden, with green plants and a cream background.", "rationale": "The assistant is asked to generate visual artwork, not accept a user drawing." },
+    { "id": "dev-web-01", "expected": "web", "scenario": "fresh information", "draft": "Find the latest announcements about reusable rockets.", "rationale": "A fresh information lookup is the primary task." },
+    { "id": "dev-web-02", "expected": "web", "scenario": "official lookup", "draft": "Check the official opening hours of the National Gallery Singapore this weekend.", "rationale": "The user wants a bounded, current factual lookup." },
+    { "id": "dev-web-03", "expected": "web", "scenario": "current software version", "draft": "Look up the current stable version of TypeScript on its official website.", "rationale": "This is one current lookup, not a broad evidence synthesis." },
+    { "id": "dev-sketch-01", "expected": "sketch", "scenario": "user draws spatial context", "draft": "Let me draw the room layout to show you what I mean.", "rationale": "The user wants to supply a drawing as input, which opens Sketch." },
+    { "id": "dev-sketch-02", "expected": "sketch", "scenario": "user drawing canvas", "draft": "Open a canvas so I can sketch my idea for the signup page and attach it here.", "rationale": "The requested capability lets the user draw and attach their own visual context." },
+    { "id": "dev-sketch-03", "expected": "sketch", "scenario": "user attaches drawing", "draft": "I want to attach my hand-drawn diagram so you can understand our login flow.", "rationale": "The diagram is user-provided input, not a request for the assistant to generate one." },
+    { "id": "dev-research-01", "expected": "research", "scenario": "evidence synthesis", "draft": "Research urban heat mitigation, compare the evidence for trees and reflective roofs, and prepare a source-backed report.", "rationale": "The user asks for comparison and synthesis across evidence." },
+    { "id": "dev-research-02", "expected": "research", "scenario": "multi-source investigation", "draft": "Investigate whether a four-day workweek improves productivity, weighing studies, limitations, and conflicting findings.", "rationale": "A multi-source investigation with uncertainty belongs to Research." },
+    { "id": "dev-research-03", "expected": "research", "scenario": "mixed intent with research first", "draft": "Research battery recycling methods first and compare their environmental evidence; later we can turn the findings into an infographic.", "rationale": "Research is the requested immediate task; the infographic is a later deliverable." }
+  ]
+}

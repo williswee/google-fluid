@@ -1,0 +1,10 @@
+.env*
+!.env.example
+.git/
+node_modules/
+.next/
+artifacts/
+test-results/
+playwright-report/
+evaluation/results/
+
