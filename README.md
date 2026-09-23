@@ -4,7 +4,7 @@ An independent interaction demo of a composer that adapts as you type. TypeSafe 
 
 The interface takes inspiration from ChatGPT and has its own identity. This project is not affiliated with OpenAI or TypeSafe. It does not run ChatGPT skills: submission only confirms the selected route and states that no tool is running. It produces no generated content or mock answers.
 
-The public interface is deployed at [chatgptfluid.vercel.app](https://chatgptfluid.vercel.app). It currently offers explicitly labelled example transitions and manual selection while approval to store the working TypeSafe key in Vercel is pending. The repository is private and will only be made public on an explicit request. See [delivery status](docs/DELIVERY.md) for verified checks and remaining live-inference work.
+The public interface is deployed at [chatgptfluid.vercel.app](https://chatgptfluid.vercel.app). Live Jev routing is enabled under the shared US$5 launch allowance. Manual selection and explicitly labelled examples remain available when live routing is unavailable. The repository is private and will only be made public on an explicit request. See [delivery status](docs/DELIVERY.md) for verified checks, recording details, and operating limits.
 
 ## Run locally
 

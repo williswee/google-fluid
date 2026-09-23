@@ -29,4 +29,4 @@ The default output filename contains the run timestamp and split. Reports includ
 
 Interpret the two latency measures separately: client round trip includes HTTP and application work; server-reported latency includes validation, budget reservation, Jev, and settlement, not pure model compute. Publish the sample size, completion count, split, model, date, and timing definition next to any result. Never present a fixture, a partial run, or an authored expected label as a live Jev result.
 
-No live evaluation has been claimed by the dataset authors. A real report is required before reporting accuracy or latency numbers.
+The 23 September 2026 acceptance run completed 15/15 development and 15/15 held-out cases correctly using jev-1.13.0 through the budget-protected local endpoint. Held-out client round-trip p50/p95 was 726.29/1262.93 ms, including cold starts. The complete reports are in `results/`; see [delivery status](../docs/DELIVERY.md) for context. These small authored English sets are demo acceptance checks, not general accuracy benchmarks.
