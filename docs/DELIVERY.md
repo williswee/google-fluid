@@ -32,3 +32,14 @@
 The public status endpoint returned HTTP 200 with liveAvailable=true. A real public POST /api/intent returned HTTP 200, source=live, mode=image, model=jev-1.13.0, and measured server latency of 2,118 ms (2,451 ms client round trip for that single smoke request). The existing ledger and cap are unchanged.
 
 A public recording attempt encountered HTTP 503 and stopped without producing a successful film. The later five-mode browser check and complete public recording passed. The final recording preserves real response timing (server latency 810–1,989 ms across its five decisions) and ends with the public URL. Failed or uncertain calls retain their full budget reservations; no retry or refund bypass was introduced.
+
+## Revision 2 — compact composer and adaptive setup
+
+User-approved after the Impeccable review: compact pill, unfolding mode-specific tool tray, immediate neutral typing feedback, and effort plus named model previews. Image frame choices, search scope/recency, research outline format, and a local sketch input are functional configuration controls. No additional AI provider or downstream tool is called. Manual settings, draft position, and caret are preserved.
+
+- Typing pause reduced from 350 to 150 ms. One in-flight request coalesces subsequent edits into the latest draft. Immediate acknowledgement is distinct from a confirmed decision.
+- Jev classifies capability and effort in one request. The interface maps those values to illustrative model presets; the actual classifier remains jev-1.13.0.
+- 90 unit/integration tests, 17 fixture browser tests, and the production build pass. Browser tests include stable textarea bounds, caret, coalescing, effort/model overrides, keyboard controls, 44px mobile targets, and local drawing controls. Desktop/mobile visual checks passed; the required design detector returned no findings.
+- Existing dataset regressions: development15/15, round-trip p50/p95 743.85/1796.8 ms; previously evaluated held-out-labelled15/15, 778.63/1455.05 ms. These are reused capability regression sets, not fresh held-out benchmarks or effort-accuracy measurements. Reports are in evaluation/results.
+- Six additional authored local-handler checks matched expected capability/effort; their measured Jev stage was319–414ms, with budget database/network work making up a substantial part of total latency. These do not measure production or a browser. See v2-stage-profile-local.json for context and stages.
+- Public deployment verification and the refreshed recording are tracked below after deployment.

@@ -1,7 +1,7 @@
 import "server-only";
 import { createHmac, randomUUID } from "node:crypto";
 import { isIP } from "node:net";
-import { MAX_DRAFT_BYTES, type IntentError } from "../intent";
+import { MAX_DRAFT_BYTES, type IntentError, type IntentTimings } from "../intent";
 import { getLiveConfig, type LiveConfig } from "./config";
 import { reserveBudget, settleBudget } from "./budget";
 import { classifyDraft } from "./jev";
@@ -123,8 +123,11 @@ export async function handleIntent(
   if (!config) return failure("DISABLED", "Live routing is not connected. You can still explore the example prompts.", 503);
   if (request.signal.aborted) return failure("CANCELLED", "The routing request was cancelled.", 499);
   const requestId = deps.requestId();
+  const timings: IntentTimings = { reserveMs: 0, inferenceMs: 0, settleMs: 0 };
+  let stageStartedAt = performance.now();
   try {
     const reservation = await deps.reserve(config, requestId, clientHash(request, config));
+    timings.reserveMs = Math.max(0, Math.round(performance.now() - stageStartedAt));
     if (!reservation.allowed) {
       if (reservation.reason === "rate_limited") {
         return failure("RATE_LIMITED", "Live routing is taking a short pause. Try again in a minute.", 429, { "Retry-After": "60" });
@@ -139,19 +142,30 @@ export async function handleIntent(
   }
 
   try {
+    stageStartedAt = performance.now();
     const { result, inputTokens } = await deps.classify(config, draft, request.signal);
+    timings.inferenceMs = Math.max(0, Math.round(performance.now() - stageStartedAt));
+    stageStartedAt = performance.now();
     try {
       await deps.settle(config, requestId, inputTokens);
     } catch {
       // The full reservation remains charged against the cap; no prompt or key is logged.
       console.warn("Live routing settlement unavailable; conservative reservation retained.");
     }
+    timings.settleMs = Math.max(0, Math.round(performance.now() - stageStartedAt));
+    const latencyMs = Math.max(0, Math.round(performance.now() - startedAt));
     return Response.json({
       ...result,
+      timings,
       // Includes validation, durable reservation, Jev, and budget settlement.
       // Browser/network travel time must be measured separately by the client.
-      latencyMs: Math.max(0, Math.round(performance.now() - startedAt)),
-    }, { headers: JSON_HEADERS });
+      latencyMs,
+    }, {
+      headers: {
+        ...JSON_HEADERS,
+        "Server-Timing": `reserve;dur=${timings.reserveMs}, jev;dur=${timings.inferenceMs}, settle;dur=${timings.settleMs}, total;dur=${latencyMs}`,
+      },
+    });
   } catch {
     // Do not refund: the provider may have processed a timed-out or cancelled request.
     return failure("UNAVAILABLE", "Live routing could not finish. Keep typing or try again shortly.", 503);

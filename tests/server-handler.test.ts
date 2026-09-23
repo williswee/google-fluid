@@ -15,6 +15,8 @@ const config: LiveConfig = {
 const result: IntentResult = {
   mode: "image",
   probabilities: { general: 0.05, image: 0.95, web: 0, research: 0, sketch: 0 },
+  effort: "balanced",
+  effortProbabilities: { brief: 0.1, balanced: 0.8, deep: 0.1 },
   model: "jev-1.13.0",
   latencyMs: 170,
   source: "live",
@@ -57,7 +59,12 @@ describe("intent endpoint", () => {
     deps.settle.mockImplementation(async () => { clock += 80; });
     const response = await handleIntent(request(), deps);
     expect(response.status).toBe(200);
-    expect(await response.json()).toEqual({ ...result, latencyMs: 310 });
+    expect(await response.json()).toEqual({
+      ...result,
+      latencyMs: 310,
+      timings: { reserveMs: 60, inferenceMs: 170, settleMs: 80 },
+    });
+    expect(response.headers.get("server-timing")).toBe("reserve;dur=60, jev;dur=170, settle;dur=80, total;dur=310");
     expect(response.headers.get("cache-control")).toBe("no-store");
     expect(deps.reserve.mock.invocationCallOrder[0]).toBeLessThan(deps.classify.mock.invocationCallOrder[0]);
     expect(deps.classify.mock.invocationCallOrder[0]).toBeLessThan(deps.settle.mock.invocationCallOrder[0]);
@@ -140,7 +147,15 @@ describe("intent endpoint", () => {
     vi.spyOn(console, "warn").mockImplementation(() => undefined);
     const response = await handleIntent(request(), deps);
     expect(response.status).toBe(200);
-    expect(await response.json()).toEqual({ ...result, latencyMs: expect.any(Number) });
+    expect(await response.json()).toEqual({
+      ...result,
+      latencyMs: expect.any(Number),
+      timings: {
+        reserveMs: expect.any(Number),
+        inferenceMs: expect.any(Number),
+        settleMs: expect.any(Number),
+      },
+    });
     expect(deps.settle).toHaveBeenCalledTimes(1);
   });
 

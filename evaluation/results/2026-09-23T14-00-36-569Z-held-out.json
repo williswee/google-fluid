@@ -1,0 +1,367 @@
+{
+  "schemaVersion": 1,
+  "startedAt": "2026-09-23T14:00:36.569Z",
+  "finishedAt": "2026-09-23T14:00:49.854Z",
+  "endpointOrigin": "http://127.0.0.1:3000",
+  "split": "held-out",
+  "datasetCases": 15,
+  "requestedCases": 15,
+  "partialSample": false,
+  "status": "completed",
+  "methodology": "Sequential live requests through /api/intent. Accuracy excludes failed requests, which are reported separately. Latency uses completed requests and includes cold starts; percentiles use nearest rank. Client timing includes HTTP overhead; server timing is reported by the endpoint. No retries or budget bypasses.",
+  "summary": {
+    "attempted": 15,
+    "completed": 15,
+    "failed": 0,
+    "correct": 15,
+    "accuracy": 1,
+    "perMode": {
+      "general": {
+        "completed": 3,
+        "correct": 3,
+        "accuracy": 1
+      },
+      "image": {
+        "completed": 3,
+        "correct": 3,
+        "accuracy": 1
+      },
+      "web": {
+        "completed": 3,
+        "correct": 3,
+        "accuracy": 1
+      },
+      "research": {
+        "completed": 3,
+        "correct": 3,
+        "accuracy": 1
+      },
+      "sketch": {
+        "completed": 3,
+        "correct": 3,
+        "accuracy": 1
+      }
+    },
+    "confusionMatrix": {
+      "general": {
+        "general": 3,
+        "image": 0,
+        "web": 0,
+        "research": 0,
+        "sketch": 0
+      },
+      "image": {
+        "general": 0,
+        "image": 3,
+        "web": 0,
+        "research": 0,
+        "sketch": 0
+      },
+      "web": {
+        "general": 0,
+        "image": 0,
+        "web": 3,
+        "research": 0,
+        "sketch": 0
+      },
+      "research": {
+        "general": 0,
+        "image": 0,
+        "web": 0,
+        "research": 3,
+        "sketch": 0
+      },
+      "sketch": {
+        "general": 0,
+        "image": 0,
+        "web": 0,
+        "research": 0,
+        "sketch": 3
+      }
+    },
+    "clientRoundTripMs": {
+      "count": 15,
+      "p50": 778.63,
+      "p95": 1455.05,
+      "max": 1455.05
+    },
+    "serverReportedMs": {
+      "count": 15,
+      "p50": 770,
+      "p95": 1449,
+      "max": 1449
+    }
+  },
+  "observations": [
+    {
+      "id": "hold-general-01",
+      "expected": "general",
+      "scenario": "ordinary planning",
+      "elapsedMs": 1455.05,
+      "actual": "general",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 1,
+        "image": 0,
+        "web": 0,
+        "research": 0,
+        "sketch": 0
+      },
+      "serverLatencyMs": 1449
+    },
+    {
+      "id": "hold-general-02",
+      "expected": "general",
+      "scenario": "figurative sketch with negated drawing",
+      "elapsedMs": 744.85,
+      "actual": "general",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 1,
+        "image": 0,
+        "web": 0,
+        "research": 0,
+        "sketch": 0
+      },
+      "serverLatencyMs": 734
+    },
+    {
+      "id": "hold-general-03",
+      "expected": "general",
+      "scenario": "tool-name explanation",
+      "elapsedMs": 1048.26,
+      "actual": "general",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 1,
+        "image": 0,
+        "web": 0,
+        "research": 0,
+        "sketch": 0
+      },
+      "serverLatencyMs": 1038
+    },
+    {
+      "id": "hold-image-01",
+      "expected": "image",
+      "scenario": "photorealistic art",
+      "elapsedMs": 1096.54,
+      "actual": "image",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0.03,
+        "image": 0.97,
+        "web": 0,
+        "research": 0,
+        "sketch": 0
+      },
+      "serverLatencyMs": 1086
+    },
+    {
+      "id": "hold-image-02",
+      "expected": "image",
+      "scenario": "assistant-generated rough visual",
+      "elapsedMs": 777.04,
+      "actual": "image",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0,
+        "image": 1,
+        "web": 0,
+        "research": 0,
+        "sketch": 0
+      },
+      "serverLatencyMs": 766
+    },
+    {
+      "id": "hold-image-03",
+      "expected": "image",
+      "scenario": "sketch word as subject",
+      "elapsedMs": 1005.95,
+      "actual": "image",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0.03,
+        "image": 0.97,
+        "web": 0,
+        "research": 0,
+        "sketch": 0
+      },
+      "serverLatencyMs": 996
+    },
+    {
+      "id": "hold-web-01",
+      "expected": "web",
+      "scenario": "recent news lookup",
+      "elapsedMs": 857.54,
+      "actual": "web",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0,
+        "image": 0,
+        "web": 1,
+        "research": 0,
+        "sketch": 0
+      },
+      "serverLatencyMs": 848
+    },
+    {
+      "id": "hold-web-02",
+      "expected": "web",
+      "scenario": "event details",
+      "elapsedMs": 738.25,
+      "actual": "web",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0.01,
+        "image": 0,
+        "web": 0.99,
+        "research": 0,
+        "sketch": 0
+      },
+      "serverLatencyMs": 727
+    },
+    {
+      "id": "hold-web-03",
+      "expected": "web",
+      "scenario": "source discovery",
+      "elapsedMs": 932.97,
+      "actual": "web",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0.02,
+        "image": 0,
+        "web": 0.97,
+        "research": 0.01,
+        "sketch": 0
+      },
+      "serverLatencyMs": 924
+    },
+    {
+      "id": "hold-sketch-01",
+      "expected": "sketch",
+      "scenario": "user draws visual explanation",
+      "elapsedMs": 716.55,
+      "actual": "sketch",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0.01,
+        "image": 0,
+        "web": 0,
+        "research": 0,
+        "sketch": 0.99
+      },
+      "serverLatencyMs": 705
+    },
+    {
+      "id": "hold-sketch-02",
+      "expected": "sketch",
+      "scenario": "user attaches annotated sketch",
+      "elapsedMs": 701.99,
+      "actual": "sketch",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0.02,
+        "image": 0,
+        "web": 0,
+        "research": 0,
+        "sketch": 0.98
+      },
+      "serverLatencyMs": 692
+    },
+    {
+      "id": "hold-sketch-03",
+      "expected": "sketch",
+      "scenario": "research word as drawing subject",
+      "elapsedMs": 733.66,
+      "actual": "sketch",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0.02,
+        "image": 0,
+        "web": 0,
+        "research": 0,
+        "sketch": 0.98
+      },
+      "serverLatencyMs": 724
+    },
+    {
+      "id": "hold-research-01",
+      "expected": "research",
+      "scenario": "comparative investigation",
+      "elapsedMs": 906.08,
+      "actual": "research",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0,
+        "image": 0,
+        "web": 0,
+        "research": 1,
+        "sketch": 0
+      },
+      "serverLatencyMs": 897
+    },
+    {
+      "id": "hold-research-02",
+      "expected": "research",
+      "scenario": "historical synthesis",
+      "elapsedMs": 778.63,
+      "actual": "research",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0,
+        "image": 0,
+        "web": 0,
+        "research": 1,
+        "sketch": 0
+      },
+      "serverLatencyMs": 770
+    },
+    {
+      "id": "hold-research-03",
+      "expected": "research",
+      "scenario": "mixed intent with synthesis first",
+      "elapsedMs": 775.42,
+      "actual": "research",
+      "correct": true,
+      "model": "jev-1.13.0",
+      "source": "live",
+      "probabilities": {
+        "general": 0,
+        "image": 0,
+        "web": 0,
+        "research": 1,
+        "sketch": 0
+      },
+      "serverLatencyMs": 767
+    }
+  ]
+}

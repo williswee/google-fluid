@@ -12,10 +12,10 @@ User-approved Next.js App Router, React, TypeScript, Vercel Hobby. Existing Supa
 AI builders, product designers, and curious visitors exploring what an interface can reveal about intent while a person types.
 
 ## Product Purpose
-A working demonstration of a fluid composer: Jev classifies the current draft and the interface reveals the likely capability through a mode chip, contextual hint, and subtle ambient cue before submission.
+A working demonstration of a fluid composer: Jev classifies the current draft and the interface reveals the likely capability through a compact composer, an unfolding capability-specific tool tray, and a named model/effort setup preview before submission.
 
 ## Capabilities and Constraints
-General, Create image, Web search, Deep research, and Sketch. Sketch means the visitor drawing and attaching an image. No tool execution, generated content, mock answers, account system, conversation history, or additional AI providers. Classification is live when configured; samples and manual selection are explicitly identified. No hidden keyword classifier.
+General, Create image, Web search, Deep research, and Sketch. Sketch means the visitor drawing and attaching an image. No downstream AI tool execution, generated content, mock answers, account system, conversation history, or additional AI providers. The sketch input is a local drawing preview with a keyboard alternative; it is never uploaded. Classification is live when configured; samples and manual selection are explicitly identified. No hidden keyword classifier.
 
 ## Operating Context
 Standalone private GitHub repository, public Vercel demo, and a captioned 45–60 second landscape video recorded from the working build. No auto refill or paid hosting upgrade. Retain no drafts in the database or application logs. Drafts are transmitted to TypeSafe while typing; disclose that plainly.

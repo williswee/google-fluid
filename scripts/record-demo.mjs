@@ -117,7 +117,7 @@ async function record(options) {
       caption.id = "recording-caption";
       caption.setAttribute("aria-hidden", "true");
       Object.assign(caption.style, {
-        position: "fixed", top: "148px", left: "50%", transform: "translateX(-50%)",
+        position: "fixed", bottom: "88px", left: "50%", transform: "translateX(-50%)",
         width: "1100px", textAlign: "center", font: "500 28px/1.45 Geist, sans-serif",
         color: "#f2efea", letterSpacing: "-0.3px", pointerEvents: "none", zIndex: "10000",
       });
@@ -127,7 +127,7 @@ async function record(options) {
         disclosure.textContent = banner;
         disclosure.id = "recording-example-disclosure";
         Object.assign(disclosure.style, {
-          position: "fixed", top: "96px", left: "50%", transform: "translateX(-50%)",
+          position: "fixed", bottom: "144px", left: "50%", transform: "translateX(-50%)",
           padding: "8px 18px", border: "1px solid #6b6253", borderRadius: "8px", background: "#27251f",
           color: "#e5cfaa", font: "500 18px/1.4 Geist, sans-serif", pointerEvents: "none", zIndex: "10001",
         });
@@ -167,8 +167,14 @@ async function record(options) {
       if (result.source !== "live" || result.mode !== mode) throw new Error(`Expected a real ${mode} decision, but the endpoint did not return it. Review the classifier; do not fake this transition.`);
       await expect(app).toHaveAttribute("data-mode", mode);
       await expect(page.getByRole("button", { name: `Suggested: ${labels[mode]}. Choose a capability` })).toBeVisible();
-      await expect(page.getByText("Reading intent…", { exact: true })).toHaveCount(0);
-      decisions.push({ mode: result.mode, model: result.model, serverLatencyMs: result.latencyMs, atSeconds: elapsed(), source: "live" });
+      await expect(app).toHaveAttribute("data-pending", "false");
+      await expect(page.getByRole("button", { name: "Response setup preview", exact: true })).toBeVisible();
+      decisions.push({
+        mode: result.mode, effort: result.effort, classifier: result.model,
+        suggestedSetup: await page.getByRole("button", { name: "Response setup preview", exact: true }).innerText(),
+        serverLatencyMs: result.latencyMs, serverStagesMs: result.timings,
+        atSeconds: elapsed(), source: "live",
+      });
     }
     async function typePrompt(draft, mode) {
       await livePrompt(draft, mode, async () => {
@@ -180,7 +186,7 @@ async function record(options) {
       await page.getByRole("button", { name: button, exact: true }).click();
       await expect(app).toHaveAttribute("data-mode", mode);
       await expect(page.getByRole("button", { name: `Example: ${labels[mode]}. Choose a capability` })).toBeVisible();
-      await expect(page.getByText("Sample", { exact: true })).toBeVisible();
+      await expect(page.getByText("Example", { exact: true })).toBeVisible();
     }
 
     storyStartedAt = performance.now();
@@ -203,10 +209,13 @@ async function record(options) {
       });
       await scene("A labeled example: finding current information.", 29, () => example("Find the latest", "web"));
       await scene("A labeled example: investigating a question in depth.", 37, () => example("Go a little deeper", "research"));
-      await scene("Sketch means you draw or attach an image to explain your idea.", 45, () => example("Draw your idea", "sketch"));
+      await scene("Sketch means you draw or attach an image to explain your idea.", 45, () => example("Try sketch mode", "sketch"));
     } else {
-      await scene("As you type, Jev reveals the likely capability.", 15, () => typePrompt("Create a minimal poster for a rooftop garden.", "image"));
-      await scene("Change the meaning, and the interface follows.", 22, async () => {
+      await scene("A thought reveals its tools, effort, and suggested model.", 15, async () => {
+        await typePrompt("Create a minimal poster for a rooftop garden.", "image");
+        await page.getByRole("region", { name: "Image setup preview" }).getByRole("button", { name: "Landscape 16:9" }).click();
+      });
+      await scene("Change the meaning. The text stays put; the setup follows.", 22, async () => {
         await livePrompt("Create a minimal maintenance checklist for a rooftop garden.", "general", async () => {
           await prompt.evaluate((element) => {
             const start = element.value.indexOf("poster");
@@ -217,17 +226,34 @@ async function record(options) {
           await prompt.pressSequentially("maintenance checklist", { delay: 55 });
         });
       });
-      await scene("Current information brings Web search into view.", 29, () => typePrompt("Find the latest news about reusable rockets.", "web"));
-      await scene("A deeper question makes room for research.", 37, () => typePrompt("Research urban cooling methods and compare the evidence in a detailed report.", "research"));
-      await scene("Want to draw your idea? Sketch becomes visible.", 45, () => typePrompt("Let me draw the room layout to show you what I mean.", "sketch"));
+      await scene("Current information reveals search and recency controls.", 29, () => typePrompt("Find the latest news about reusable rockets.", "web"));
+      await scene("A deeper question unfolds a research setup.", 37, () => typePrompt("Research urban cooling methods and compare the evidence in a detailed report.", "research"));
+      await scene("Want to draw your idea? A drawing surface appears.", 45, async () => {
+        await typePrompt("Let me draw the room layout to show you what I mean.", "sketch");
+        const drawing = page.locator(".sketch-canvas");
+        const bounds = await drawing.boundingBox();
+        if (!bounds) throw new Error("The local drawing surface is unavailable.");
+        const left = bounds.x + bounds.width * .32;
+        const right = bounds.x + bounds.width * .67;
+        const top = bounds.y + bounds.height * .2;
+        const bottom = bounds.y + bounds.height * .8;
+        await page.mouse.move(left, top);
+        await page.mouse.down();
+        await page.mouse.move(right, top, { steps: 8 });
+        await page.mouse.move(right, bottom, { steps: 5 });
+        await page.mouse.move(left, bottom, { steps: 8 });
+        await page.mouse.move(left, top, { steps: 5 });
+        await page.mouse.up();
+        await expect(drawing.locator("path")).toHaveCount(1);
+      });
     }
 
-    await scene("You can always choose a capability yourself.", 50, async () => {
+    await scene("Every suggestion stays under your control.", 50, async () => {
       await page.getByRole("button", { name: "Choose a capability", exact: true }).click();
       await page.getByRole("menuitemradio", { name: /^Sketch/ }).click();
       await expect(page.getByRole("button", { name: "Selected: Sketch. Choose a capability" })).toBeVisible();
     });
-    await scene("This previews the interface. No tool is running.", 54, async () => {
+    await scene("A setup preview, without running a downstream model.", 54, async () => {
       await page.getByRole("button", { name: "Preview selected route" }).click();
       await expect(page.getByText("Sketch selected. UI demonstration only — no tool is running.", { exact: true })).toBeVisible();
     });

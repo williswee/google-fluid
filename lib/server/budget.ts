@@ -10,10 +10,30 @@ export type ReservationDecision =
   | { allowed: true }
   | { allowed: false; reason: "budget_exhausted" | "rate_limited" | "disabled" | "duplicate" };
 
-function client(config: LiveConfig) {
+function createBudgetClient(config: LiveConfig) {
   return createClient(config.supabaseUrl, config.supabaseServiceRoleKey, {
     auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
   });
+}
+
+// A warm instance reuses only the stateless service client. Each RPC creates its
+// own request builder and timeout; no user session or draft is stored in it.
+let activeClient: {
+  url: string;
+  key: string;
+  value: ReturnType<typeof createBudgetClient>;
+} | undefined;
+
+function client(config: LiveConfig) {
+  if (!activeClient || activeClient.url !== config.supabaseUrl ||
+    activeClient.key !== config.supabaseServiceRoleKey) {
+    activeClient = {
+      url: config.supabaseUrl,
+      key: config.supabaseServiceRoleKey,
+      value: createBudgetClient(config),
+    };
+  }
+  return activeClient.value;
 }
 
 /** Every caller must reserve globally before making even one upstream attempt. */

@@ -1,6 +1,6 @@
 # ChatGPT Fluid
 
-An independent interaction demo of a composer that adapts as you type. TypeSafe Jev predicts whether a draft is an ordinary request, an image request, a web lookup, a request to draw or attach visual input, or a research task. The composer exposes the relevant capability and changes its background subtly, before submission.
+An independent interaction demo of a composer that adapts as you type. TypeSafe Jev predicts whether a draft is an ordinary request, an image request, a web lookup, a request to draw or attach visual input, or a research task. The compact composer reveals mode-specific controls and a suggested effort/model setup, with a coordinated background response before submission. Typing is acknowledged immediately; confirmed suggestions still wait for Jev.
 
 The interface takes inspiration from ChatGPT and has its own identity. This project is not affiliated with OpenAI or TypeSafe. It does not run ChatGPT skills: submission only confirms the selected route and states that no tool is running. It produces no generated content or mock answers.
 
@@ -28,9 +28,9 @@ Do not put credentials in source code, screenshots, recordings, issue text, or c
 
 ## How it works
 
-The browser sends the current draft to `POST /api/intent`. The server validates the request, reserves from a shared budget in Supabase, and calls Jev's structured choice interface. The response contains one mode, five probabilities, the model identifier, and the measured server request latency. Uncertain classifications stay in the ordinary composer state. A manual selection remains available to the visitor.
+The browser sends the current draft to `POST /api/intent`. The server validates the request, reserves from a shared budget in Supabase, and asks Jev two parallel Choice questions: capability and effort (brief, balanced, deep). The response contains one mode, five capability probabilities, an effort and three effort probabilities, the classifier model identifier, and measured request/stage latencies. Uncertain classifications stay in the ordinary composer state. A manual selection remains available to the visitor.
 
-Sketch means user-provided drawing input: “Let me draw the room layout to show you” should expose Sketch. “Generate a sketch of a cat” requests model-generated output and belongs to Image. “Sketch out a plan” requests a written outline and stays General. The demo previews those capability choices; it does not execute drawing or generation tools.
+Sketch means user-provided drawing input: “Let me draw the room layout to show you” should expose Sketch. “Generate a sketch of a cat” requests model-generated output and belongs to Image. “Sketch out a plan” requests a written outline and stays General. The demo previews those capability choices. Its local drawing input stays in tab memory; it does not generate content, upload drawings, search pages, or run research jobs.
 
 ```ts
 // POST /api/intent
@@ -40,6 +40,9 @@ Sketch means user-provided drawing input: “Let me draw the room layout to show
 {
   mode: "general" | "image" | "web" | "research" | "sketch";
   probabilities: Record<"general" | "image" | "web" | "research" | "sketch", number>;
+  effort: "brief" | "balanced" | "deep";
+  effortProbabilities: Record<"brief" | "balanced" | "deep", number>;
+  timings: { reserveMs: number; inferenceMs: number; settleMs: number };
   model: string;
   latencyMs: number;
   source: "live";
@@ -53,6 +56,14 @@ Sketch means user-provided drawing input: “Let me draw the room layout to show
 ```
 
 `liveAvailable` reports server configuration readiness. It does not promise provider availability or remaining budget. `/api/intent` performs the authoritative checks for each request. Programmatic evaluation sends an `Origin` header matching the site's origin, just as the browser does.
+
+## Responsive setup previews
+
+The browser acknowledges typing immediately and sends after a 150 ms pause. It permits one request in flight and replaces queued work with the latest draft, ignoring obsolete results without cancelling their budget settlement. A 30-entry exact-draft cache lives only in the current tab. Mode changes keep the input geometry stable. Model/effort controls and tray configuration can be changed manually; Preview reports the selected setup without running it.
+
+Jev effort is independently confidence-gated; ambiguous effort stays balanced. The app then maps capability and effort to illustrative model presets (brief: GPT-6 Luna, balanced: GPT-6 Sol, deep: GPT-6 Astra; image: GPT Image 2.5 Flare or Sunburst). These are UI choices, not another model call or a claimed model-selection benchmark. Names were checked against the [official model catalog](https://developers.openai.com/api/docs/models) on 23 September 2026. The classifier remains Jev.
+
+`Server-Timing` and response stage timings separate the budget check, Jev request, and settlement. The browser's round trip is separately measured. A faster acknowledgement is not a claim of instantaneous inference. The original recording and evaluation figures below refer to the first revision; the delivery notes distinguish the revised checks.
 
 ## Cost, privacy, and deployment
 

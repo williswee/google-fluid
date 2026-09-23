@@ -1,0 +1,352 @@
+{
+  "model": "jev-1.13.0",
+  "questions": [
+    "skill",
+    "effort"
+  ],
+  "context": {
+    "execution": "local handleIntent invocation using real Supabase and Jev requests",
+    "httpEndpoint": false,
+    "browserRoundTrip": false,
+    "sharedLaunchBudgetGuard": true,
+    "requestOrder": "sequential; first case includes initial client/network setup",
+    "serverRegion": "local machine, not Vercel",
+    "inferenceTiming": "Jev SDK request including network, provider processing, response parsing and validation; not isolated model compute",
+    "scope": "Six authored clear-intent smoke cases; not a general accuracy benchmark or before/after latency comparison",
+    "draftsStored": false,
+    "timingUnit": "milliseconds"
+  },
+  "cases": [
+    {
+      "id": "brief-general",
+      "status": 200,
+      "expectedMode": "general",
+      "mode": "general",
+      "expectedEffort": "brief",
+      "effort": "brief",
+      "effortProbabilities": {
+        "brief": 1,
+        "balanced": 0,
+        "deep": 0
+      },
+      "timings": {
+        "reserveMs": 1176,
+        "inferenceMs": 401,
+        "settleMs": 428
+      },
+      "latencyMs": 2008,
+      "handlerRoundTripMs": 2016
+    },
+    {
+      "id": "balanced-image",
+      "status": 200,
+      "expectedMode": "image",
+      "mode": "image",
+      "expectedEffort": "balanced",
+      "effort": "balanced",
+      "effortProbabilities": {
+        "brief": 0.58,
+        "balanced": 0.42,
+        "deep": 0
+      },
+      "timings": {
+        "reserveMs": 457,
+        "inferenceMs": 324,
+        "settleMs": 184
+      },
+      "latencyMs": 965,
+      "handlerRoundTripMs": 966
+    },
+    {
+      "id": "brief-web",
+      "status": 200,
+      "expectedMode": "web",
+      "mode": "web",
+      "expectedEffort": "brief",
+      "effort": "brief",
+      "effortProbabilities": {
+        "brief": 1,
+        "balanced": 0,
+        "deep": 0
+      },
+      "timings": {
+        "reserveMs": 176,
+        "inferenceMs": 319,
+        "settleMs": 174
+      },
+      "latencyMs": 669,
+      "handlerRoundTripMs": 670
+    },
+    {
+      "id": "deep-research",
+      "status": 200,
+      "expectedMode": "research",
+      "mode": "research",
+      "expectedEffort": "deep",
+      "effort": "deep",
+      "effortProbabilities": {
+        "brief": 0,
+        "balanced": 0,
+        "deep": 1
+      },
+      "timings": {
+        "reserveMs": 459,
+        "inferenceMs": 414,
+        "settleMs": 401
+      },
+      "latencyMs": 1274,
+      "handlerRoundTripMs": 1275
+    },
+    {
+      "id": "balanced-sketch",
+      "status": 200,
+      "expectedMode": "sketch",
+      "mode": "sketch",
+      "expectedEffort": "balanced",
+      "effort": "balanced",
+      "effortProbabilities": {
+        "brief": 0.04,
+        "balanced": 0.96,
+        "deep": 0
+      },
+      "timings": {
+        "reserveMs": 262,
+        "inferenceMs": 385,
+        "settleMs": 191
+      },
+      "latencyMs": 838,
+      "handlerRoundTripMs": 839
+    },
+    {
+      "id": "deep-general",
+      "status": 200,
+      "expectedMode": "general",
+      "mode": "general",
+      "expectedEffort": "deep",
+      "effort": "deep",
+      "effortProbabilities": {
+        "brief": 0,
+        "balanced": 0,
+        "deep": 1
+      },
+      "timings": {
+        "reserveMs": 180,
+        "inferenceMs": 322,
+        "settleMs": 172
+      },
+      "latencyMs": 674,
+      "handlerRoundTripMs": 674
+    }
+  ],
+  "summary": {
+    "cases": 6,
+    "modeCorrect": 6,
+    "effortCorrect": 6,
+    "inferenceMsRange": [
+      319,
+      414
+    ],
+    "reserveMsRange": [
+      176,
+      1176
+    ],
+    "settleMsRange": [
+      172,
+      428
+    ],
+    "serverLatencyMsRange": [
+      669,
+      2008
+    ]
+  },
+  "recordedOn": "2026-09-23",
+  "regressionReruns": {
+    "purpose": "Post-change regression of existing previously evaluated capability datasets after adding an independent effort Choice question to the same Jev request.",
+    "isFreshHeldOutBenchmark": false,
+    "effortAccuracyMeasured": false,
+    "execution": "Sequential actual HTTP requests to the local /api/intent endpoint with shared budget reservation and settlement; no bypass or retry.",
+    "notes": "The held-out split name is retained to identify the existing dataset. These previously evaluated prompts were reused as regression checks and do not constitute a new held-out benchmark. The evaluator records capability accuracy only; independent effort smoke results are reported separately in this file.",
+    "reports": [
+      {
+        "path": "2026-09-23T14-00-07-467Z-development.json",
+        "split": "development",
+        "status": "completed",
+        "startedAt": "2026-09-23T14:00:07.467Z",
+        "finishedAt": "2026-09-23T14:00:20.496Z",
+        "summary": {
+          "attempted": 15,
+          "completed": 15,
+          "failed": 0,
+          "correct": 15,
+          "accuracy": 1,
+          "perMode": {
+            "general": {
+              "completed": 3,
+              "correct": 3,
+              "accuracy": 1
+            },
+            "image": {
+              "completed": 3,
+              "correct": 3,
+              "accuracy": 1
+            },
+            "web": {
+              "completed": 3,
+              "correct": 3,
+              "accuracy": 1
+            },
+            "research": {
+              "completed": 3,
+              "correct": 3,
+              "accuracy": 1
+            },
+            "sketch": {
+              "completed": 3,
+              "correct": 3,
+              "accuracy": 1
+            }
+          },
+          "confusionMatrix": {
+            "general": {
+              "general": 3,
+              "image": 0,
+              "web": 0,
+              "research": 0,
+              "sketch": 0
+            },
+            "image": {
+              "general": 0,
+              "image": 3,
+              "web": 0,
+              "research": 0,
+              "sketch": 0
+            },
+            "web": {
+              "general": 0,
+              "image": 0,
+              "web": 3,
+              "research": 0,
+              "sketch": 0
+            },
+            "research": {
+              "general": 0,
+              "image": 0,
+              "web": 0,
+              "research": 3,
+              "sketch": 0
+            },
+            "sketch": {
+              "general": 0,
+              "image": 0,
+              "web": 0,
+              "research": 0,
+              "sketch": 3
+            }
+          },
+          "clientRoundTripMs": {
+            "count": 15,
+            "p50": 743.85,
+            "p95": 1796.8,
+            "max": 1796.8
+          },
+          "serverReportedMs": {
+            "count": 15,
+            "p50": 735,
+            "p95": 1792,
+            "max": 1792
+          }
+        }
+      },
+      {
+        "path": "2026-09-23T14-00-36-569Z-held-out.json",
+        "split": "held-out",
+        "status": "completed",
+        "startedAt": "2026-09-23T14:00:36.569Z",
+        "finishedAt": "2026-09-23T14:00:49.854Z",
+        "summary": {
+          "attempted": 15,
+          "completed": 15,
+          "failed": 0,
+          "correct": 15,
+          "accuracy": 1,
+          "perMode": {
+            "general": {
+              "completed": 3,
+              "correct": 3,
+              "accuracy": 1
+            },
+            "image": {
+              "completed": 3,
+              "correct": 3,
+              "accuracy": 1
+            },
+            "web": {
+              "completed": 3,
+              "correct": 3,
+              "accuracy": 1
+            },
+            "research": {
+              "completed": 3,
+              "correct": 3,
+              "accuracy": 1
+            },
+            "sketch": {
+              "completed": 3,
+              "correct": 3,
+              "accuracy": 1
+            }
+          },
+          "confusionMatrix": {
+            "general": {
+              "general": 3,
+              "image": 0,
+              "web": 0,
+              "research": 0,
+              "sketch": 0
+            },
+            "image": {
+              "general": 0,
+              "image": 3,
+              "web": 0,
+              "research": 0,
+              "sketch": 0
+            },
+            "web": {
+              "general": 0,
+              "image": 0,
+              "web": 3,
+              "research": 0,
+              "sketch": 0
+            },
+            "research": {
+              "general": 0,
+              "image": 0,
+              "web": 0,
+              "research": 3,
+              "sketch": 0
+            },
+            "sketch": {
+              "general": 0,
+              "image": 0,
+              "web": 0,
+              "research": 0,
+              "sketch": 3
+            }
+          },
+          "clientRoundTripMs": {
+            "count": 15,
+            "p50": 778.63,
+            "p95": 1455.05,
+            "max": 1455.05
+          },
+          "serverReportedMs": {
+            "count": 15,
+            "p50": 770,
+            "p95": 1449,
+            "max": 1449
+          }
+        }
+      }
+    ]
+  }
+}
