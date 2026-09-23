@@ -1,0 +1,137 @@
+{
+  "recordedAt": "2026-09-23T14:05:55.698Z",
+  "baseUrl": "https://chatgptfluid.vercel.app",
+  "context": "Six authored production browser smoke cases, not a general model benchmark. No mocks. Input acknowledgement measured from input event to next animation frame after pending becomes visible. Baseline before region optimization.",
+  "cases": [
+    {
+      "id": "image",
+      "expected": "image",
+      "mode": "image",
+      "effort": "balanced",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 1157,
+        "inferenceMs": 243,
+        "settleMs": 730
+      },
+      "serverLatencyMs": 2133,
+      "serverTimingHeader": "reserve;dur=1157, jev;dur=243, settle;dur=730, total;dur=2133",
+      "ackMs": 19,
+      "dispatchAfterInputMs": 154,
+      "roundTripMs": 2516,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true,
+      "setup": "GPT Image 2.5 Flare\nBalanced · preview"
+    },
+    {
+      "id": "semantic-edit",
+      "expected": "general",
+      "mode": "general",
+      "effort": "brief",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 673,
+        "inferenceMs": 215,
+        "settleMs": 537
+      },
+      "serverLatencyMs": 1425,
+      "serverTimingHeader": "reserve;dur=673, jev;dur=215, settle;dur=537, total;dur=1425",
+      "ackMs": 15,
+      "dispatchAfterInputMs": 152,
+      "roundTripMs": 1760,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true,
+      "setup": "GPT-6 Luna\nBrief · preview"
+    },
+    {
+      "id": "current-news",
+      "expected": "web",
+      "mode": "web",
+      "effort": "balanced",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 1442,
+        "inferenceMs": 301,
+        "settleMs": 701
+      },
+      "serverLatencyMs": 2450,
+      "serverTimingHeader": "reserve;dur=1442, jev;dur=301, settle;dur=701, total;dur=2450",
+      "ackMs": 6,
+      "dispatchAfterInputMs": 153,
+      "roundTripMs": 2904,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true,
+      "setup": "GPT-6 Sol\nBalanced · preview"
+    },
+    {
+      "id": "evidence-report",
+      "expected": "research",
+      "mode": "research",
+      "effort": "deep",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 699,
+        "inferenceMs": 222,
+        "settleMs": 2504
+      },
+      "serverLatencyMs": 3426,
+      "serverTimingHeader": "reserve;dur=699, jev;dur=222, settle;dur=2504, total;dur=3426",
+      "ackMs": 3,
+      "dispatchAfterInputMs": 153,
+      "roundTripMs": 3786,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true,
+      "setup": "GPT-6 Astra\nDeep · preview"
+    },
+    {
+      "id": "drawing-input",
+      "expected": "sketch",
+      "mode": "sketch",
+      "effort": "balanced",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 638,
+        "inferenceMs": 179,
+        "settleMs": 641
+      },
+      "serverLatencyMs": 1459,
+      "serverTimingHeader": "reserve;dur=638, jev;dur=179, settle;dur=641, total;dur=1459",
+      "ackMs": 5,
+      "dispatchAfterInputMs": 153,
+      "roundTripMs": 1734,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true,
+      "setup": "GPT-6 Sol\nBalanced · preview"
+    },
+    {
+      "id": "complex-analysis",
+      "expected": "general",
+      "mode": "general",
+      "effort": "deep",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 626,
+        "inferenceMs": 220,
+        "settleMs": 600
+      },
+      "serverLatencyMs": 1446,
+      "serverTimingHeader": "reserve;dur=626, jev;dur=220, settle;dur=600, total;dur=1446",
+      "ackMs": 12,
+      "dispatchAfterInputMs": 153,
+      "roundTripMs": 1722,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true,
+      "setup": "GPT-6 Astra\nDeep · preview"
+    }
+  ],
+  "pageErrors": [],
+  "mobileFits": true,
+  "deployment": "dpl_AoYRVmRpYQxpMVxqbMS9Tm8xtL1G",
+  "functionRegion": "iad1"
+}

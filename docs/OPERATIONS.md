@@ -22,6 +22,14 @@ Use the existing Supabase Free project and Vercel Hobby account. This demo must 
 
 Do not test budget exhaustion by spending the remaining allowance. Use the unit/integration tests for that condition. Do not reset or increase the ledger to make an evaluation pass.
 
+## Function region and latency
+
+`vercel.json` pins the single Hobby function region to `icn1` (Seoul), alongside the existing Supabase database in AWS `ap-northeast-2`. The previous US East function region added cross-region latency to both required budget operations. Keep inference behind the same atomic reserve → Jev → settle path; do not bypass accounting to improve latency.
+
+`scripts/measure-interaction.mjs <origin> <new-report-path>` measures six authored browser cases through the protected endpoint. It records immediate typing acknowledgement separately from dispatch delay, request round trip, and server stages. Every invocation spends from the same launch allowance; it has no automatic retry. Preserve before/after reports and treat these small samples as deployment checks, not global latency guarantees.
+
+Vercel documents [region codes](https://vercel.com/docs/regions) and [function region configuration](https://vercel.com/docs/functions/configuring-functions/region).
+
 ## Pause and inspect
 
 The ledger documentation includes a read-only SQL query for confirmed and reserved spend. Failed or uncertain upstream requests retain their maximum reservation because they may have incurred a charge; do not automatically refund them. The ledger is an application-level guard for the pinned model price and documented input limit, not a provider-account-wide billing cap.
