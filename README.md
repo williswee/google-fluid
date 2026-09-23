@@ -63,13 +63,13 @@ The browser acknowledges typing immediately and sends after a 150 ms pause. It p
 
 Jev effort is independently confidence-gated; ambiguous effort stays balanced. The app then maps capability and effort to illustrative model presets (brief: GPT-6 Luna, balanced: GPT-6 Sol, deep: GPT-6 Astra; image: GPT Image 2.5 Flare or Sunburst). These are UI choices, not another model call or a claimed model-selection benchmark. Names were checked against the [official model catalog](https://developers.openai.com/api/docs/models) on 23 September 2026. The classifier remains Jev.
 
-`Server-Timing` and response stage timings separate the budget check, Jev request, and settlement. The browser's round trip is separately measured. A faster acknowledgement is not a claim of instantaneous inference. The original recording and evaluation figures below refer to the first revision; the delivery notes distinguish the revised checks.
+`Server-Timing` and response stage timings separate the budget check, Jev request, and settlement. The browser's round trip is separately measured. A faster acknowledgement is not a claim of instantaneous inference. The delivery notes distinguish the original acceptance results from the revised production checks and recording.
 
 ## Cost, privacy, and deployment
 
 The demo has one application-enforced **US$5 launch allowance**, shared by visitors, local live testing, evaluation, and recording. Supabase atomically reserves the maximum permitted upstream attempt before it runs; successful calls settle to reported input usage. Failed or uncertain attempts retain their conservative reservation. There are no automatic retries, refills, billing upgrades, or new paid integrations. Budget or ledger failures stop live inference and leave labeled example exploration available. See [operations notes](docs/OPERATIONS.md) for setup and verification.
 
-Live inference sends draft text to TypeSafe as the visitor types, before Send is pressed. The application does not persist prompt text or completed conversations. The Supabase ledger stores operational accounting and daily HMAC-based client identifiers for rate limiting; it does not store raw IP addresses or prompts. Hosting and inference providers may process request metadata under their own policies. Visitors should not enter sensitive information. The interface labels fixture examples separately from live predictions.
+Live inference sends draft text to TypeSafe as the visitor types, before Preview is pressed. The application does not persist prompt text or completed conversations. The Supabase ledger stores operational accounting and daily HMAC-based client identifiers for rate limiting; it does not store raw IP addresses or prompts. Hosting and inference providers may process request metadata under their own policies. Visitors should not enter sensitive information. The interface labels fixture examples separately from live predictions.
 
 Production is intended for Vercel Hobby with Supabase Free. Set the five server environment variables in the selected Vercel project, apply the migration, then deploy. Keep live inference disabled until these checks pass. Reuse the same Supabase ledger across local work and production so the launch allowance is shared. A second database would create a second allowance and must not be used as a refill.
 
@@ -84,6 +84,14 @@ npm run test:e2e
 The browser suite intercepts both API endpoints with controlled fixtures. It checks debounce, stale responses, manual overrides, outages, IME composition, UTF-8 limits, source labels, Classic/Fluid switching, and keyboard access; it does not establish real model accuracy or latency. Install Playwright's Chromium with `npx playwright install chromium` if it is not already present, or set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` to a compatible existing Chromium executable. The test runner reuses an existing local server or starts one automatically.
 
 Live evaluation is separate and consumes the shared allowance. It is never part of the default test or build commands.
+
+To measure the actual browser interaction and the protected server stages on six authored cases:
+
+```sh
+node scripts/measure-interaction.mjs https://chatgptfluid.vercel.app evaluation/results/new-browser-check.json
+```
+
+Use a new report filename. This also spends from the shared allowance; there are no mocks or automatic retries.
 
 ```sh
 # Development set: 15 authored prompts, balanced across five modes.

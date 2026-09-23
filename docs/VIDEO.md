@@ -25,13 +25,13 @@ Playwright Chromium and the installed `ffmpeg-static` development dependency are
 | Target time | Actual interaction | Caption |
 | --- | --- | --- |
 | 0–6s | Select Classic, open the + menu, let the capabilities remain readable, then close it. | “Useful capabilities can stay hidden behind a click.” |
-| 6–15s | Select Fluid and type “Create a minimal poster for a rooftop garden.” Wait for the real Image decision. | “As you type, Jev reveals the likely capability.” |
-| 15–22s | Select the word “poster” and type “maintenance checklist.” Wait for the real General decision. | “Change the meaning, and the interface follows.” |
-| 22–29s | Type “Find the latest news about reusable rockets.” Wait for Web search. | “Current information brings Web search into view.” |
-| 29–37s | Type “Research urban cooling methods and compare the evidence in a detailed report.” Wait for Deep research. | “A deeper question makes room for research.” |
-| 37–45s | Type “Let me draw the room layout to show you what I mean.” Wait for Sketch, which means user drawing input. | “Want to draw your idea? Sketch becomes visible.” |
-| 45–50s | Open the menu and select Sketch manually, leaving the “Selected” chip visible. | “You can always choose a capability yourself.” |
-| 50–54s | Submit once, keeping the confirmation visible. | “This previews the interface. No tool is running.” |
+| 6–15s | Select Fluid and type “Create a minimal poster for a rooftop garden.” Wait for the real Image decision and select Landscape. | “A thought reveals its tools, effort, and suggested model.” |
+| 15–22s | Select the word “poster” and type “maintenance checklist.” Wait for the real General decision. | “Change the meaning. The text stays put; the setup follows.” |
+| 22–29s | Type “Find the latest news about reusable rockets.” Wait for Web search. | “Current information reveals search and recency controls.” |
+| 29–37s | Type “Research urban cooling methods and compare the evidence in a detailed report.” Wait for Deep research. | “A deeper question unfolds a research setup.” |
+| 37–45s | Type “Let me draw the room layout to show you what I mean.” Wait for Sketch and draw a room outline on the local surface. | “Want to draw your idea? A drawing surface appears.” |
+| 45–50s | Open the menu and select Sketch manually, leaving the “Selected” chip visible. | “Every suggestion stays under your control.” |
+| 50–54s | Submit once, keeping the confirmation visible. | “A setup preview, without running a downstream model.” |
 | 54–58s | Hold the final frame. A remote recording names the actual recorded host; a localhost recording makes no live-site claim. | “ChatGPT Fluid · Built with TypeSafe Jev” or the recorded host. |
 
 The poster-to-checklist revision is the signature moment. If Jev does not make that transition in the real take, improve and re-evaluate the classifier before claiming it works. The recorder will not manually substitute the expected mode.
