@@ -94,10 +94,5 @@ The `search-v4` sets each contain 54 cases, two per route. Both real Jev runs pa
 
 The header has no brand link or Classic/Fluid switch. **Notes** lives beside the TypeSafe credit in the footer and includes attribution to [Anish Gupta](https://github.com/anishfn), privacy and implementation limits. The original dinosaur runner is also embedded in the app's real 404 page. Chrome's original is an offline game; this is our own independent implementation with no copied code or assets. Keyboard handling stays inside the game, so typing in search cannot jump or pause it accidentally.
 
-## Demo video
-
-The current 30-second, captioned 1080p film is `artifacts/google-fluid-demo-30s-v3.mp4`. It follows flights → hotels → Earth images → Singapore sunrise → serendipity → the dinosaur game, with six real Jev decisions, focused zooms and 1.3× playback. It ends with “Fluid search that changes shape :)”. See [recording and editing instructions](docs/VIDEO.md). Raw footage and final media stay local and are excluded from Git.
-
-## Previous prototype
-
-Historical chat-composer evaluations, code history, and the 58-second chat video remain available. The former chat recorder is `scripts/record-demo.mjs`; the current search film uses `scripts/record-search-demo.mjs`. `docs/VIDEO.md` documents the current edit and keeps the earlier recordings in historical sections.
+## License
+[MIT](https://github.com/williswee/google-fluid/blob/main/LICENSE)
