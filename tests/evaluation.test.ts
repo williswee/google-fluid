@@ -9,7 +9,7 @@ describe("evaluation datasets", () => {
     const datasets = await Promise.all(["development", "held-out"].map(async (split) => {
       const data = JSON.parse(await readFile(new URL(`../evaluation/search/${split}.json`, import.meta.url), "utf8"));
       expect(data.split).toBe(split);
-      expect(data.dataset).toBe("search-v3");
+      expect(data.dataset).toBe("search-v4");
       expect(data.cases).toHaveLength(MODES.length * 2);
       for (const mode of MODES) expect(data.cases.filter((item: { expected: string }) => item.expected === mode)).toHaveLength(2);
       for (const item of data.cases) {

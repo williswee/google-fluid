@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "dataset": "search-v3",
+  "dataset": "search-v4",
   "split": "held-out",
   "language": "en",
-  "description": "Authored English search-intent cases for the twenty-two-mode Fluid Search demo; not user data. Two cases per mode in each disjoint split. Includes explicit negation, topic mentions and ambiguity. Separate from historical search-v1/search-v2 reports and archived composer datasets.",
+  "description": "Authored English search-intent cases for 27 modes; not user data. Two disjoint cases per mode, expanded for travel, shopping and visual search. Historical reports remain unchanged.",
   "cases": [
     {
       "id": "search-held-out-general-01",
@@ -312,6 +312,76 @@
       "scenario": "offline/404 Easter egg",
       "draft": "open the offline dinosaur runner",
       "rationale": "The visitor requests the jumping dinosaur game or its explicit 404 Easter egg."
+    },
+    {
+      "id": "search-v4-held-out-flights-01",
+      "expected": "flights",
+      "scenario": "airfare paraphrase",
+      "draft": "Find me an airline ticket from Paris to Rome",
+      "rationale": "The primary action requests the flights interface."
+    },
+    {
+      "id": "search-v4-held-out-flights-02",
+      "expected": "flights",
+      "scenario": "round trip planning",
+      "draft": "I need a return flight to Bali from Sydney",
+      "rationale": "The primary action requests the flights interface."
+    },
+    {
+      "id": "search-v4-held-out-hotels-01",
+      "expected": "hotels",
+      "scenario": "accommodation paraphrase",
+      "draft": "Where can two people stay overnight in Kyoto?",
+      "rationale": "The primary action requests the hotels interface."
+    },
+    {
+      "id": "search-v4-held-out-hotels-02",
+      "expected": "hotels",
+      "scenario": "hotel room amenity",
+      "draft": "Find a room in Seoul with breakfast included",
+      "rationale": "The primary action requests the hotels interface."
+    },
+    {
+      "id": "search-v4-held-out-video-01",
+      "expected": "video",
+      "scenario": "video clip",
+      "draft": "Show me a clip of a rocket landing",
+      "rationale": "The primary action requests the video interface."
+    },
+    {
+      "id": "search-v4-held-out-video-02",
+      "expected": "video",
+      "scenario": "watch tutorial",
+      "draft": "I want to watch a tutorial on making croissants",
+      "rationale": "The primary action requests the video interface."
+    },
+    {
+      "id": "search-v4-held-out-shopping-01",
+      "expected": "shopping",
+      "scenario": "buying intent",
+      "draft": "Where can I buy a waterproof hiking backpack?",
+      "rationale": "The primary action requests the shopping interface."
+    },
+    {
+      "id": "search-v4-held-out-shopping-02",
+      "expected": "shopping",
+      "scenario": "shopping over comparison",
+      "draft": "Compare laptops I can purchase for under $800",
+      "rationale": "The primary action requests the shopping interface."
+    },
+    {
+      "id": "search-v4-held-out-images-01",
+      "expected": "images",
+      "scenario": "existing photographs",
+      "draft": "Find photographs of Saturn",
+      "rationale": "The primary action requests the images interface."
+    },
+    {
+      "id": "search-v4-held-out-images-02",
+      "expected": "images",
+      "scenario": "image discovery",
+      "draft": "Show me Tokyo skyline wallpapers",
+      "rationale": "The primary action requests the images interface."
     }
   ]
 }

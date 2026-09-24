@@ -1,7 +1,7 @@
 export const MODES = [
   "general", "weather", "finance", "places", "movies", "convert", "define",
   "documents", "site", "news", "date", "precise",
-  "calculate", "timer", "stopwatch", "metronome", "color", "compare", "science", "game", "play", "dino",
+  "calculate", "timer", "stopwatch", "metronome", "color", "compare", "science", "game", "play", "dino", "flights", "hotels", "video", "shopping", "images",
 ] as const;
 
 export type ModeId = (typeof MODES)[number];

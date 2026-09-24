@@ -1,0 +1,39 @@
+'use client';
+import { useEffect, useState } from 'react';
+import { ArrowUpRight, ChartNoAxesCombined, Newspaper } from 'lucide-react';
+import { compoundGrowth, parseGrowthInputs, marketSearch, NEWS_PERIODS, NEWS_SOURCES, newsSearch } from '../lib/market-tools';
+import './market-tools.css';
+
+const dollars=(value:number)=>value.toLocaleString('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
+const growing=(draft:string)=>/compound|interest|growth|invest(?:ment)?\s+(?:return|over)|savings?\s+(?:over|growth)/i.test(draft);
+function Growth({draft}:{draft:string}) {
+ const parsed=parseGrowthInputs(draft);
+ const [initial,setInitial]=useState(parsed.initial),[monthly,setMonthly]=useState(parsed.monthly),[rate,setRate]=useState(parsed.rate),[years,setYears]=useState(parsed.years);
+ useEffect(()=>{const next=parseGrowthInputs(draft);setInitial(next.initial);setMonthly(next.monthly);setRate(next.rate);setYears(next.years);},[draft]);
+ const points=[initial,monthly,rate,years].every(x=>x.trim())?compoundGrowth(Number(initial),Number(monthly),Number(rate),Number(years)):null;
+ const last=points?.at(-1), maximum=points?Math.max(...points.flatMap(p=>[p.balance,p.contributed]),1):1;
+ const path=(field:'balance'|'contributed')=>points?.map((p,i)=>`${i?'L':'M'}${12+p.year/Number(years)*576},${178-p[field]/maximum*150}`).join(' ');
+ return <div className="growth-workspace"><div className="market-topline"><h2>Compound growth</h2><span>Editable scenario · USD</span></div>
+ <div className="growth-summary"><div><span>After {years || '—'} years</span><output aria-label="Illustrative future balance">{last?dollars(last.balance):'—'}</output></div><dl><div><dt>Contributed</dt><dd>{last?dollars(last.contributed):'—'}</dd></div><div><dt>Interest</dt><dd>{last?dollars(last.balance-last.contributed):'—'}</dd></div></dl></div>
+ <svg className="growth-chart" viewBox="0 0 600 200" role="img" aria-label={last?`Illustrative balance ${dollars(last.balance)} after ${years} years, compared with ${dollars(last.contributed)} contributed.`:'Enter valid values to calculate growth.'}><path d="M12 178H588" stroke="#cbded1" fill="none"/>{points&&<><path d={path('contributed')} fill="none" stroke="#81988a" strokeWidth="2" strokeDasharray="5 5"/><path d={path('balance')} fill="none" stroke="#137333" strokeWidth="3"/><text x="12" y="198">Today</text><text x="588" y="198" textAnchor="end">Year {years}</text></>}</svg>
+ <div className="growth-legend"><span><i/>Balance</span><span><i/>Contributions</span></div>
+ <div className="growth-inputs">{[{label:'Initial amount',value:initial,set:setInitial,min:0,max:1e7},{label:'Monthly deposit',value:monthly,set:setMonthly,min:0,max:1e6},{label:'Annual rate (%)',value:rate,set:setRate,min:-50,max:50},{label:'Years',value:years,set:setYears,min:1,max:50}].map(item=><label key={item.label}>{item.label}<input type="number" aria-label={item.label} min={item.min} max={item.max} step={item.label==='Years'?1:'any'} value={item.value} onChange={e=>item.set(e.target.value)}/></label>)}</div>
+ {!points&&<p role="status" className="field-error">Use nonnegative amounts, a rate from −50% to 50%, and 1–50 whole years.</p>}
+ <details className="source-details"><summary>Calculation details</summary><p>Illustrative calculation, not a market forecast. The editable defaults are examples. Interest compounds monthly; deposits arrive at month-end. Taxes, fees and inflation are excluded. <a href="https://www.investor.gov/financial-tools-calculators/calculators/compound-interest-calculator" target="_blank" rel="noopener noreferrer">About compound interest</a>.</p></details></div>;
+}
+function Finance({draft}:{draft:string}) {
+ const [tab,setTab]=useState(growing(draft)?'Growth calculator':'Stock explorer');const [query,setQuery]=useState(draft.replace(/^stocks:/i,''));const [view,setView]=useState('Price & chart'),[period,setPeriod]=useState('1 year');
+ useEffect(()=>{setQuery(draft.replace(/^stocks:/i,''));setTab(growing(draft)?'Growth calculator':'Stock explorer');},[draft]);
+ return <div className="market-tool"><div className="market-tabs" role="group" aria-label="Finance tool">{['Stock explorer','Growth calculator'].map(item=><button type="button" key={item} aria-pressed={tab===item} onClick={()=>setTab(item)}>{item}</button>)}</div>
+ {tab==='Growth calculator'?<Growth draft={draft}/>:<><div className="market-topline"><h2>Follow the market.</h2><ChartNoAxesCombined size={27}/></div><label className="market-query">Company, ticker or asset<input aria-label="Company, ticker or asset" value={query} onChange={e=>setQuery(e.target.value)}/></label><div className="market-shortcuts">{['AAPL','MSFT','Bitcoin'].map(item=><button type="button" key={item} onClick={()=>setQuery(item)}>{item}</button>)}</div><div className="market-research"><div className="market-view" role="group" aria-label="Market view">{['Price & chart','Company news','Earnings','Compare'].map(item=><button type="button" key={item} aria-pressed={view===item} onClick={()=>setView(item)}>{item}</button>)}</div><label>Time horizon<select aria-label="Market time horizon" value={period} onChange={e=>setPeriod(e.target.value)}>{['Today','1 month','1 year','5 years','All time'].map(item=><option key={item}>{item}</option>)}</select></label></div><a className="market-cta" aria-disabled={!query.trim()} href={query.trim()?marketSearch(query,view,period):undefined} target="_blank" rel="noopener noreferrer">Open {view.toLowerCase()}<ArrowUpRight size={17}/></a><p className="market-note">Current market data opens on Google.</p></>}
+ </div>;
+}
+function News({draft}:{draft:string}) {
+ const [topic,setTopic]=useState(draft),[source,setSource]=useState<keyof typeof NEWS_SOURCES>('All'),[period,setPeriod]=useState<keyof typeof NEWS_PERIODS>('Past week'),[view,setView]=useState('Top stories'),[region,setRegion]=useState('World');
+ useEffect(()=>setTopic(draft),[draft]);
+ return <div className="news-desk"><div className="news-masthead"><Newspaper size={23}/><h2>Your news desk</h2></div><div className="news-view" role="group" aria-label="News view">{['Top stories','Latest coverage','Explainers'].map(item=><button type="button" key={item} aria-pressed={view===item} onClick={()=>setView(item)}>{item}</button>)}</div>
+ <label className="market-query">Follow a topic<input aria-label="News topic" value={topic} onChange={e=>setTopic(e.target.value)}/></label><div className="news-settings"><label>Published<select aria-label="News recency" value={period} onChange={e=>setPeriod(e.target.value as keyof typeof NEWS_PERIODS)}>{Object.keys(NEWS_PERIODS).map(item=><option key={item}>{item}</option>)}</select></label><label>Source<select aria-label="News source" value={source} onChange={e=>setSource(e.target.value as keyof typeof NEWS_SOURCES)}>{Object.keys(NEWS_SOURCES).map(item=><option key={item} value={item}>{item==='All'?'All sources':item}</option>)}</select></label><label>Focus<select aria-label="News region" value={region} onChange={e=>setRegion(e.target.value)}>{['World','Singapore','United States','United Kingdom'].map(item=><option key={item}>{item}</option>)}</select></label></div>
+ <div className="news-query-preview"><span>{view} · {period.toLowerCase()}</span><p>{topic.trim()||'Choose a topic to follow'}</p><small>{source==='All'?'Across sources':`From ${source}`}{region==='World'?'':` · ${region}`}</small></div>
+ <a className="market-cta" aria-disabled={!topic.trim()} href={topic.trim()?newsSearch(topic,source,period,view,region):undefined} target="_blank" rel="noopener noreferrer">Read current coverage<ArrowUpRight size={17}/></a><p className="market-note">Search preview. Live headlines open on Google News results.</p></div>;
+}
+export default function MarketTools({mode,draft}:{mode:'finance'|'news';draft:string}) {return mode==='finance'?<Finance draft={draft}/>:<News draft={draft}/>;}

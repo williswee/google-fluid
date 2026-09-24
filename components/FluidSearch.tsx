@@ -7,6 +7,7 @@ import { EXAMPLES, SEARCH_MODES, filterExamples, type SearchExample } from '../l
 import { parseSearchSyntax, removeSearchToken } from '../lib/search-syntax';
 import { SEARCH_ICONS } from './search-icons';
 import SearchTools from './SearchTools';
+import SearchHints from './SearchHints';
 
 export default function FluidSearch() {
   const [draft, setDraft] = useState('');
@@ -153,7 +154,7 @@ export default function FluidSearch() {
           {palette !== null && <div className="command-menu">
             <div className="command-heading"><span>{options.length} {options.length === 1 ? 'search' : 'searches'} to try</span><span><kbd>↑</kbd><kbd>↓</kbd> to explore <kbd>esc</kbd> to close</span></div>
             <div ref={commandList} id="search-palette" role="listbox" aria-label="Search tools" className="command-options">
-              {options.map((item, index) => { const ItemIcon = SEARCH_ICONS[item.mode]; return <button type="button" role="option" tabIndex={-1} aria-selected={activeOption === index} id={`search-option-${index}`} key={item.id} className="command-option" onMouseDown={e => e.preventDefault()} onClick={() => choose(item)} onPointerMove={event => { if (event.movementX || event.movementY) setActiveOption(index); }}><ItemIcon size={19} /><span><strong>{SEARCH_MODES[item.mode].label}</strong><span>{item.query}</span></span><ArrowRight size={16} /></button>; })}
+              {options.map((item, index) => { const ItemIcon = SEARCH_ICONS[item.mode]; return <button type="button" role="option" tabIndex={-1} aria-selected={activeOption === index} id={`search-option-${index}`} key={item.id} className="command-option" onMouseDown={e => e.preventDefault()} onClick={() => choose(item)} onPointerMove={event => { if (event.movementX || event.movementY) setActiveOption(index); }}><ItemIcon size={19} /><span><strong>{item.title ?? SEARCH_MODES[item.mode].label}</strong><span>{item.query}</span></span><ArrowRight size={16} /></button>; })}
               {options.length === 0 && <p className="command-empty">No tool matches. Try “timer”, “weather” or “color”.</p>}
             </div>
           </div>}
@@ -163,6 +164,7 @@ export default function FluidSearch() {
             <div className="mode-content" key={mode}><SearchTools mode={mode} draft={draft} onDraft={(value, keepMode) => { changeDraft(value); if (keepMode) setSelection({ draft: value, mode: keepMode }); }} /></div>
           </section>}</div></div>
         </div>
+        <SearchHints active={!hasDraft && palette === null && !about} onBrowse={openPalette} onChoose={choose} />
         <span className="sr-only" aria-live="polite" aria-atomic="true">{pending ? '' : showPanel ? `${SEARCH_MODES[mode].label} ready. ${status}` : ''}</span>
         <p id="privacy-note" className="sr-only">{privacy}</p>
         {(oversized || intent.error) && <p id="query-error" className="query-error" role="alert">{oversized ? 'Keep the search under 2,000 bytes.' : intent.error}{intent.error && <><button type="button" onClick={() => setRetry(v => v + 1)}>Retry</button><button type="button" onClick={openPalette}>Choose a tool</button></>}</p>}
@@ -178,7 +180,7 @@ export default function FluidSearch() {
         <div className="how-flow"><span>Your query</span><ArrowRight size={15} /><span>Jev intent</span><ArrowRight size={15} /><span>A useful interface</span></div>
         </div>
         <div className="notes-section"><h3>Tools & data</h3>
-        <p>Calculators, clocks, color controls, the orbit lab and game run on your device. Knowledge cards cover a small set of examples; their source buttons explain the data. Weather loads a real forecast for Singapore or Tokyo. Currency conversion uses daily ECB reference rates. Stocks, places and news link to Google for current results. The map illustration is schematic.</p>
+        <p>Calculators, clocks, color controls, the orbit lab and game run on your device. Knowledge cards cover a small set of examples; their source buttons explain the data. Weather loads a real forecast for Singapore or Tokyo. Currency conversion uses daily ECB reference rates. Flights, hotels, shopping, finance, video and news controls prepare searches for current results. Image previews are curated references, not live search results. Interactive maps load OpenStreetMap only when you choose to load them.</p>
         <p>The orbit lab is a prebuilt Newtonian model, not an AI-generated simulation or a model of black holes. Nothing in this demo generates answers or executes AI tools. Enter opens your query on Google in a new tab.</p>
         </div>
         <div className="notes-section"><h3>Controls & limits</h3>

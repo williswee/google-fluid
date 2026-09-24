@@ -45,3 +45,12 @@
 .how-flow{padding:16px 0 0;display:grid;grid-template-columns:minmax(0,1fr) 15px minmax(0,1fr) 15px minmax(0,1fr);gap:8px;max-width:390px}.how-flow span{text-align:center;padding:8px 6px}
 .about-title h2:focus{outline:0}
 @media(max-width:440px){.footer-with-notes .about-panel{padding:18px}.about-title h2{font-size:19px}.query-form .clear-button{margin:0 -2px}.query-form textarea::placeholder{font-size:14px}}
+/* One quiet, actionable lesson at a time; typing makes room for the tool. */
+.search-hints{display:flex;justify-content:center;align-items:center;gap:2px;margin:12px auto 0;max-width:540px;min-height:48px;color:#62666c}
+.search-hint{min-height:44px;padding:6px 8px;font-size:12px;line-height:1.6;text-align:center;border-radius:8px;min-width:0}
+.search-hint>span{display:block;animation:hint-reveal .2s ease-out}.search-hint strong{font-weight:500;color:#4d5663}.search-hint:hover strong{color:var(--blue)}
+.search-hint kbd{font:inherit;border:1px solid #d9dde3;border-radius:4px;background:#fafbfc;padding:1px 6px;margin-inline:3px}
+.hint-pause{display:grid;place-items:center;min-width:44px;min-height:44px;color:#697078;border-radius:50%}.hint-pause:hover{background:#f3f6fb}
+.fluid-app[data-mode=flights]{--accent:#225c9e;--tint:#f2f7fe}.fluid-app[data-mode=hotels]{--accent:#8b5033;--tint:#fcf6f0}.fluid-app[data-mode=shopping]{--accent:#7950a2;--tint:#f8f4fc}.fluid-app[data-mode=images]{--accent:#76557e;--tint:#faf5fb}.fluid-app[data-mode=video]{--accent:#a14343;--tint:#fff6f5}
+@keyframes hint-reveal{from{opacity:.3}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.search-hint>span{animation:none}}

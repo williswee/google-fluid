@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "dataset": "search-v3",
+  "dataset": "search-v4",
   "split": "development",
   "language": "en",
-  "description": "Authored English search-intent cases for the twenty-two-mode Fluid Search demo; not user data. Two cases per mode in each disjoint split. Includes explicit negation, topic mentions and ambiguity. Separate from historical search-v1/search-v2 reports and archived composer datasets.",
+  "description": "Authored English search-intent cases for 27 modes; not user data. Two disjoint cases per mode, expanded for travel, shopping and visual search. Historical reports remain unchanged.",
   "cases": [
     {
       "id": "search-development-general-01",
@@ -312,6 +312,76 @@
       "scenario": "offline/404 Easter egg",
       "draft": "404",
       "rationale": "The visitor requests the jumping dinosaur game or its explicit 404 Easter egg."
+    },
+    {
+      "id": "search-v4-development-flights-01",
+      "expected": "flights",
+      "scenario": "route between two cities",
+      "draft": "flights from Singapore to Tokyo",
+      "rationale": "The primary action requests the flights interface."
+    },
+    {
+      "id": "search-v4-development-flights-02",
+      "expected": "flights",
+      "scenario": "one-way airfare",
+      "draft": "one way flights from London to New York",
+      "rationale": "The primary action requests the flights interface."
+    },
+    {
+      "id": "search-v4-development-hotels-01",
+      "expected": "hotels",
+      "scenario": "overnight accommodation",
+      "draft": "hotels in Tokyo for 2 guests",
+      "rationale": "The primary action requests the hotels interface."
+    },
+    {
+      "id": "search-v4-development-hotels-02",
+      "expected": "hotels",
+      "scenario": "amenity and destination",
+      "draft": "Singapore hotels with a pool",
+      "rationale": "The primary action requests the hotels interface."
+    },
+    {
+      "id": "search-v4-development-video-01",
+      "expected": "video",
+      "scenario": "video format intent",
+      "draft": "videos about the northern lights",
+      "rationale": "The primary action requests the video interface."
+    },
+    {
+      "id": "search-v4-development-video-02",
+      "expected": "video",
+      "scenario": "short tutorial",
+      "draft": "short sourdough video tutorial",
+      "rationale": "The primary action requests the video interface."
+    },
+    {
+      "id": "search-v4-development-shopping-01",
+      "expected": "shopping",
+      "scenario": "purchase with budget",
+      "draft": "noise cancelling headphones under $200",
+      "rationale": "The primary action requests the shopping interface."
+    },
+    {
+      "id": "search-v4-development-shopping-02",
+      "expected": "shopping",
+      "scenario": "product purchase",
+      "draft": "buy running shoes for beginners",
+      "rationale": "The primary action requests the shopping interface."
+    },
+    {
+      "id": "search-v4-development-images-01",
+      "expected": "images",
+      "scenario": "existing photo search",
+      "draft": "images of Earth from space",
+      "rationale": "The primary action requests the images interface."
+    },
+    {
+      "id": "search-v4-development-images-02",
+      "expected": "images",
+      "scenario": "image format intent",
+      "draft": "pictures of the Moon",
+      "rationale": "The primary action requests the images interface."
     }
   ]
 }

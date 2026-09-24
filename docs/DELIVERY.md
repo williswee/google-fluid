@@ -1,4 +1,36 @@
-# Current delivery — Impeccable polish, 24 September 2026
+# Current delivery — expanded search tools, 24 September 2026
+
+Expanded the demo to **27 interfaces and 43 distinctly named examples**. Added Flights, Hotels, Shopping, Videos and Images; expanded Finance, News and Maps. Preserved the white search surface, anchored query, footer Notes and private repository.
+
+- Flights: editable origin/destination with swap, trip type, dates, cabin and passengers.
+- Hotels: stay dates/nights, rooms, guests, class and amenities.
+- Shopping: product, valid budget, currency, condition, category and sort.
+- Finance: stock research controls and a real local compound-growth calculator with an illustrative chart.
+- Videos: duration, source and upload-date refinements.
+- Images: attributed NASA Earth/Moon references with image-search and preview controls.
+- Maps: explicit Load map opens OpenStreetMap; custom destination search remains separate from the selected city preview.
+- News: topic, source, recency, region and coverage-style refinements.
+
+Travel, shopping, stock, video and news actions open genuine Google searches. They do not fabricate prices, availability, video results or headlines. Search/detail copy identifies the previews. The two NASA assets are official remote JPEGs (about 128/247 KiB); external map resources load only on request. No new AI provider, account or paid integration.
+
+Every slash example now has a unique title, including Calculator / Tip & bill split, Unit converter / Currency converter, Weather forecast / Sunrise & sunset, Hex / Named color picker, individual dictionary/film examples, and distinct dinosaur/Easter-egg titles. Category filtering still works.
+
+A quiet clickable hint appears only below the empty search. It cycles every six seconds, pauses on hover/focus and on demand, stops offscreen or in a hidden tab, and stays static with reduced motion. Selecting a hint is immediate and labelled Selected by you; typing an ordinary query still uses Jev.
+
+Verification:
+
+- 381 unit/integration tests and production build pass.
+- 55 fixture browser scenarios pass: 54 in the integrated run and the remaining Maps case after correcting its test-only locator. Coverage includes every new control family, all unique slash labels, hint pause/reduced motion, query/caret stability and existing utilities. No application defect or inference retry was involved in that locator correction.
+- One batched visual review at 1440, 813, 390 and 320px found no horizontal overflow or page errors. A targeted settled desktop Maps/News capture resolved a capture-timing anomaly without code changes. Independent finish review: ship.
+- Real Jev search-v4 development: **54/54**, round-trip p50 **698.75 ms**, p95 **864.80 ms**.
+- Real Jev search-v4 held-out: **54/54**, round-trip p50 **980.67 ms**, p95 **2616.06 ms**.
+- Both sets have two cases per route and use the same protected local endpoint, model and budget ledger. These small authored English sets are acceptance checks, not a general model-accuracy or global-latency claim. Reports: `evaluation/results/search-v4-development.json` and `search-v4-held-out.json`.
+
+The shared US$5 allowance, atomic accounting, request controls, secrets, Vercel Hobby tier and repository visibility remain unchanged. Video work is deferred.
+
+---
+
+# Historical delivery — Impeccable polish, 24 September 2026
 
 Preserved the white Google-style world, anchored search field, all 22 modes and footer-only disclosures. Improved mobile placeholder and menu typography, shared keyboard focus, hover/pressed feedback and footer readability. Notes retains its copy and credits with clear sections; closing it or pressing Escape restores focus to the actual opener. Slash navigation scrolls only its list, whose height adapts to available viewport space. Removed obsolete header/example CSS.
 

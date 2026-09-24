@@ -6,7 +6,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Google Fluid — a Jev search experiment',
-  description: 'A search bar that takes the shape of your curiosity. Explore 22 interactive search interfaces powered by TypeSafe Jev.',
+  description: 'A search bar that takes the shape of your curiosity. Explore 27 interactive search interfaces powered by TypeSafe Jev.',
   robots: { index: true, follow: true },
 };
 

@@ -258,13 +258,13 @@ test('place filters change a Maps destination without fetching invented places',
   const { requests } = await setup(page, { live: false });
   await choose(page, 'places');
   const places = panel(page, 'places');
-  await places.getByRole('button', { name: 'Parks', exact: true }).click();
-  const destination = new URL((await places.getByRole('link', { name: /Explore on Maps/ }).getAttribute('href'))!);
+  await places.getByRole('combobox', {name:'Place type', exact:true}).selectOption('parks');
+  const destination = new URL((await places.getByRole('link', { name: /Search Google Maps/ }).getAttribute('href'))!);
   expect(destination.host).toBe('www.google.com');
   expect(destination.pathname).toBe('/maps/search/');
   expect(destination.searchParams.get('query')).toBe(`${SEARCH_MODES.places.example} parks`);
   await page.getByRole('button', { name: 'Notes', exact: true }).click();
-  await expect(page.getByRole('region', { name: 'Fluid Search notes' })).toContainText('map illustration is schematic');
+  await expect(page.getByRole('region', { name: 'Fluid Search notes' })).toContainText('OpenStreetMap only when you choose');
   expect(requests).toHaveLength(0);
 });
 
