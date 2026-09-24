@@ -1,4 +1,14 @@
-# Current video — 24 September 2026
+# Current video — revised edit, 24 September 2026
+
+Delivered `artifacts/google-fluid-demo-30s-v2.mp4`: exactly 30.00 seconds, 1920×1080 H.264 at 30 fps, captions and no audio. The requested sequence is Flights from Singapore to Tokyo → Hotels → Images of the earth → Sunrise in Singapore tomorrow → What does serendipity mean → Play the dinosaur game. All six tools are triggered by real Jev decisions on https://googlefluid.vercel.app. A continuous 35.75-second capture plays at the explicitly requested 1.3× speed, labelled during the footage. The last 2.5 seconds contain only **Fluid search that changes shape :)**.
+
+Final take: `artifacts/recordings/search-v2-2026-09-24T07-31-41-246Z/take.json`. In story order, server times were 1106/337/583/578/575/558 ms; request-to-confirmed-UI times were 1280/610/754/706/727/672 ms, including assertion overhead. These are measurements of the original capture, not the sped-up playback or a general performance claim. Six paid requests in the final take, two real keyboard jumps and no page errors. An earlier six-request take was discarded because the automated player jumped too early and hit a cactus; the corrected keyboard timing passed a separate seven-second manual-mode check without inference. Total usage for this revision was twelve protected Jev requests. There were no API mocks, response replays, application-state changes or budget bypasses.
+
+Verified the loaded NASA Earth image, tomorrow selected in the live Singapore forecast, the serendipity definition and both dinosaur jumps. Full MP4 decoding, exact duration, codec and dimensions pass. Visually reviewed scene framing, caption readability, source badges and the exact end card. The final camera adjustment reused the same footage without inference. The repository's 393 tests and production build also pass; application code and the public deployment were not changed. VTT captions, poster, contact sheet, raw capture and JSON metadata stay local and ignored. The recorder and updated documentation remain in the private repository.
+
+---
+
+# Previous video edit — 24 September 2026
 
 Delivered `artifacts/google-fluid-demo-30s.mp4`: exactly 30.00 seconds, 1920×1080 H.264 at 30 fps, captions and no audio. Recorded the current https://googlefluid.vercel.app deployment. Three actual Jev decisions reveal Flights, Hotels and Color; the `/` menu opens a playable dinosaur runner with a visible jump. Editorial zooms follow the query and controls; the closing card includes the public URL and TypeSafe Jev credit. No response mocks, state injection or time compression.
 

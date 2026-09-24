@@ -96,8 +96,8 @@ The header has no brand link or Classic/Fluid switch. **Notes** lives beside the
 
 ## Demo video
 
-The current 30-second, captioned 1080p film is `artifacts/google-fluid-demo-30s.mp4`. It shows live flight, hotel and color transitions, then a playable dinosaur selected through `/`, with focused zooms and the public URL. See [recording and editing instructions](docs/VIDEO.md). Raw footage and final media stay local and are excluded from Git.
+The current 30-second, captioned 1080p film is `artifacts/google-fluid-demo-30s-v2.mp4`. It follows flights → hotels → Earth images → Singapore sunrise → serendipity → the dinosaur game, with six real Jev decisions, focused zooms and 1.3× playback. It ends with “Fluid search that changes shape :)”. See [recording and editing instructions](docs/VIDEO.md). Raw footage and final media stay local and are excluded from Git.
 
 ## Previous prototype
 
-Historical chat-composer evaluations, code history, and the 58-second chat video remain available. `scripts/record-demo.mjs` and `docs/VIDEO.md` belong to that previous interface and are not a recorder for the current search demo. The current search film uses `scripts/record-search-demo.mjs`; the earlier recorder remains historical.
+Historical chat-composer evaluations, code history, and the 58-second chat video remain available. The former chat recorder is `scripts/record-demo.mjs`; the current search film uses `scripts/record-search-demo.mjs`. `docs/VIDEO.md` documents the current edit and keeps the earlier recordings in historical sections.

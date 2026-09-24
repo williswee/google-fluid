@@ -1,6 +1,37 @@
-# Google Fluid — 30-second demo
+# Google Fluid — revised 30-second demo
 
-The current film is `artifacts/google-fluid-demo-30s.mp4`: 1920 × 1080, 30 fps, H.264, exactly 30 seconds, captioned, landscape, without audio. It records https://googlefluid.vercel.app with real Jev decisions and a manually selected dinosaur game. Smooth editorial zooms focus on the query, full travel panels, color controls and gameplay. Typing and inference remain at normal speed.
+The current film is `artifacts/google-fluid-demo-30s-v2.mp4`: exactly 30 seconds, 1920 × 1080, 30 fps, H.264, landscape, captions and no audio. It records the public site at https://googlefluid.vercel.app. All six searches receive real Jev decisions. The 35.75-second capture plays at the user-requested **1.3× speed**, followed by a 2.5-second end card. A small playback label stays visible during the footage.
+
+| Finished time | Scene |
+| --- | --- |
+| 0–4.3s | Flights from Singapore to Tokyo; select One way. |
+| 4.3–8.05s | Hotels in Tokyo for 2 guests; select Pool. |
+| 8.05–12.15s | Images of the earth; show the loaded NASA Earth reference. |
+| 12.15–16.75s | Sunrise in Singapore tomorrow; focus on the live forecast and sunrise time. |
+| 16.75–20.6s | What does serendipity mean; show the dictionary definition. |
+| 20.6–27.5s | Play the dinosaur game; Start and jump using the real keyboard controls. |
+| 27.5–30s | Only: “Fluid search that changes shape :)” |
+
+Camera moves keep the query and useful controls readable. The travel controls prepare searches, the Earth image is an attributed curated reference, and weather comes from the app's existing Open-Meteo endpoint. The Jev provenance badge remains visible. A recording-only pointer, click rings, captions, camera crops and the end card are editorial additions. No application state or API response is changed; the entire footage segment receives the same 1.3× speedup.
+
+## Record or re-edit
+
+```sh
+node scripts/record-search-demo.mjs
+node scripts/record-search-demo.mjs --render /absolute/path/to/v2/take.json
+```
+
+The recorder requires Playwright Chromium, `ffmpeg-static`, Arial on macOS, and live inference at the public origin. Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` to use an installed Chromium. Each real request uses the same shared budget guard as the site. The recorder checks all six routes, the loaded Earth image, tomorrow's forecast, the dictionary entry and real gameplay. A failed route or scene stops the take; there are no automatic retries. Re-editing makes no network or inference requests.
+
+The encoder trims the removable black alignment marker, applies the uniform speedup, adds the camera and captions, and verifies a complete decode with exactly 30 seconds of 1080p H.264 video. Companion VTT captions, poster, contact sheet and JSON metadata use the same `google-fluid-demo-30s-v2` stem. Raw footage and capture logs remain under `artifacts/recordings/`. All media stays local and excluded from Git.
+
+See the current entry in [DELIVERY.md](DELIVERY.md) for the take, measured decision times and checks. Earlier edits below are retained as historical records; they are not the current film.
+
+---
+
+# Previous Google Fluid edit — 30-second demo
+
+The previous film is `artifacts/google-fluid-demo-30s.mp4`: 1920 × 1080, 30 fps, H.264, exactly 30 seconds, captioned, landscape, without audio. It records https://googlefluid.vercel.app with real Jev decisions and a manually selected dinosaur game. Smooth editorial zooms focus on the query, full travel panels, color controls and gameplay. Typing and inference remain at normal speed.
 
 | Time | Scene |
 | --- | --- |
@@ -12,7 +43,9 @@ The current film is `artifacts/google-fluid-demo-30s.mp4`: 1920 × 1080, 30 fps,
 
 The Jev badge stays visible during automatic routing. The game shows “Selected by you.” The trip controls prepare searches; no prices or availability are invented. A recording-only pointer and click rings make real interactions visible. Captions, a clear caption band, camera crops and the closing card are editorial additions; application state and API responses are untouched.
 
-## Reproduce or re-edit
+## Previous recording notes
+
+The commands and storyboard in this historical section describe the first edit. The current recorder uses the six-search v2 sequence documented above; retrieve the earlier recorder from Git history to re-render the first take.
 
 ```sh
 node scripts/record-search-demo.mjs

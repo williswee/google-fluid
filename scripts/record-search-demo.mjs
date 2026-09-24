@@ -11,20 +11,27 @@ const artifacts = path.join(root, 'artifacts');
 const base = 'https://googlefluid.vercel.app';
 const wait = ms => new Promise(resolve => setTimeout(resolve, Math.max(0, ms)));
 const font = '/System/Library/Fonts/Supplemental/Arial.ttf';
+const playbackRate = 1.3;
+const footageDuration = 27.5;
+const captureDuration = footageDuration * playbackRate;
+const outputStem = 'google-fluid-demo-30s-v2';
+const endCopy = 'Fluid search that changes shape :)';
 const cues = [
-  [0, 2.8, 'What if search changed shape?'],
-  [2.8, 7, 'A flight query becomes a trip planner.'],
-  [7, 14, 'Change the thought. The interface follows.'],
-  [14, 20.2, 'Find a color. Make it yours.'],
-  [20.2, 22.7, 'Type / to explore all 27 tools.'],
-  [22.7, 27.4, 'Even a little room to play.'],
+  [0, 4.3, 'Start with a trip.'],
+  [4.3, 8.05, 'Then find somewhere to stay.'],
+  [8.05, 12.15, 'A different view.'],
+  [12.15, 16.75, 'A new day.'],
+  [16.75, 20.6, 'A word worth knowing.'],
+  [20.6, 27.5, 'And a little time to play.'],
 ];
+// Camera timing is in finished-video seconds; actions below use real capture time.
 const camera = [
-  [0, 1.12, 470], [1, 1.12, 470], [2.2, 1.7, 430],
-  [3.6, 1.30, 638], [7, 1.30, 638], [7.75, 1.4, 610],
-  [9.2, 1.24, 640], [14, 1.24, 640], [17, 1.75, 535],
-  [20.2, 1.75, 535], [21.1, 1.5, 600], [22.7, 1.55, 590],
-  [26.1, 1.55, 590], [27.4, 1, 540], [30, 1, 540],
+  [0, 1.12, 470], [0.75, 1.12, 470], [1.6, 1.65, 440],
+  [2.65, 1.30, 638], [4.3, 1.30, 638], [5.1, 1.4, 610],
+  [6.3, 1.24, 640], [8.05, 1.24, 640], [9.8, 1.45, 599],
+  [12.15, 1.45, 599], [14.25, 1.8, 550], [15.3, 1.8, 550],
+  [16.75, 1.8, 550], [18.5, 1.9, 540], [20.6, 1.9, 540],
+  [22.5, 1.55, 590], [26.5, 1.55, 590], [27.3, 1.12, 470], [30, 1.12, 470],
 ];
 function run(args, logLevel = 'error') {
   return new Promise((resolve, reject) => {
@@ -49,12 +56,13 @@ function stamp(seconds) {
 }
 async function render(manifestPath) {
   const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
+  if (manifest.version !== 2) throw new Error('This edit requires a v2 take with the revised six-search sequence.');
   const scan = await run(['-i', manifest.rawVideo, '-vf', 'blackdetect=d=0.15:pix_th=0.02', '-an', '-f', 'null', '-'], 'info');
   const markers = [...scan.matchAll(/black_start:([\d.]+) black_end:([\d.]+) black_duration:([\d.]+)/g)];
   if (!markers.length) throw new Error('Start marker missing; refusing an unaligned edit.');
   const start = Number(markers.at(-1)[2]);
   const filter = [
-    `trim=start=${start}:duration=30,setpts=PTS-STARTPTS,fps=30`,
+    `trim=start=${start}:duration=${captureDuration},setpts=(PTS-STARTPTS)/${playbackRate},fps=30,tpad=stop_mode=clone:stop_duration=3,trim=duration=30`,
     `zoompan=z='${expression(1)}':x='iw/2-iw/zoom/2':y='max(0,min(ih-ih/zoom,${expression(2)}-ih/zoom/2))':d=1:s=1920x1080:fps=30`,
   ];
   // A dedicated caption band keeps text clear of the logo during camera moves.
@@ -64,36 +72,32 @@ async function render(manifestPath) {
     await writeFile(textfile, cue[2]);
     filter.push(`drawtext=fontfile='${font}':textfile='${textfile}':fontsize=34:fontcolor=0x202124:x=(w-tw)/2:y=40:enable='between(t,${cue[0]},${cue[1]})':alpha='min(1,(t-${cue[0]})/0.18)'`);
   }
-  // End card is an editorial overlay; the actual recording stays at normal speed underneath.
-  filter.push("drawbox=x=0:y=0:w=iw:h=ih:color=white:t=fill:enable='gte(t,27.4)'");
-  const end = [
-    ['Search that changes shape.', 58, '0x202124', 380],
-    ['googlefluid.vercel.app', 44, '0x1a73e8', 480],
-    ['Try it yourself', 25, '0x62666c', 554],
-    ['Built with TypeSafe Jev', 22, '0x62666c', 674],
-  ];
-  for (const [i, [text, size, color, y]] of end.entries()) {
-    const textfile = path.join(path.dirname(manifestPath), `end-${i}.txt`);
-    await writeFile(textfile, text);
-    filter.push(`drawtext=fontfile='${font}':textfile='${textfile}':fontsize=${size}:fontcolor=${color}:x=(w-tw)/2:y=${y}:enable='gte(t,27.4)':alpha='min(1,(t-27.4)/0.3)'`);
-  }
+  // The requested speedup is disclosed during footage, never on the minimal end card.
+  const speedFile = path.join(path.dirname(manifestPath), 'speed.txt');
+  await writeFile(speedFile, '1.3× playback');
+  filter.push(`drawtext=fontfile='${font}':textfile='${speedFile}':fontsize=21:fontcolor=0x71757a:x=w-tw-48:y=47:enable='lt(t,${footageDuration})'`);
+  // Freeze the final recorded frame beneath the closing editorial overlay.
+  filter.push(`drawbox=x=0:y=0:w=iw:h=ih:color=white:t=fill:enable='gte(t,${footageDuration})'`);
+  const endFile = path.join(path.dirname(manifestPath), 'end.txt');
+  await writeFile(endFile, endCopy);
+  filter.push(`drawtext=fontfile='${font}':textfile='${endFile}':fontsize=58:fontcolor=0x202124:x=(w-tw)/2:y=(h-th)/2:enable='gte(t,${footageDuration})':alpha='min(1,(t-${footageDuration})/0.25)'`);
   const filterFile = path.join(path.dirname(manifestPath), 'edit.ffmpeg');
   await writeFile(filterFile, filter.join(','));
-  const output = path.join(artifacts, 'google-fluid-demo-30s.mp4');
+  const output = path.join(artifacts, `${outputStem}.mp4`);
   await run(['-y', '-i', manifest.rawVideo, '-filter_script:v', filterFile, '-t', '30', '-an', '-c:v', 'libx264', '-preset', 'medium', '-crf', '17', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', output]);
   const metadata = await run(['-i', output, '-f', 'null', '-'], 'info');
   if (!/Duration: 00:00:30\.00/.test(metadata) || !/Video: h264[^\n]*1920x1080/.test(metadata)) throw new Error('Final MP4 did not verify as 30 seconds, 1920×1080 H.264.');
-  await run(['-y', '-ss', '18.5', '-i', output, '-frames:v', '1', path.join(artifacts, 'google-fluid-demo-30s-poster.png')]);
-  await run(['-y', '-i', output, '-vf', 'fps=1/2,scale=480:-1,tile=3x5', '-frames:v', '1', path.join(artifacts, 'google-fluid-demo-30s-contact.png')]);
-  const allCues = [...cues, [27.4, 30, 'Search that changes shape.\ngooglefluid.vercel.app · Built with TypeSafe Jev']];
-  await writeFile(path.join(artifacts, 'google-fluid-demo-30s.vtt'), 'WEBVTT\n\n' + allCues.map(([a,b,text])=>`${stamp(a)} --> ${stamp(b)}\n${text}`).join('\n\n') + '\n');
-  await writeFile(path.join(artifacts, 'google-fluid-demo-30s.json'), JSON.stringify({...manifest, output, duration:30, width:1920, height:1080, fps:30, trimStart:start, camera, captions:allCues, verified:true}, null, 2)+'\n');
+  await run(['-y', '-ss', '11', '-i', output, '-frames:v', '1', path.join(artifacts, `${outputStem}-poster.png`)]);
+  await run(['-y', '-i', output, '-vf', 'fps=1/2,scale=480:-1,tile=3x5', '-frames:v', '1', path.join(artifacts, `${outputStem}-contact.png`)]);
+  const allCues = [...cues, [footageDuration, 30, endCopy]];
+  await writeFile(path.join(artifacts, `${outputStem}.vtt`), 'WEBVTT\n\n' + allCues.map(([a,b,text])=>`${stamp(a)} --> ${stamp(b)}\n${text}`).join('\n\n') + '\n');
+  await writeFile(path.join(artifacts, `${outputStem}.json`), JSON.stringify({...manifest, output, duration:30, width:1920, height:1080, fps:30, playbackRate, captureDuration, trimStart:start, camera, captions:allCues, verified:true}, null, 2)+'\n');
   console.log(`Verified: ${output}`);
 }
 async function record() {
   const status = await fetch(`${base}/api/status`).then(r=>r.json());
   if (!status.liveAvailable) throw new Error('Live Jev is unavailable; recording stopped.');
-  const take = path.join(artifacts, 'recordings', `search-${new Date().toISOString().replace(/[:.]/g,'-')}`);
+  const take = path.join(artifacts, 'recordings', `search-v2-${new Date().toISOString().replace(/[:.]/g,'-')}`);
   await mkdir(take, {recursive:true});
   const browser = await chromium.launch({headless:true, ...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ? {executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH} : {})});
   const context = await browser.newContext({viewport:{width:1920,height:1080},deviceScaleFactor:1,recordVideo:{dir:take,size:{width:1920,height:1080}}});
@@ -112,7 +116,7 @@ async function record() {
   let start;
   const elapsed=()=> (performance.now()-start)/1000;
   async function at(time) {
-    if(elapsed()>time+0.3) throw new Error(`Take exceeded scene timing at ${time}s; no inference is shortened.`);
+    if(elapsed()>time+0.3) throw new Error(`Take exceeded capture timing at ${time}s.`);
     await wait((time-elapsed())*1000);
   }
   async function moveTo(locator) {
@@ -158,55 +162,55 @@ async function record() {
     start=performance.now();
     await at(1);
     await live('flights from Singapore to Tokyo','flights');
-    await at(5.7);
+    await at(4.4);
     await click(page.getByRole('button',{name:'One way',exact:true}));
-    await at(7);
+    await at(5.6);
     await live('hotels in Tokyo for 2 guests','hotels');
-    await at(11.5);
+    await at(8.9);
     await click(page.getByRole('button',{name:'Pool',exact:true}));
-    await at(14);
-    await live('color picker coral','color');
-    await at(17.3);
-    const blue=page.getByRole('slider',{name:'Blue channel'});
-    const bounds=await blue.boundingBox();
-    const initial=Number(await blue.inputValue())/255;
-    const x=bounds.x+initial*bounds.width;
-    await page.mouse.move(x,bounds.y+bounds.height/2,{steps:12});
-    await page.mouse.down();
-    for(let i=0;i<=36;i++){await page.mouse.move(x+(bounds.x+bounds.width-8-x)*i/36,bounds.y+bounds.height/2);await wait(22);}
-    await page.mouse.up();
-    await at(20.2);
-    await click(page.getByRole('button',{name:'Browse all search tools'}));
-    await input.pressSequentially('dino',{delay:65});
-    await at(21.5);
-    await click(page.getByRole('option',{name:'Dinosaur runner play the dinosaur game',exact:true}));
-    await expect(page.locator('.decision-source')).toContainText('Selected by you');
-    await at(22.4);
+    await at(10.5);
+    await live('images of the earth','images');
+    await expect(page.locator('.dt-photo-frame img')).toBeVisible();
+    await page.waitForFunction(()=>{const img=document.querySelector('.dt-photo-frame img');return img?.complete && img.naturalWidth>0;});
+    await page.mouse.move(1370,900,{steps:12});
+    await at(15.8);
+    await live('sunrise in Singapore tomorrow','weather');
+    await expect(page.locator('.knowledge-weather .forecast-facts')).toBeVisible();
+    await expect(page.getByRole('button',{name:/Tomorrow/})).toHaveAttribute('aria-pressed','true');
+    await moveTo(page.locator('.forecast-facts span').nth(1));
+    await at(21.8);
+    await live('what does serendipity mean','define');
+    await expect(page.locator('.knowledge-dictionary h2')).toHaveText('serendipity');
+    await page.mouse.move(1370,780,{steps:12});
+    await at(26.8);
+    await live('play the dinosaur game','dino');
+    await at(29.6);
     await click(page.getByRole('button',{name:'Start game',exact:true}));
     await page.mouse.move(1400,720,{steps:10});
     // Actual keyboard gameplay: jump when the visible cactus approaches the player.
-    await at(23.15);
+    await at(30.5);
     await page.keyboard.press('Space');
     await expect(page.locator('.dino-player')).toHaveAttribute('data-grounded','false');
     let jumps=1;
-    while(elapsed()<26.2){
+    while(elapsed()<35.3){
       const state=await page.evaluate(()=>{
         const player=document.querySelector('.dino-player');
         const obstacles=[...document.querySelectorAll('.dino-cactus')].map(e=>Number(e.getAttribute('transform')?.match(/translate\(([-\d.]+)/)?.[1]));
         return {grounded:player?.getAttribute('data-grounded')==='true',nearest:Math.min(...obstacles.filter(x=>x>30)),phase:document.querySelector('.dino-game')?.getAttribute('data-state')};
       });
       if(state.phase==='crashed') throw new Error('Dinosaur crashed before the closing shot.');
-      if(state.grounded && state.nearest<170){await page.keyboard.press('Space');jumps++;}
-      await wait(40);
+      if(state.grounded && state.nearest<130){await page.keyboard.press('Space');jumps++;}
+      await wait(25);
     }
     if(!jumps) throw new Error('No playable dinosaur jump was captured.');
-    await click(page.getByRole('button',{name:'Clear search',exact:true}));
-    await page.mouse.move(1500,750,{steps:12});
-    await at(30);
+    await at(captureDuration);
     await wait(250);
     if(errors.length) throw new Error(errors.join('; '));
-    const manifest={recordedAt:new Date().toISOString(),baseUrl:base,decisions,paidRequests:requests.size,jumps,errors,capture:'Actual live browser, continuous 1× timing. Editorial camera crops, visible pointer, captions and end card. No mocked/replayed responses or modified application state.',rawVideo:await video.path()};
+    const manifest={version:2,recordedAt:new Date().toISOString(),baseUrl:base,decisions,paidRequests:requests.size,jumps,errors,capture:'Actual live browser captured continuously at 1×, then played at the requested 1.3× speed with an on-screen playback label. All six routes use real Jev responses. Editorial camera crops, visible pointer, captions and end card. No mocked/replayed responses or modified application state.',rawVideo:await video.path()};
     await writeFile(path.join(take,'take.json'),JSON.stringify(manifest,null,2));
+  } catch (error) {
+    errors.push(error.message);
+    throw error;
   } finally {
     await context.close();await browser.close();
     await writeFile(path.join(take, 'capture-log.json'), JSON.stringify({recordedAt,baseUrl:base,decisions,paidRequests:requests.size,errors,rawVideo:await video.path()},null,2));
