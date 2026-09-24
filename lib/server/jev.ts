@@ -26,8 +26,9 @@ export const SEARCH_CRITERIA = {
   color: "Use a color picker, inspect a color/hex/RGB value, mix or adjust a color. Includes bare hex colors like '#4285f4', 'color picker coral', 'find a shade of blue'. Excludes unrelated uses of color names in titles or general questions about color science.",
   compare: "A side-by-side comparison of two objects/entities, especially Earth vs Mars or planet comparisons. Includes 'compare Earth and Mars', 'Earth versus Mars'. Excludes currency/unit conversion and arithmetic.",
   science: "Interactively explore or visualize gravity, orbits, planetary motion, a solar system, or black-hole gravity. Includes 'show me how gravity affects an orbit', 'simulate a planet orbiting a star', 'how does a black hole bend space'. Prefer general for unrelated science explanations. This route offers a simplified prebuilt orbit simulation.",
-  game: "Play a game directly, including tic-tac-toe, noughts and crosses, classic browser games or Pac-Man. Includes 'play tic tac toe'. Merely asking for the history or rules of a game is general.",
+  game: "Play a game directly (except the dinosaur/offline runner, which is dino), including tic-tac-toe, noughts and crosses, classic browser games or Pac-Man. Includes 'play tic tac toe'. Merely asking for the history or rules of a game is general.",
   play: "An explicit visual search Easter egg: 'do a barrel roll', 'askew', 'tilt the page'. Includes requests to see these page tricks; excludes their history or unrelated barrel/roll meanings.",
+  dino: "Play the jumping dinosaur runner, Chrome's offline T-rex game, jump over cacti, or the 404 dinosaur Easter egg. Includes 'play the dinosaur game', 'offline dinosaur runner', '404 dinosaur game', and the bare query '404' as this demo's Easter egg. Prefer dino over game or play for this specific runner. Excludes dinosaur facts, dinosaur movies, and technical questions such as 'what does HTTP 404 mean' or 'fix my 404 error'; those are general.",
 } satisfies Record<ModeId, string>;
 
 export interface Classification {

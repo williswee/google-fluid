@@ -1,4 +1,24 @@
-# Current delivery — Fluid Search interactive tools, 24 September 2026
+# Current delivery — quieter chrome and Dinosaur run, 24 September 2026
+
+Removed the top brand and Classic/Fluid switch. The interface is always fluid. Renamed How it works to Notes and moved its trigger/disclosure to the footer. Notes explicitly credits ShapeShift OSS and Anish Gupta (@anishfn), with links to both the project and author.
+
+Added a 22nd intent, Dinosaur run, and two prepared queries (30 total). Natural play requests and bare `404` route through Jev; selecting `/dinosaur` is immediate and labelled Selected by you. An original local SVG/physics runner provides Space/ArrowUp/touch jump, score, cacti, collision, pause/resume/restart, and automatic pause on blur/hidden tab. No global game key handlers, automatic start, audio, storage or extra provider. A real HTTP404 route embeds the same playable component with a home link. Chrome's original is an offline game; Notes distinguishes that inspiration from our 404 use.
+
+Verification:
+
+- 310 unit/integration tests and production build pass.
+- 39 browser scenarios pass: 38 on the full run and the corrected test-selector case on its targeted confirmation; no app defect or retry was involved.
+- Batched visuals at 1440px, 813px and 390px: no horizontal overflow or page errors. All three missing-route checks returned HTTP404.
+- Focused live Jev check: 4/4 dinosaur queries routed to dino; all four technical/factual/negated requests avoided the game. Exact expected labels were 10/11: “what does HTTP404 mean” selected Dictionary rather than general search, whose unknown-term panel links to Google. This is recorded rather than counted as an exact match. Three existing route regressions passed. Report: `evaluation/results/search-v3-dino-focused.json`.
+- The expanded search-v3 datasets contain 44 cases per split; no claim of a full new benchmark. Historical search-v2 results remain unchanged.
+
+Same private repository, Vercel Hobby project and US$5 ledger. No video work.
+
+Production verification will be recorded after publication.
+
+---
+
+# Historical delivery — Fluid Search interactive tools, 24 September 2026
 
 The public app now has 21 interfaces and 28 prepared queries discoverable through `/`. The example grid is removed. How it works contains privacy, affiliation, routing details, limitations, and the optional manual mode lock. The query is preserved when browsing/cancelling the palette, including its selection range. Choosing a tool is immediate and labelled Selected by you; a subsequent edit returns to Jev.
 

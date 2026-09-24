@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-24T02:44:32.771Z",
+  "generatedAt": "2026-09-24T02:59:46.221235+00:00",
   "title": "Design System: Fluid Search",
   "extensions": {
     "shadows": [
@@ -18,11 +18,6 @@
         "name": "search-focus",
         "value": "0 4px 24px #3c404314",
         "purpose": "Search shell focus-within feedback."
-      },
-      {
-        "name": "selected-segment",
-        "value": "0 2px 5px #20212412",
-        "purpose": "Active Classic/Fluid segment."
       }
     ],
     "motion": [
@@ -747,13 +742,6 @@
       "css": ".ds-choices{display:flex;flex-wrap:wrap;gap:6px;padding:8px;background:var(--tint,#f5f8ff)}.ds-choice{font-family:Geist,Arial,sans-serif;min-height:44px;min-width:44px;font-size:11px;border:1px solid color-mix(in srgb,var(--accent,#1967d2) 15%,white);border-radius:8px;padding:8px 12px;background:#ffffff70;color:var(--ink,#202124);cursor:pointer;transition:background .15s,color .15s}.ds-choice[aria-pressed=true]{background:var(--accent,#1967d2);color:white;border-color:var(--accent,#1967d2)}.ds-choice:hover:not([aria-pressed=true]){background:white}.ds-search-button:focus-visible,.ds-input:focus-visible,.ds-choice:focus-visible,.ds-nav button:focus-visible,.ds-chip:focus-visible,.ds-example:focus-visible{outline:3px solid #8ab4f8;outline-offset:3px}"
     },
     {
-      "name": "Classic / Fluid switch",
-      "kind": "nav",
-      "description": "Compact comparison switch with a lifted active segment.",
-      "html": "<div class=\"ds-nav\" role=\"group\" aria-label=\"Search interface\"><button aria-pressed=\"false\">Classic</button><button aria-pressed=\"true\">Fluid</button></div>",
-      "css": ".ds-nav{display:inline-flex;background:#f3f4f5;border:1px solid #e9eaec;border-radius:24px;padding:3px}.ds-nav button{font-family:Geist,Arial,sans-serif;border:0;background:none;color:#202124;min-width:66px;height:44px;border-radius:20px;font-size:12px;cursor:pointer;transition:background .15s,color .15s,box-shadow .15s}.ds-nav button[aria-pressed=true]{background:white;color:#174ea6;box-shadow:0 2px 5px #20212412}.ds-nav button:hover{color:#174ea6}.ds-search-button:focus-visible,.ds-input:focus-visible,.ds-choice:focus-visible,.ds-nav button:focus-visible,.ds-chip:focus-visible,.ds-example:focus-visible{outline:3px solid #8ab4f8;outline-offset:3px}"
-    },
-    {
       "name": "Search filter chip",
       "kind": "chip",
       "description": "Removable syntax token with a full touch target.",
@@ -795,13 +783,13 @@
       "name": "Orbit model control",
       "kind": "input",
       "description": "An adjustable model parameter with a visible value, full-height range target and scientific rather than decorative units.",
-      "html": "<label class=\"ds-model-range\"><span>Central mass <output>1.00 × Earth</output></span><input aria-label=\"Central mass in Earth masses\" type=\"range\" min=\".25\" max=\"3\" step=\".05\" value=\"1\"></label>",
+      "html": "<label class=\"ds-model-range\"><span>Central mass <output>1.00 \u00d7 Earth</output></span><input aria-label=\"Central mass in Earth masses\" type=\"range\" min=\".25\" max=\"3\" step=\".05\" value=\"1\"></label>",
       "css": ".ds-model-range{font-family:Geist,Arial,sans-serif;display:block;margin-bottom:13px;font-size:11px;color:#35586e}.ds-model-range>span{display:flex;justify-content:space-between;gap:8px}.ds-model-range output{font-variant-numeric:tabular-nums;color:#244b65;font-weight:500;white-space:nowrap}.ds-model-range input{appearance:auto;display:block;padding:0;margin:2px 0 0;width:100%;min-width:0;min-height:44px;border:0;background:transparent;accent-color:#256087;cursor:pointer}.ds-model-range input:focus-visible{outline:3px solid #8ab4f8;outline-offset:3px}"
     }
   ],
   "narrative": {
     "northStar": "A search bar that takes the shape of your curiosity.",
-    "overview": "The user-pinned Google-style world uses a white canvas, a familiar multicolour wordmark, charcoal text and restrained blue actions. Fluid Search retains its independent identity in the header. Privacy, affiliation and implementation details live in How it works; the footer is a quiet TypeSafe Jev attribution.\n\nThe query is the visual anchor. Its lower shell becomes one useful interface at a time. A slash control and searchable command menu make all 21 modes discoverable without a permanent example grid. Functional tools, curated knowledge and playful experiments share the same shell, with their own clear controls and source details.",
+    "overview": "The user-pinned Google-style world uses a white canvas, a familiar multicolour wordmark, charcoal text and restrained blue actions. The central wordmark is the only top identity; no header brand or view switch. Privacy, affiliation and implementation details live in Notes; the footer contains Notes and a quiet TypeSafe Jev attribution.\n\nThe query is the visual anchor. Its lower shell becomes one useful interface at a time. A slash control and searchable command menu make all 22 modes discoverable without a permanent example grid. Functional tools, curated knowledge and playful experiments share the same shell, with their own clear controls and source details.",
     "keyCharacteristics": [
       "White space around one anchored search surface.",
       "Discovery through the slash menu; detail through progressive disclosure.",

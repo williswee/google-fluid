@@ -21,10 +21,11 @@ export const SEARCH_MODES: Record<ModeId, { label: string; hint: string; example
   compare: { label: 'Compare', hint: 'See both sides.', example: 'Earth vs Mars' },
   science: { label: 'Orbit lab', hint: 'A little space to experiment.', example: 'show me how gravity affects an orbit' },
   game: { label: 'Tic-tac-toe', hint: 'Your move.', example: 'play tic-tac-toe' },
+  dino: { label: 'Dinosaur run', hint: 'One more jump.', example: 'play the dinosaur game' },
   play: { label: 'Easter eggs', hint: 'A small surprise.', example: 'do a barrel roll' },
 };
 
-export const EXAMPLES: ModeId[] = ['calculate','timer','convert','weather','color','stopwatch','metronome','define','movies','compare','science','game','play','places','finance','documents','site','news','date','precise','general'];
+export const EXAMPLES: ModeId[] = ['calculate','timer','convert','weather','color','stopwatch','metronome','define','movies','compare','science','game','dino','play','places','finance','documents','site','news','date','precise','general'];
 
 export type SearchExample = { id: string; mode: ModeId; query: string };
 const alternatives: Partial<Record<ModeId, string>> = {
@@ -35,6 +36,7 @@ const alternatives: Partial<Record<ModeId, string>> = {
   movies: 'Interstellar',
   define: 'define:ephemeral',
   play: 'askew',
+  dino: '404 dinosaur game',
 };
 export const SEARCH_EXAMPLES: SearchExample[] = EXAMPLES.flatMap(mode => [
   { id: mode, mode, query: SEARCH_MODES[mode].example },

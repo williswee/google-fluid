@@ -1,0 +1,119 @@
+{
+  "testedAt": "2026-09-24T02:57:45.463Z",
+  "origin": "http://127.0.0.1:3000",
+  "methodology": "Eleven authored focused cases: four dinosaur requests, four non-play factual/technical/negated boundaries, and three existing route regressions. Real Jev through unchanged shared budget guard; no retries. This is not a full search-v3 benchmark.",
+  "correct": 10,
+  "total": 11,
+  "results": [
+    {
+      "id": "dino-focused-1",
+      "expected": "dino",
+      "actual": "dino",
+      "correct": true,
+      "source": "live",
+      "model": "jev-1.13.0",
+      "status": 200,
+      "roundTripMs": 2557
+    },
+    {
+      "id": "dino-focused-2",
+      "expected": "dino",
+      "actual": "dino",
+      "correct": true,
+      "source": "live",
+      "model": "jev-1.13.0",
+      "status": 200,
+      "roundTripMs": 1074
+    },
+    {
+      "id": "dino-focused-3",
+      "expected": "dino",
+      "actual": "dino",
+      "correct": true,
+      "source": "live",
+      "model": "jev-1.13.0",
+      "status": 200,
+      "roundTripMs": 699
+    },
+    {
+      "id": "dino-focused-4",
+      "expected": "dino",
+      "actual": "dino",
+      "correct": true,
+      "source": "live",
+      "model": "jev-1.13.0",
+      "status": 200,
+      "roundTripMs": 698
+    },
+    {
+      "id": "dino-focused-5",
+      "expected": "general",
+      "actual": "define",
+      "correct": false,
+      "source": "live",
+      "model": "jev-1.13.0",
+      "status": 200,
+      "roundTripMs": 764
+    },
+    {
+      "id": "dino-focused-6",
+      "expected": "general",
+      "actual": "general",
+      "correct": true,
+      "source": "live",
+      "model": "jev-1.13.0",
+      "status": 200,
+      "roundTripMs": 989
+    },
+    {
+      "id": "dino-focused-7",
+      "expected": "general",
+      "actual": "general",
+      "correct": true,
+      "source": "live",
+      "model": "jev-1.13.0",
+      "status": 200,
+      "roundTripMs": 744
+    },
+    {
+      "id": "dino-focused-8",
+      "expected": "general",
+      "actual": "general",
+      "correct": true,
+      "source": "live",
+      "model": "jev-1.13.0",
+      "status": 200,
+      "roundTripMs": 804
+    },
+    {
+      "id": "dino-focused-9",
+      "expected": "game",
+      "actual": "game",
+      "correct": true,
+      "source": "live",
+      "model": "jev-1.13.0",
+      "status": 200,
+      "roundTripMs": 754
+    },
+    {
+      "id": "dino-focused-10",
+      "expected": "weather",
+      "actual": "weather",
+      "correct": true,
+      "source": "live",
+      "model": "jev-1.13.0",
+      "status": 200,
+      "roundTripMs": 644
+    },
+    {
+      "id": "dino-focused-11",
+      "expected": "calculate",
+      "actual": "calculate",
+      "correct": true,
+      "source": "live",
+      "model": "jev-1.13.0",
+      "status": 200,
+      "roundTripMs": 766
+    }
+  ]
+}

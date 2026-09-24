@@ -186,26 +186,24 @@ test('provider errors preserve the query and an explicit retry recovers', async 
   await expect(panel(page, 'weather')).toBeVisible();
 });
 
-test('Classic keeps the query, hides specialized tools, and skips inference', async ({ page }) => {
-  const { requests, query, app } = await setup(page);
+test('the landing view has one fluid experience and keeps Notes in the footer', async ({ page }) => {
+  const { requests, query } = await setup(page);
+  await expect(page.getByRole('banner')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Fluid Search home', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Classic', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Fluid', exact: true })).toHaveCount(0);
+  await expect(page.locator('footer').getByRole('button', { name: 'Notes', exact: true })).toBeVisible();
   await query.fill('Tokyo weather');
   await expect(panel(page, 'weather')).toBeVisible();
-  await page.getByRole('button', { name: 'Classic', exact: true }).click();
-  await expect(app).toHaveAttribute('data-mode', 'general');
-  await expect(panel(page, 'weather')).toHaveCount(0);
-  await expect(query).toHaveValue('Tokyo weather');
-  await query.fill('Singapore weather');
-  await page.waitForTimeout(250);
   expect(requests).toHaveLength(1);
-  await page.getByRole('button', { name: 'Fluid', exact: true }).click();
-  await expect.poll(() => requests.length).toBe(2);
+  await expect(query).toHaveValue('Tokyo weather');
 });
 
 test('the slash picker remains usable offline and clearly labels manual selection', async ({ page }) => {
   const { requests, query } = await setup(page, { live: false });
   await choose(page, 'weather');
   await expect(query).toHaveValue(SEARCH_MODES.weather.example);
-  await expect(page.getByRole('button', { name: 'Selected by you. How it works' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Selected by you. Notes' })).toBeVisible();
   await page.waitForTimeout(250);
   expect(requests).toHaveLength(0);
 });
@@ -220,7 +218,7 @@ test('palette selection is immediate and the next semantic edit returns to live 
   await expect.poll(() => requests.length).toBe(1);
   await requests[0].route.fulfill({ json: fixture('places') });
   await expect(panel(page, 'places')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Selected by you. How it works' })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Selected by you. Notes' })).toHaveCount(0);
 });
 
 test('the local converter calculates, swaps units, and rejects impossible temperatures', async ({ page }) => {
@@ -265,8 +263,8 @@ test('place filters change a Maps destination without fetching invented places',
   expect(destination.host).toBe('www.google.com');
   expect(destination.pathname).toBe('/maps/search/');
   expect(destination.searchParams.get('query')).toBe(`${SEARCH_MODES.places.example} parks`);
-  await page.getByRole('button', { name: 'How it works', exact: true }).click();
-  await expect(page.getByRole('region', { name: 'How Fluid Search works' })).toContainText('map illustration is schematic');
+  await page.getByRole('button', { name: 'Notes', exact: true }).click();
+  await expect(page.getByRole('region', { name: 'Fluid Search notes' })).toContainText('map illustration is schematic');
   expect(requests).toHaveLength(0);
 });
 
@@ -326,7 +324,7 @@ test('a manually chosen search tool stays selected through edits until Auto retu
   const { requests, query, app } = await setup(page, { delayed: true });
   await query.fill('rain tomorrow');
   await expect.poll(() => requests.length).toBe(1);
-  await page.getByRole('button', { name: 'How it works', exact: true }).click();
+  await page.getByRole('button', { name: 'Notes', exact: true }).click();
   const picker = page.getByRole('combobox', { name: 'Choose search tool' });
   await picker.selectOption('movies');
   await expect(panel(page, 'movies')).toBeVisible();
@@ -350,17 +348,19 @@ test("unsupported conversions keep the original query without inventing a value"
   await expect(page.getByRole("link", { name: /Convert on Google/ })).toHaveAttribute("href", "https://www.google.com/search?q=9am+Singapore+in+London");
 });
 
-test('the quiet landing view puts notices behind How it works and lists every tool with slash', async ({ page }) => {
+test('the quiet landing view puts notices behind Notes and lists every tool with slash', async ({ page }) => {
   const { requests } = await setup(page);
   await expect(page.locator('.examples')).toHaveCount(0);
   await expect(page.locator('.search-status')).toHaveCount(0);
-  await expect(page.getByRole('region', { name: 'How Fluid Search works' })).toHaveCount(0);
-  await page.getByRole('button', { name: 'How it works', exact: true }).click();
-  const about = page.getByRole('region', { name: 'How Fluid Search works' });
+  await expect(page.getByRole('region', { name: 'Fluid Search notes' })).toHaveCount(0);
+  await page.getByRole('button', { name: 'Notes', exact: true }).click();
+  const about = page.getByRole('region', { name: 'Fluid Search notes' });
   await expect(about).toContainText('Drafts are sent to TypeSafe');
   await expect(about).toContainText('not affiliated with Google');
-  await page.getByRole('button', { name: 'Close explanation' }).click();
-  await expect(page.getByRole('button', { name: 'How it works', exact: true })).toBeFocused();
+  await expect(about.getByRole('link', { name: /ShapeShift/ })).toHaveAttribute('href', 'https://github.com/anishfn/shapeshift');
+  await expect(about.getByRole('link', { name: /Anish Gupta/ })).toHaveAttribute('href', 'https://github.com/anishfn');
+  await page.getByRole('button', { name: 'Close notes' }).click();
+  await expect(page.getByRole('button', { name: 'Notes', exact: true })).toBeFocused();
   await page.getByRole('button', { name: 'Browse all search tools' }).click();
   await expect(page.getByRole('listbox', { name: 'Search tools' }).getByRole('option')).toHaveCount(SEARCH_EXAMPLES.length);
   await page.waitForTimeout(250);
@@ -581,8 +581,8 @@ test('pure arithmetic waits for Jev instead of treating multiplication as search
   expect(requests[0].draft).toBe('24 * 18 + 6');
   await requests[0].route.fulfill({ json: fixture('calculate') });
   await expect(panel(page, 'calculate').getByLabel('Calculation result')).toHaveText('438');
-  await expect(page.getByRole('button', { name: /^Jev · \d+ ms\. How it works$/ })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Search syntax · instant. How it works' })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: /^Jev · \d+ ms\. Notes$/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Search syntax · instant. Notes' })).toHaveCount(0);
 });
 
 test('currency arithmetic never renders infinity when an amount overflows the returned rate', async ({ page }) => {
@@ -601,4 +601,108 @@ test('currency arithmetic never renders infinity when an amount overflows the re
   await currency.getByLabel('Currency amount').fill('1.1e308');
   await expect(currency.getByLabel('Converted currency value')).toHaveText('—');
   await expect(currency.getByText('Enter a smaller, valid amount.')).toBeVisible();
+});
+
+test('the source information button opens Notes without changing the current query or tool', async ({ page }) => {
+  const { requests, query, app } = await setup(page);
+  await choose(page, 'calculate');
+  const originalQuery = await query.inputValue();
+  await page.getByRole('button', { name: 'Selected by you. Notes', exact: true }).click();
+  const notes = page.getByRole('region', { name: 'Fluid Search notes', exact: true });
+  await expect(notes).toBeVisible();
+  await expect(notes).toContainText('Drafts are sent to TypeSafe');
+  await expect(query).toHaveValue(originalQuery);
+  await expect(app).toHaveAttribute('data-mode', 'calculate');
+  await page.getByRole('button', { name: 'Close notes', exact: true }).click();
+  await expect(notes).toHaveCount(0);
+  await expect(query).toHaveValue(originalQuery);
+  expect(requests).toHaveLength(0);
+});
+
+test('the missing-page route returns a real 404 and offers the game and a way back', async ({ page }) => {
+  const { requests } = await setup(page, { live: false });
+  const response = await page.goto('/this-page-does-not-exist');
+  expect(response?.status()).toBe(404);
+  await expect(page.getByRole('heading', { name: '404. A little off the path.', exact: true })).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Dinosaur game', exact: true })).toBeVisible();
+  await expect(page.locator('.dino-game')).toHaveAttribute('data-state', 'ready');
+  await expect(page.getByRole('button', { name: 'Start game', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Back to search', exact: true })).toHaveAttribute('href', '/');
+  await page.getByRole('link', { name: 'Back to search', exact: true }).click();
+  await expect(page).toHaveURL('/');
+  await expect(page.getByRole('combobox', { name: 'Search query' })).toBeVisible();
+  expect(requests).toHaveLength(0);
+});
+
+test('the dinosaur runner waits for Start, jumps, collides and can restart', async ({ page }) => {
+  const { requests, query } = await setup(page, { mode: 'dino' });
+  await query.fill('404 dinosaur game');
+  await expect(panel(page, 'dino')).toBeVisible();
+  await page.clock.install();
+  const game = page.getByRole('region', { name: 'Dinosaur game', exact: true });
+  const arena = game.getByRole('group', { name: 'Dinosaur runner', exact: true });
+  await page.clock.runFor(2000);
+  await expect(game).toHaveAttribute('data-state', 'ready');
+  await expect(game.getByLabel('Score', { exact: true })).toHaveText(/^0+$/);
+  await game.getByRole('button', { name: 'Start game', exact: true }).click();
+  await expect(arena).toBeFocused();
+  await expect(game).toHaveAttribute('data-state', 'running');
+  await arena.press('Space');
+  await page.clock.runFor(120);
+  await expect(game.locator('.dino-player')).toHaveAttribute('data-grounded', 'false');
+  await page.clock.runFor(900);
+  await expect(game.locator('.dino-player')).toHaveAttribute('data-grounded', 'true');
+  await page.clock.runFor(6000);
+  await expect(game).toHaveAttribute('data-state', 'crashed');
+  await expect(game.getByRole('status').filter({ hasText: 'Game over.' })).toContainText('Game over.');
+  await game.getByRole('button', { name: 'Restart', exact: true }).click();
+  await expect(game).toHaveAttribute('data-state', 'running');
+  await expect(arena).toBeFocused();
+  expect(requests).toHaveLength(1);
+});
+
+test('moving from the dinosaur game to the search pauses play and preserves normal typing', async ({ page }) => {
+  const { requests, query } = await setup(page, { live: false });
+  await choose(page, 'dino');
+  await page.getByRole('button', { name: 'Notes', exact: true }).click();
+  await page.getByRole('combobox', { name: 'Choose search tool' }).selectOption('dino');
+  await page.getByRole('button', { name: 'Close notes', exact: true }).click();
+  await page.clock.install();
+  const game = page.getByRole('region', { name: 'Dinosaur game', exact: true });
+  const arena = game.getByRole('group', { name: 'Dinosaur runner', exact: true });
+  await game.getByRole('button', { name: 'Start game', exact: true }).click();
+  await page.clock.runFor(350);
+  await query.click();
+  await expect(game).toHaveAttribute('data-state', 'paused');
+  const pausedScore = await game.getByLabel('Score', { exact: true }).textContent();
+  await query.press('End');
+  await query.press('Space');
+  await query.pressSequentially('again');
+  await expect(query).toHaveValue('play the dinosaur game again');
+  await expect(query).toBeFocused();
+  await page.clock.runFor(5000);
+  await expect(game).toHaveAttribute('data-state', 'paused');
+  await expect(game.getByLabel('Score', { exact: true })).toHaveText(pausedScore!);
+  await game.getByRole('button', { name: 'Resume', exact: true }).click();
+  await expect(game).toHaveAttribute('data-state', 'running');
+  await expect(arena).toBeFocused();
+  await game.getByRole('button', { name: 'Pause', exact: true }).click();
+  await expect(game).toHaveAttribute('data-state', 'paused');
+  expect(requests).toHaveLength(0);
+});
+
+test('the dinosaur game fits mobile and its touch jump works without a keyboard', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await setup(page, { live: false });
+  await choose(page, 'dino');
+  await page.clock.install();
+  const game = page.getByRole('region', { name: 'Dinosaur game', exact: true });
+  await game.getByRole('button', { name: 'Start game', exact: true }).click();
+  await game.getByRole('button', { name: 'Jump', exact: true }).click();
+  await page.clock.runFor(120);
+  await expect(game.locator('.dino-player')).toHaveAttribute('data-grounded', 'false');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  const bounds = await game.getByRole('button', { name: 'Jump', exact: true }).boundingBox();
+  expect(bounds!.width).toBeGreaterThanOrEqual(44);
+  expect(bounds!.height).toBeGreaterThanOrEqual(44);
 });

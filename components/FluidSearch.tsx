@@ -10,7 +10,6 @@ import SearchTools from './SearchTools';
 
 export default function FluidSearch() {
   const [draft, setDraft] = useState('');
-  const [fluid, setFluid] = useState(true);
   const [live, setLive] = useState<boolean | null>(null);
   const [composing, setComposing] = useState(false);
   const [retry, setRetry] = useState(0);
@@ -30,16 +29,16 @@ export default function FluidSearch() {
   const oversized = new TextEncoder().encode(draft).length > MAX_DRAFT_BYTES;
   const hasDraft = Boolean(draft.trim());
   const selected = selection?.draft === draft ? selection : null;
-  const enabled = fluid && live === true && hasDraft && !oversized && !composing && !syntax.mode && !manual && !selected && palette === null;
+  const enabled = live === true && hasDraft && !oversized && !composing && !syntax.mode && !manual && !selected && palette === null;
   const intent = useIntent(draft, enabled, retry);
   const effectiveMode: ModeId = manual ?? selected?.mode ?? syntax.mode ?? (hasDraft && !intent.error ? intent.result?.mode : undefined) ?? 'general';
-  const mode = fluid ? effectiveMode : 'general';
+  const mode = effectiveMode;
   const pending = intent.pending;
   const Icon = SEARCH_ICONS[mode];
   const source = manual || selected ? 'Selected' : syntax.mode ? 'Search syntax' : intent.result && hasDraft && !intent.error ? 'Jev' : 'Search';
-  const showPanel = palette === null && fluid && hasDraft && !oversized && (mode !== 'general' || Boolean(intent.result && !pending) || Boolean(manual));
+  const showPanel = palette === null && hasDraft && !oversized && (mode !== 'general' || Boolean(intent.result && !pending) || Boolean(manual));
   const currentResult = intent.resultDraft === draft ? intent.result : null;
-  const status = !fluid ? '' : pending ? (intent.result ? 'Updating…' : 'Reading your search…') : source === 'Jev' ? `Jev · ${currentResult?.roundTripMs ?? intent.result?.roundTripMs} ms` : source === 'Search syntax' ? 'Search syntax · instant' : source === 'Selected' ? 'Selected by you' : '';
+  const status = pending ? (intent.result ? 'Updating…' : 'Reading your search…') : source === 'Jev' ? `Jev · ${currentResult?.roundTripMs ?? intent.result?.roundTripMs} ms` : source === 'Search syntax' ? 'Search syntax · instant' : source === 'Selected' ? 'Selected by you' : '';
   const privacy = live === true ? 'Drafts are sent to TypeSafe while you type. Nothing is saved here.' : live === false ? 'Live routing is unavailable. Choose any tool with / to explore it.' : 'Checking live routing…';
 
   useEffect(() => {
@@ -71,12 +70,14 @@ export default function FluidSearch() {
     }
   }, [palette]);
 
+  useEffect(() => { if (about) document.getElementById('notes-title')?.focus(); }, [about]);
+
   function changeDraft(value: string) { setDraft(value); setSelection(null); }
   function clear() { setDraft(''); setSelection(null); setManual(null); setPalette(null); input.current?.focus(); }
   function openPalette() { savedCaret.current = { start: input.current?.selectionStart ?? draft.length, end: input.current?.selectionEnd ?? draft.length }; setPalette(''); setActiveOption(0); input.current?.focus(); }
   function closePalette() { restoreCaret.current = true; setPalette(null); input.current?.focus(); }
   function choose(item: SearchExample) {
-    savedCaret.current = {start:item.query.length,end:item.query.length}; restoreCaret.current = true; setDraft(item.query); setManual(null); setSelection({ draft: item.query, mode: item.mode }); setPalette(null); setFluid(true); input.current?.focus();
+    savedCaret.current = {start:item.query.length,end:item.query.length}; restoreCaret.current = true; setDraft(item.query); setManual(null); setSelection({ draft: item.query, mode: item.mode }); setPalette(null); input.current?.focus();
   }
   function changeInput(value: string) {
     if (palette !== null) {
@@ -102,13 +103,6 @@ export default function FluidSearch() {
   function submit(event: FormEvent<HTMLFormElement>) { if (!hasDraft || oversized || composing || palette !== null) event.preventDefault(); }
 
   return <div className="fluid-app" data-mode={mode} data-pending={pending}>
-    <header className="site-header">
-      <a className="project-name" href="/" aria-label="Fluid Search home"><span className="brand-symbol" aria-hidden="true"><i /><i /><i /><i /></span>Fluid Search</a>
-      <div className="header-actions">
-        <button ref={aboutButton} className="about-button" type="button" aria-label="How it works" onClick={() => setAbout(v => !v)} aria-expanded={about} aria-controls="about-search"><Info size={17} /><span>How it works</span></button>
-        <div className="view-switch" aria-label="Search interface" role="group"><button type="button" onClick={() => { setFluid(false); setPalette(null); }} aria-pressed={!fluid}>Classic</button><button type="button" onClick={() => setFluid(true)} aria-pressed={fluid}>Fluid</button></div>
-      </div>
-    </header>
     <main className="search-main">
       <div className="identity"><h1 aria-label="Google Fluid"><span className="google-word" aria-hidden="true"><b>G</b><b>o</b><b>o</b><b>g</b><b>l</b><b>e</b></span><span className="fluid-word">fluid</span></h1><p>A search bar that takes the shape of your curiosity.</p></div>
       <div className="search-experience">
@@ -129,7 +123,7 @@ export default function FluidSearch() {
             </div>
           </div>}
           <div className={`tool-reveal${showPanel ? ' is-open' : ''}`} style={{ height: showPanel ? panelHeight : 0 }}><div className="tool-clip">{showPanel && <section ref={panel} className="search-tools" aria-label={`${SEARCH_MODES[mode].label} search tools`}>
-            <div className="tool-meta"><span><Icon size={14} />{SEARCH_MODES[mode].label}</span><button type="button" className="decision-source" onClick={() => setAbout(v => !v)} aria-label={`${status}. How it works`}>{status}<Info size={12} /></button></div>
+            <div className="tool-meta"><span><Icon size={14} />{SEARCH_MODES[mode].label}</span><button type="button" className="decision-source" onClick={() => setAbout(v => !v)} aria-label={`${status}. Notes`}>{status}<Info size={12} /></button></div>
             {syntax.tokens.filter(t => t.provenance !== 'deprecated').length > 0 && <div className="query-tokens" aria-label="Search filters">{syntax.tokens.filter(t => t.provenance !== 'deprecated').map((token, index) => <button type="button" key={`${token.start}-${index}`} onClick={() => changeDraft(removeSearchToken(draft, token))} aria-label={`Remove ${token.label}: ${token.value || 'unfinished'}`}><span>{token.label}{token.value ? `: ${token.value}` : ': …'}</span><X size={12} /></button>)}</div>}
             <div className="mode-content" key={mode}><SearchTools mode={mode} draft={draft} onDraft={(value, keepMode) => { changeDraft(value); if (keepMode) setSelection({ draft: value, mode: keepMode }); }} /></div>
           </section>}</div></div>
@@ -139,8 +133,10 @@ export default function FluidSearch() {
         {(oversized || intent.error) && <p id="query-error" className="query-error" role="alert">{oversized ? 'Keep the search under 2,000 bytes.' : intent.error}{intent.error && <><button type="button" onClick={() => setRetry(v => v + 1)}>Retry</button><button type="button" onClick={openPalette}>Choose a tool</button></>}</p>}
         {syntax.deprecated.length > 0 && <p className="syntax-notice">{syntax.deprecated.join(' and ')} {syntax.deprecated.length > 1 ? 'are' : 'is'} no longer supported by Google. <button type="button" onClick={() => choose({ id: 'site', mode: 'site', query: SEARCH_MODES.site.example })}>Try a website filter</button></p>}
       </div>
-      {about && <section id="about-search" className="about-panel" aria-label="How Fluid Search works">
-        <div className="about-title"><h2>From a thought to a useful tool.</h2><button type="button" className="icon-button" aria-label="Close explanation" onClick={() => { setAbout(false); aboutButton.current?.focus(); }}><X size={18} /></button></div>
+    </main>
+    <footer className="site-footer footer-with-notes">
+      {about && <section id="search-notes" className="about-panel" aria-label="Fluid Search notes">
+        <div className="about-title"><h2 id="notes-title" tabIndex={-1}>Notes</h2><button type="button" className="icon-button" aria-label="Close notes" onClick={() => { setAbout(false); aboutButton.current?.focus(); }}><X size={18} /></button></div>
         <p>{privacy} This is an independent experiment, not affiliated with Google.</p>
         <p>TypeSafe Jev chooses an interface from the meaning of your search. Type <code>/</code> to explore every tool immediately. Selecting one is labelled “Selected by you”; editing its query returns to automatic routing. Explicit search operators are recognized on your device.</p>
         <div className="how-flow"><span>Your query</span><ArrowRight size={15} /><span>Jev intent</span><ArrowRight size={15} /><span>A useful interface</span></div>
@@ -149,9 +145,10 @@ export default function FluidSearch() {
         {currentResult && <p className="timing-details">Last live request: {currentResult.roundTripMs} ms round trip · {currentResult.model}{currentResult.timings ? ` · Budget check ${currentResult.timings.reserveMs} ms · Jev ${currentResult.timings.inferenceMs} ms · Settlement ${currentResult.timings.settleMs} ms` : ''}</p>}
         <p className="about-small">A 150 ms typing pause, one live request at a time, and a shared US$5 allowance. No keyword rules pretend to be Jev. The / menu works even when live routing is unavailable. Timers and games are kept only while their panel is open; nothing is saved. Metronome audio starts only when you press Start.</p>
         <label className="about-picker">Keep a tool selected <select aria-label="Choose search tool" value={manual ?? 'auto'} onChange={e => { setManual(e.target.value === 'auto' ? null : e.target.value as ModeId); if(e.target.value === 'auto') setSelection(null); }}><option value="auto">Auto</option>{EXAMPLES.map(m => <option key={m} value={m}>{SEARCH_MODES[m].label}</option>)}</select></label>
-        <a href="https://github.com/anishfn/shapeshift" target="_blank" rel="noopener noreferrer">Interaction inspiration: ShapeShift<ArrowUpRight size={14} /></a>
+        <p className="notes-credit">Inspired by <a href="https://github.com/anishfn/shapeshift" target="_blank" rel="noopener noreferrer">ShapeShift</a>, the open-source fluid interface by <a href="https://github.com/anishfn" target="_blank" rel="noopener noreferrer">Anish Gupta (@anishfn)</a>. Its slash discovery and intent-driven widgets helped shape this experiment.</p>
+        <p className="about-small">Our dinosaur runner is an original implementation inspired by <a href="https://blog.google/products-and-platforms/products/chrome/chrome-dino/" target="_blank" rel="noopener noreferrer">Chrome’s offline dinosaur game</a>. You can also play it on this demo’s 404 page. It starts only when you choose to play.</p>
       </section>}
-    </main>
-    <footer className="site-footer"><a href="https://typesafe.ai" target="_blank" rel="noopener noreferrer">Built with <strong>TypeSafe Jev</strong><ArrowUpRight size={13} /></a></footer>
+      <div className="footer-links"><button ref={aboutButton} className="notes-button" type="button" aria-label="Notes" onClick={() => setAbout(v => !v)} aria-expanded={about} aria-controls="search-notes"><Info size={14}/><span>Notes</span></button><span aria-hidden="true">·</span><a href="https://typesafe.ai" target="_blank" rel="noopener noreferrer">Built with <strong>TypeSafe Jev</strong><ArrowUpRight size={13} /></a></div>
+    </footer>
   </div>;
 }

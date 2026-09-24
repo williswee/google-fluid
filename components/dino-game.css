@@ -1,0 +1,31 @@
+.dino-game{--dino-ink:#34383e;--dino-muted:#62666c;min-width:0;width:100%;color:var(--dino-ink);font-family:Geist,Arial,sans-serif}
+.dino-game .dino-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:15px}
+.dino-game .dino-title{font-size:19px;line-height:1.35;font-weight:500;letter-spacing:-.3px;margin:0}
+.dino-game .dino-score{display:flex;gap:9px;align-items:baseline;font-size:11px;color:var(--dino-muted)}
+.dino-game .dino-score output{font-size:16px;font-variant-numeric:tabular-nums;letter-spacing:1px;color:var(--dino-ink)}
+.dino-game .dino-arena{position:relative;overflow:hidden;min-width:0;width:100%;background:#fff;border:1px solid #e1e4e8;border-radius:12px;touch-action:manipulation;cursor:pointer}
+.dino-game .dino-arena:focus-visible{outline:3px solid #8ab4f8;outline-offset:3px}
+.dino-game .dino-scene{display:block;width:100%;height:210px}
+.dino-game .dino-sky{fill:#dfe2e6}
+.dino-game .dino-sky .dino-sun{fill:#c8cdd3}
+.dino-game .dino-horizon{stroke:#a9afb7;stroke-width:1}
+.dino-game .dino-ground{fill:none;stroke:#c3c8cf;stroke-width:1}
+.dino-game .dino-cactus{color:#535a62}
+.dino-game .dino-player{color:var(--dino-ink)}
+.dino-game .dino-overlay{position:absolute;top:29px;left:18px;right:18px;display:flex;flex-direction:column;align-items:center;gap:5px;pointer-events:none;text-align:center}
+.dino-game .dino-overlay>span{font-size:18px;font-weight:500;line-height:1.4;background:#fffd;padding:0 7px}
+.dino-game .dino-overlay>p{font-size:11px;line-height:1.5;color:var(--dino-muted);margin:0;background:#fffd;padding:0 7px}
+.dino-game .dino-controls{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:18px}
+.dino-game .dino-controls button{display:inline-flex;justify-content:center;align-items:center;gap:6px;min-height:44px;min-width:44px;padding:9px 14px;border:1px solid #d8dde4;border-radius:8px;background:white;color:#454c55;font-family:inherit;font-size:12px;line-height:1.3;cursor:pointer;transition:background-color .15s}
+.dino-game .dino-controls button:hover:not(:disabled){background:#eef1f5}
+.dino-game .dino-controls .dino-primary{background:#34383e;color:white;border-color:#34383e}
+.dino-game .dino-controls .dino-primary:hover{background:#1e2228}
+.dino-game .dino-controls button:disabled{opacity:1;color:#7c828a;background:#f4f5f7;border-color:#e8eaed;cursor:default}
+.dino-game .dino-controls button:focus-visible{outline:3px solid #8ab4f8;outline-offset:3px}
+.dino-game .dino-instructions{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px;font-size:11px;line-height:1.8;color:var(--dino-muted);margin:15px 0 0;text-align:center}
+.dino-game kbd{font-family:inherit;font-size:10px;line-height:1.4;border:1px solid #dce0e5;border-radius:4px;background:#fff9;padding:2px 5px;color:#4b515a}
+.dino-game .dino-status{font-size:11px;line-height:1.6;color:#525961;text-align:center;margin:9px 0 0;min-height:18px}
+.dino-game[data-state=crashed] .dino-status{color:#805032}
+.dino-game .dino-motion-note{font-size:10px;line-height:1.6;color:var(--dino-muted);text-align:center;margin:7px 0 0}
+@media(max-width:440px){.dino-game .dino-title{font-size:17px}.dino-game .dino-heading{gap:10px}.dino-game .dino-score{gap:6px}.dino-game .dino-controls{gap:6px}.dino-game .dino-controls button{font-size:11px;padding:9px 10px}.dino-game .dino-instructions{font-size:10px}.dino-game .dino-overlay>span{font-size:17px}}
+@media(prefers-reduced-motion:reduce){.dino-game *{animation:none!important;transition:none!important}}

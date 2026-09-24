@@ -1,12 +1,12 @@
 # Fluid Search
 
-A white Google-style search bar that takes the shape of the query. Ordinary language is classified by **TypeSafe Jev**; the same input unfolds into 21 useful search interfaces. This replaces the earlier ChatGPT composer prototype.
+A white Google-style search bar that takes the shape of the query. Ordinary language is classified by **TypeSafe Jev**; the same input unfolds into 22 useful search interfaces. This replaces the earlier ChatGPT composer prototype.
 
 Try it at [chatgptfluid.vercel.app](https://chatgptfluid.vercel.app). The existing URL and private repository are retained during the pivot. This is an independent experiment, not affiliated with Google or TypeSafe.
 
 ## What to try
 
-Type `/` in the search bar (or tap its `/` button) to browse all 21 interfaces and 28 prepared queries. Filter the list, navigate with arrows, and press Enter. Escape restores the draft and cursor. Choosing a tool is immediate and explicitly labelled **Selected by you**; editing the query returns to Jev.
+Type `/` in the search bar (or tap its `/` button) to browse all 22 interfaces and 30 prepared queries. Filter the list, navigate with arrows, and press Enter. Escape restores the draft and cursor. Choosing a tool is immediate and explicitly labelled **Selected by you**; editing the query returns to Jev.
 
 | Try | What you can do |
 | --- | --- |
@@ -20,6 +20,7 @@ Type `/` in the search bar (or tap its `/` button) to browse all 21 interfaces a
 | `Dune Part Two` / `Interstellar` | Film facts, cast and movie-night timing |
 | `Earth vs Mars` | Compare days/years/moons and calculate Mars age |
 | `show me how gravity affects an orbit` | Adjust mass/radius in a Newtonian orbit model |
+| `play the dinosaur game` / `404` | Jump cacti with Space, ↑ or touch; pause and restart |
 | `play tic-tac-toe` | Play two-player X/O with undo and reset |
 | `do a barrel roll` / `askew` | Replay a bounded visual toy |
 | `quiet cafes in Singapore` / `AAPL stock performance` | Refine Maps or market searches |
@@ -31,7 +32,7 @@ Type `/` in the search bar (or tap its `/` button) to browse all 21 interfaces a
 
 Utilities run on-device. Weather supports Singapore/Tokyo and loads Open-Meteo data through a fixed-city endpoint. Currency supports USD/EUR/GBP/SGD through daily ECB reference rates via Frankfurter. No query text or amount is sent to those data providers. Curated dictionary, film and planet entries expose their sources in collapsed disclosures; unsupported entities keep the original Google query. Stocks, maps and news remain real outbound searches. The orbit lab is a prebuilt educational model, not generative AI or relativistic physics. `cache:` and `related:` are flagged as retired.
 
-Inspired by [ShapeShift](https://github.com/anishfn/shapeshift/tree/5e24166dcbde6e794f0bd5b1b4bd395aaee5fc19): discoverable slash commands, intent-to-widget mapping, and deterministic interactions after intent classification. These components were independently implemented; no source code or assets were copied. We do not adopt its silent offline keyword fallback or saved-card history.
+Inspired by **Anish Gupta (@anishfn)** and his open-source [ShapeShift](https://github.com/anishfn/shapeshift/tree/5e24166dcbde6e794f0bd5b1b4bd395aaee5fc19): discoverable slash commands, intent-to-widget mapping, and deterministic interactions after intent classification. These components were independently implemented; no source code or assets were copied. We do not adopt its silent offline keyword fallback or saved-card history.
 
 ## Run locally
 
@@ -47,11 +48,11 @@ Default configuration disables live inference. To connect it, apply the isolated
 
 ## Architecture
 
-`components/FluidSearch.tsx` owns the anchored input, comparison, provenance, slash palette and the How it works disclosure. `lib/search-presets.ts` is the shared discovery registry. `SearchTools.tsx` renders distinct functional controls. `lib/search-syntax.ts` parses and edits explicit operators without changing unrelated text. `lib/conversion.ts` contains deterministic unit math. UtilityTools, KnowledgeTools and PlayTools isolate each interactive family. CurrencyTool uses a validated fixed-currency endpoint; neither external-data endpoint accepts drafts.
+`components/FluidSearch.tsx` owns the anchored input, provenance, slash palette and the Notes disclosure. `lib/search-presets.ts` is the shared discovery registry. `SearchTools.tsx` renders distinct functional controls. `lib/search-syntax.ts` parses and edits explicit operators without changing unrelated text. `lib/conversion.ts` contains deterministic unit math. UtilityTools, KnowledgeTools and PlayTools isolate each interactive family. CurrencyTool uses a validated fixed-currency endpoint; neither external-data endpoint accepts drafts.
 
 Natural-language drafts dispatch after a 150 ms pause. `hooks/useIntent.ts` permits one request in flight, coalesces edits, ignores obsolete responses and retains exact-draft results in tab memory only. Dispatched calls finish accounting. IME composition and oversized drafts do not trigger inference.
 
-`POST /api/intent` accepts `{ draft: string }`, limited to 2,000 UTF-8 bytes. The official server-only SDK asks one Choice question using `jev-1.13.0`, no automatic retries and a five-second provider timeout. The result includes mode, probabilities for all 21 routes, model, source (`live`), server latency and reserve/inference/settlement timings. The confidence gate remains 0.70 with a 0.20 winning margin; ambiguity returns general. Effort/model previews from the chat prototype were removed.
+`POST /api/intent` accepts `{ draft: string }`, limited to 2,000 UTF-8 bytes. The official server-only SDK asks one Choice question using `jev-1.13.0`, no automatic retries and a five-second provider timeout. The result includes mode, probabilities for all 22 routes, model, source (`live`), server latency and reserve/inference/settlement timings. The confidence gate remains 0.70 with a 0.20 winning margin; ambiguity returns general. Effort/model previews from the chat prototype were removed.
 
 `GET /api/status` reports configuration readiness, not guaranteed budget or provider availability. The browser distinguishes immediate typing feedback from the confirmed route. The expanding panel is measured independently of the input, uses one bounded 280 ms height transition, and respects reduced motion.
 
@@ -61,7 +62,7 @@ The same **US$5 total Jev allowance** covers visitors, development, evaluation a
 
 Vercel Hobby runs the API in `icn1` alongside the existing Seoul Supabase database. API secrets stay in encrypted server environment variables. WAF and database rate limits remain in place. See [operations](docs/OPERATIONS.md) and [budget design](supabase/README.md).
 
-The app stores no query text or conversation history. Live natural-language drafts are sent to TypeSafe as you type; the notice lives inside How it works and is also linked to the input for assistive technology. Explicit syntax, palette choices and widget edits do not call Jev. Weather and exchange endpoints fetch only whitelisted city/currency identifiers, with 15-minute and one-hour caching respectively. Metronome audio requires an explicit click and stops on unmount; timers/games are not persisted. Hosting/provider metadata processing is outside the app's prompt storage policy.
+The app stores no query text or conversation history. Live natural-language drafts are sent to TypeSafe as you type; the notice lives inside Notes and is also linked to the input for assistive technology. Explicit syntax, palette choices and widget edits do not call Jev. Weather and exchange endpoints fetch only whitelisted city/currency identifiers, with 15-minute and one-hour caching respectively. Metronome audio requires an explicit click and stops on unmount; timers/games are not persisted. Hosting/provider metadata processing is outside the app's prompt storage policy.
 
 ## Verification
 
@@ -81,7 +82,9 @@ npm run evaluate -- --base-url http://127.0.0.1:3000 --split held-out
 node scripts/measure-interaction.mjs https://chatgptfluid.vercel.app evaluation/results/new-search-browser-check.json
 ```
 
-The `search-v2` development and held-out sets each contain 42 cases, two per route. Both completed 42/42 correct through the protected endpoint. The public browser check passed all 21 routes (17 real Jev and four local syntax), preserving input and selection; its live-request median was 445 ms, excluding debounce and rendering. Reports distinguish local endpoint latency from public browser measurements; these small authored English sets are acceptance checks, not broad accuracy claims. Historical search-v1 reports remain unchanged. See [current delivery](docs/DELIVERY.md) for actual results.
+The `search-v3` sets each contain 44 cases, two per route. The earlier 21-mode search-v2 sets completed 42/42 correct each; their historical reports remain unchanged. Dinosaur-specific validation includes explicit play, the 404 Easter egg, and technical/factual queries that must remain ordinary search. See [current delivery](docs/DELIVERY.md) for measured results.
+
+The header has no brand link or Classic/Fluid switch. **Notes** lives beside the TypeSafe credit in the footer and includes attribution to [Anish Gupta](https://github.com/anishfn), privacy and implementation limits. The original dinosaur runner is also embedded in the app's real 404 page. Chrome's original is an offline game; this is our own independent implementation with no copied code or assets. Keyboard handling stays inside the game, so typing in search cannot jump or pause it accidentally.
 
 ## Previous prototype
 

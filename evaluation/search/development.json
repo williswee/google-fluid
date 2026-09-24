@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "dataset": "search-v2",
+  "dataset": "search-v3",
   "split": "development",
   "language": "en",
-  "description": "Authored English search-intent cases for the twenty-one-mode Fluid Search demo; not user data. Two cases per mode in each disjoint split. Includes explicit negation, topic mentions and ambiguity. Separate from historical search-v1 reports and archived composer datasets.",
+  "description": "Authored English search-intent cases for the twenty-two-mode Fluid Search demo; not user data. Two cases per mode in each disjoint split. Includes explicit negation, topic mentions and ambiguity. Separate from historical search-v1/search-v2 reports and archived composer datasets.",
   "cases": [
     {
       "id": "search-development-general-01",
@@ -298,6 +298,20 @@
       "scenario": "askew action",
       "draft": "Make this little search window askew",
       "rationale": "The user requests a visual tilt rather than a definition of askew."
+    },
+    {
+      "id": "search-development-dino-01",
+      "expected": "dino",
+      "scenario": "dinosaur runner",
+      "draft": "play the dinosaur game",
+      "rationale": "The visitor requests the jumping dinosaur game or its explicit 404 Easter egg."
+    },
+    {
+      "id": "search-development-dino-02",
+      "expected": "dino",
+      "scenario": "offline/404 Easter egg",
+      "draft": "404",
+      "rationale": "The visitor requests the jumping dinosaur game or its explicit 404 Easter egg."
     }
   ]
 }

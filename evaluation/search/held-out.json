@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "dataset": "search-v2",
+  "dataset": "search-v3",
   "split": "held-out",
   "language": "en",
-  "description": "Authored English search-intent cases for the twenty-one-mode Fluid Search demo; not user data. Two cases per mode in each disjoint split. Includes explicit negation, topic mentions and ambiguity. Separate from historical search-v1 reports and archived composer datasets.",
+  "description": "Authored English search-intent cases for the twenty-two-mode Fluid Search demo; not user data. Two cases per mode in each disjoint split. Includes explicit negation, topic mentions and ambiguity. Separate from historical search-v1/search-v2 reports and archived composer datasets.",
   "cases": [
     {
       "id": "search-held-out-general-01",
@@ -298,6 +298,20 @@
       "scenario": "bounded tilt request",
       "draft": "Tilt the search widget with the askew trick",
       "rationale": "The request concerns a visual Easter egg rather than colour, search filtering or gameplay."
+    },
+    {
+      "id": "search-held-out-dino-01",
+      "expected": "dino",
+      "scenario": "dinosaur runner",
+      "draft": "let me jump a little T rex over cacti",
+      "rationale": "The visitor requests the jumping dinosaur game or its explicit 404 Easter egg."
+    },
+    {
+      "id": "search-held-out-dino-02",
+      "expected": "dino",
+      "scenario": "offline/404 Easter egg",
+      "draft": "open the offline dinosaur runner",
+      "rationale": "The visitor requests the jumping dinosaur game or its explicit 404 Easter egg."
     }
   ]
 }

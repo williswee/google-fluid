@@ -132,9 +132,9 @@ components:
 
 **Creative North Star: "A search bar that takes the shape of your curiosity."**
 
-The user-pinned Google-style world uses a white canvas, a familiar multicolour wordmark, charcoal text and restrained blue actions. Fluid Search retains its independent identity in the header. Privacy, affiliation and implementation details live in How it works; the footer is a quiet TypeSafe Jev attribution.
+The user-pinned Google-style world uses a white canvas, a familiar multicolour wordmark, charcoal text and restrained blue actions. Fluid Search retains its independent identity in the central wordmark. Privacy, affiliation and implementation details live in Notes; the footer is a quiet TypeSafe Jev attribution.
 
-The query is the visual anchor. Its lower shell becomes one useful interface at a time. A slash control and searchable command menu make all 21 modes discoverable without a permanent example grid. Functional tools, curated knowledge and playful experiments share the same shell, with their own clear controls and source details.
+The query is the visual anchor. Its lower shell becomes one useful interface at a time. A slash control and searchable command menu make all 22 modes discoverable without a permanent example grid. Functional tools, curated knowledge and playful experiments share the same shell, with their own clear controls and source details.
 
 **Key Characteristics:**
 
@@ -158,7 +158,7 @@ The query uses the desktop and mobile tokens; the narrow-screen text is 16px. To
 
 ## Layout
 
-The main column is centred and at most 760px wide. Below 700px, its side clearance is 16px and the header becomes more compact. The about action becomes icon-only while retaining its accessible name.
+The main column is centred and at most 760px wide. Below 700px, its side clearance is 16px. Notes remains a labelled footer button on every screen size.
 
 The command menu lives inside the lower shell. Its list scrolls within the smaller of 390px and 49svh, with an active row and keyboard guidance; the guidance hides on narrow screens. Tool-specific layouts use keypads, paired values, tabs, fields, an illustration beside controls, or a playable board. Colour controls stack below 500px; orbit and game layouts stack below 560px. Forecast days retain a minimum 44px width and scroll horizontally when needed. Four document-format tiles remain in a row.
 
@@ -166,7 +166,7 @@ The command menu lives inside the lower shell. Its list scrolls within the small
 
 ## Elevation & Depth
 
-A light border and diffuse shadow separate the search shell from the white canvas. Hover and focus deepen the shadow slightly. White inputs, pale interiors and subtle separators organize content without nested raised cards. The active Classic/Fluid segment has a small lift. The active command row uses a pale blue fill rather than extra elevation. Exact shadows and motion live in the sidecar.
+A light border and diffuse shadow separate the search shell from the white canvas. Hover and focus deepen the shadow slightly. White inputs, pale interiors and subtle separators organize content without nested raised cards. The active command row uses a pale blue fill rather than extra elevation. Exact shadows and motion live in the sidecar.
 
 ## Shapes
 
@@ -174,11 +174,11 @@ The pill-like search shell becomes slightly squarer when open and clips its lowe
 
 ## Components
 
-The search field has an intent icon, growing textarea, clear control, slash control and blue submit arrow. Empty, oversized, composing and open-menu states disable submission. The shell carries focus-within feedback; controls retain visible focus. Classic/Fluid is a pressed-state segmented switch.
+The search field has an intent icon, growing textarea, clear control, slash control and blue submit arrow. Empty, oversized, composing and open-menu states disable submission. The shell carries focus-within feedback; controls retain visible focus. The former Classic/Fluid switch and header identity are removed. Notes and the TypeSafe credit share the footer.
 
-The slash menu filters tool names and examples while preserving the underlying query. Arrow keys move the active option, Enter selects it, and Escape restores the prior draft and caret. Pointer selection produces the same result. Selection fills an editable example and opens its tool immediately, including during a routing outage. A persistent manual selector lives in How it works.
+The slash menu filters tool names and examples while preserving the underlying query. Arrow keys move the active option, Enter selects it, and Escape restores the prior draft and caret. Pointer selection produces the same result. Selection fills an editable example and opens its tool immediately, including during a routing outage. A persistent manual selector lives in Notes.
 
-Routing badges remain visible above the tool: **Jev** with measured timing, **Search syntax · instant**, or **Selected by you**. Pending edits show Reading or Updating while retaining the previous tool. The badge opens How it works. That disclosure contains draft transmission, non-affiliation, source behaviour, diagnostics and the persistent selector. A screen-reader description still associates privacy status with the query. Errors and retry actions remain beside the shell.
+Routing badges remain visible above the tool: **Jev** with measured timing, **Search syntax · instant**, or **Selected by you**. Pending edits show Reading or Updating while retaining the previous tool. The badge opens Notes. That disclosure contains draft transmission, non-affiliation, source behaviour, diagnostics and the persistent selector. A screen-reader description still associates privacy status with the query. Errors and retry actions remain beside the shell.
 
 Tool families preserve their own working affordances:
 
@@ -201,3 +201,7 @@ The lower panel uses its measured content height and a 280ms transition with `cu
 - **Don't** present selected tools, local syntax or reference content as Jev-generated results.
 - **Don't** invent retrieved data, hide failure states or turn fixture values into facts.
 - **Don't** move the active input or require animation to understand state.
+
+## Dinosaur and footer refinement
+
+The header branding and Classic/Fluid switch are removed. Notes is a 44px footer button beside the TypeSafe credit; opening it reveals a max-760px panel with privacy, attribution to ShapeShift by Anish Gupta, and technical details. Main top spacing retains the established search position (134px desktop, 114px tablet, 103px phone). The dinosaur panel uses charcoal pixel art, a grounded desert track, score, jump/pause/restart controls and explicit start. Its original SVG artwork and local physics require no external assets. The same component appears on the real 404 page. Motion needed to play begins only after consent to start; pausing and reduced decorative motion remain available.
