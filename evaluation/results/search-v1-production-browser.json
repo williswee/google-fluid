@@ -1,0 +1,205 @@
+{
+  "recordedAt": "2026-09-24T02:09:19.897Z",
+  "baseUrl": "https://chatgptfluid.vercel.app",
+  "dataset": "search-v1-browser",
+  "context": "Twelve authored production browser smoke cases: eight real Jev requests and four explicit local-syntax transitions. No fixtures, retries, or fake results. Round trip excludes typing pause and subsequent rendering; acknowledgement is input-to-next-frame pending feedback.",
+  "cases": [
+    {
+      "id": "weather",
+      "expected": "weather",
+      "mode": "weather",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 759,
+        "inferenceMs": 689,
+        "settleMs": 99
+      },
+      "serverLatencyMs": 1550,
+      "ackMs": 3,
+      "dispatchAfterInputMs": 154,
+      "roundTripMs": 1698,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "convert",
+      "expected": "convert",
+      "mode": "convert",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 62,
+        "inferenceMs": 247,
+        "settleMs": 57
+      },
+      "serverLatencyMs": 367,
+      "ackMs": 2,
+      "dispatchAfterInputMs": 152,
+      "roundTripMs": 719,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "places",
+      "expected": "places",
+      "mode": "places",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 61,
+        "inferenceMs": 280,
+        "settleMs": 59
+      },
+      "serverLatencyMs": 401,
+      "ackMs": 13,
+      "dispatchAfterInputMs": 152,
+      "roundTripMs": 546,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "define",
+      "expected": "define",
+      "mode": "define",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 59,
+        "inferenceMs": 258,
+        "settleMs": 55
+      },
+      "serverLatencyMs": 372,
+      "ackMs": 1,
+      "dispatchAfterInputMs": 151,
+      "roundTripMs": 474,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "finance",
+      "expected": "finance",
+      "mode": "finance",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 51,
+        "inferenceMs": 202,
+        "settleMs": 51
+      },
+      "serverLatencyMs": 304,
+      "ackMs": 15,
+      "dispatchAfterInputMs": 152,
+      "roundTripMs": 415,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "movies",
+      "expected": "movies",
+      "mode": "movies",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 261,
+        "inferenceMs": 530,
+        "settleMs": 51
+      },
+      "serverLatencyMs": 846,
+      "ackMs": 2,
+      "dispatchAfterInputMs": 152,
+      "roundTripMs": 1534,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "news",
+      "expected": "news",
+      "mode": "news",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 49,
+        "inferenceMs": 226,
+        "settleMs": 63
+      },
+      "serverLatencyMs": 338,
+      "ackMs": 2,
+      "dispatchAfterInputMs": 152,
+      "roundTripMs": 468,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "documents",
+      "expected": "documents",
+      "mode": "documents",
+      "source": "local-syntax",
+      "localModePaintMs": 13,
+      "inferenceRequests": 0,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "site",
+      "expected": "site",
+      "mode": "site",
+      "source": "local-syntax",
+      "localModePaintMs": 12,
+      "inferenceRequests": 0,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "date",
+      "expected": "date",
+      "mode": "date",
+      "source": "local-syntax",
+      "localModePaintMs": 14,
+      "inferenceRequests": 0,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "precise",
+      "expected": "precise",
+      "mode": "precise",
+      "source": "local-syntax",
+      "localModePaintMs": 9,
+      "inferenceRequests": 0,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "general",
+      "expected": "general",
+      "mode": "general",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 64,
+        "inferenceMs": 254,
+        "settleMs": 52
+      },
+      "serverLatencyMs": 370,
+      "ackMs": 6,
+      "dispatchAfterInputMs": 155,
+      "roundTripMs": 471,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    }
+  ],
+  "pageErrors": [],
+  "mobileFits": true,
+  "sourceCommit": "1f7081c",
+  "deployment": "https://chatgptfluid-16hzixiqn-williswees-projects.vercel.app",
+  "functionRegion": "icn1"
+}

@@ -16,7 +16,20 @@ Length/weight/temperature conversions calculate locally. Currency and unsupporte
 - New search-v1 live evaluation: development 24/24, held-out 24/24, both completed without errors. The protected local endpoint's development client p50/p95 was 684.54/1147.82 ms; held-out 695.66/1125.46 ms. These small authored English sets are acceptance checks, not general accuracy guarantees or production latency measurements.
 - Reports: evaluation/results/2026-09-24T01-58-28-580Z-search-development.json and 2026-09-24T02-00-24-744Z-search-held-out.json. Prior chat reports remain historical evidence only.
 
-Public deployment details and browser measurements are added after verification below. No search video was created or re-recorded.
+## Search production verification
+
+Public URL: https://chatgptfluid.vercel.app. Ready deployment: https://chatgptfluid-16hzixiqn-williswees-projects.vercel.app (`dpl_7iSq3sRFYWG3sQEt4AToBqqjuxT8`, implementation commit `1f7081c`). Vercel inspection confirms function region `icn1`; no secrets, allowance, hosting tier or repository visibility changed.
+
+All twelve authored public-browser cases passed: eight successful real Jev requests and four deterministic local-syntax transitions. The four syntax cases made zero inference requests. All twelve preserved draft contents, input bounds and selection. No browser errors; no horizontal overflow at 390px.
+
+- Live request round trips: 415–1,698 ms across eight cases, including the first request. Six were 415–719 ms; the first weather request was 1,698 ms and the movie request was 1,534 ms. These measurements exclude the 151–155 ms typing pause and subsequent UI animation.
+- Immediate typing acknowledgement: 1–15 ms in those eight cases.
+- Explicit syntax mode paint: 9–14 ms across four cases, measured to the next frame after the mode changes. The panel reveal itself lasts 280 ms when reduced motion is off.
+- Full measurements: `evaluation/results/search-v1-production-browser.json`. This is a small sequential deployment check, not a global latency guarantee.
+
+A fresh Impeccable review used its fallback reviewer contract because the harness has no named-agent loader. The verdict pass scored both listed fixes resolved: current product/design persistence and supporting-text contrast. Its ship verdict covers those two fixes; details are in `.impeccable/critique/2026-09-24-search-finish.md`.
+
+No search video was created or re-recorded. Existing video artifacts remain the historical ChatGPT prototype, as requested.
 
 ---
 
@@ -25,7 +38,7 @@ Public deployment details and browser measurements are added after verification 
 ## Project and outputs
 
 - Local project: /Users/williswee/Downloads/Code/jev-ui-demo. Moved out of Slothware Ventures with Git history, settings, deployment link, dependencies, and artifacts intact. No old path references remain in source.
-- Public interface: https://chatgptfluid.vercel.app (HTTP 200, no login required). Live Jev routing is enabled with the shared US$5 guard. Current production deployment: https://chatgptfluid-q00stgduk-williswees-projects.vercel.app (revision 2, code commit b99f720).
+- Public interface: https://chatgptfluid.vercel.app (HTTP 200, no login required). Live Jev routing is enabled with the shared US$5 guard. Revision 2 production deployment: https://chatgptfluid-q00stgduk-williswees-projects.vercel.app (revision 2, code commit b99f720).
 - Source: https://github.com/williswee/chatgpt-fluid (private, main).
 - Live recording: artifacts/chatgpt-fluid-demo.mp4, 58.03 seconds, 1920×1080 H.264, captions burned in. Recorded against https://chatgptfluid.vercel.app with real Jev responses; no mocked API responses, replay, or inference-speed edits. Caption, poster, metadata, and raw-take companions are in artifacts/.
 - The earlier example-only preview is separately named and visibly labelled throughout.
