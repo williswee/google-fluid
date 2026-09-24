@@ -18,7 +18,7 @@ Use the existing Supabase Free project and Vercel Hobby account. This demo must 
 - With live inference configured, run the development evaluation through the protected application endpoint. Review failures and the measured report; run the held-out set only after the route criteria are settled. Do not invent results while connection is pending.
 - Check desktop, narrow mobile, keyboard navigation, reduced motion, rapid prompt edits, manual override, and failed inference. A stale prediction must not replace a newer prompt's mode.
 - Confirm search submission opens Google only after visitor action. Local panels must not invent forecasts, prices, maps, headlines or definitions. Explicit operators are labelled Search syntax, not Jev.
-- Deploy to the selected Vercel project, assign the requested `chatgptfluid.vercel.app` address if available, and verify the live public URL before advertising it. Record the reviewed commit and deployment URL in delivery notes.
+- Deploy to the existing `chatgptfluid` Vercel project. Its production domain is `googlefluid.vercel.app`; `chatgptfluid.vercel.app` permanently redirects there. Both are saved project domains, so future production deployments retain this configuration. Verify the live public URL and record the reviewed commit and deployment URL in delivery notes.
 
 Do not test budget exhaustion by spending the remaining allowance. Use the unit/integration tests for that condition. Do not reset or increase the ledger to make an evaluation pass.
 

@@ -12,7 +12,7 @@ Next.js App Router, React, TypeScript, Vercel Hobby, existing Supabase Free budg
 AI builders, designers, and curious visitors exploring fluid interfaces through a familiar Google-style search bar. The interface unfolds into a useful tool as the query's meaning changes, before submission.
 
 ## Current scope
-The 24 September user pivot replaces the ChatGPT composer with a fresh white Google-style search experience. Deliver and verify the Vercel app first. Video work is deferred. Keep the existing deployment URL and private repository; do not change visibility or touch the parent venture board.
+The 24 September user pivot replaces the ChatGPT composer with a fresh white Google-style search experience. Deliver and verify the Vercel app first. Video work is deferred. Use googlefluid.vercel.app as the public address, with the previous chatgptfluid.vercel.app address redirecting to it. Keep the private repository; do not change visibility or touch the parent venture board.
 
 ## Capabilities
 27 routes cover search filters, real utilities, selected knowledge cards, comparison, an orbit lab, games, visual Easter eggs, travel, shopping and media search. Jev classifies natural language; local explicit syntax is labelled Search syntax. Selecting from `/` is immediate and labelled Selected by you, and the next query edit returns to automatic routing. No silent keyword fallback.

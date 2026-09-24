@@ -1,4 +1,12 @@
-# Current delivery — controls and interaction polish, 24 September 2026
+# Current address — 24 September 2026
+
+Public demo: https://googlefluid.vercel.app. The previous https://chatgptfluid.vercel.app address returns a permanent 308 redirect, preserving paths and query strings. Both domains are verified and configured on the existing Vercel project, so future production deployments retain the new address. The deployment, environment variables, shared budget and private repository remain unchanged.
+
+Verified HTTPS 200 on the new address, redirect with query-string preservation, same-origin API validation without inference, all 43 slash examples, and manual tool selection. No browser errors or paid inference. No application source changes or rebuild were needed. Historical verification URLs below remain as recorded.
+
+---
+
+# Historical delivery — controls and interaction polish, 24 September 2026
 
 Preserved all 27 tools, 43 examples and the white Google-style surface. The annotated Notes selector now has a consistent 16px chevron, 12px right inset and 36px reserved end padding. The same treatment applies across tool dropdowns while preserving native menus, keyboard selection, 44px targets and forced-colors fallback. Notes has a stable 170px selector width.
 

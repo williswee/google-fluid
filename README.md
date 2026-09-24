@@ -2,7 +2,7 @@
 
 A white Google-style search bar that takes the shape of the query. Ordinary language is classified by **TypeSafe Jev**; the same input unfolds into 27 useful search interfaces. This replaces the earlier ChatGPT composer prototype.
 
-Try it at [chatgptfluid.vercel.app](https://chatgptfluid.vercel.app). The existing URL and private repository are retained during the pivot. This is an independent experiment, not affiliated with Google or TypeSafe.
+Try it at [googlefluid.vercel.app](https://googlefluid.vercel.app). The previous address redirects here; the repository remains private. This is an independent experiment, not affiliated with Google or TypeSafe.
 
 ## What to try
 
@@ -87,7 +87,7 @@ Live checks consume the shared allowance and never run during ordinary builds/te
 ```sh
 npm run evaluate -- --base-url http://127.0.0.1:3000 --split development
 npm run evaluate -- --base-url http://127.0.0.1:3000 --split held-out
-node scripts/measure-interaction.mjs https://chatgptfluid.vercel.app evaluation/results/new-search-browser-check.json
+node scripts/measure-interaction.mjs https://googlefluid.vercel.app evaluation/results/new-search-browser-check.json
 ```
 
 The `search-v4` sets each contain 54 cases, two per route. Both real Jev runs passed 54/54: development round-trip p50/p95 699/865 ms, held-out 981/2616 ms. These small authored English sets are acceptance checks, not a general accuracy or latency guarantee. The earlier 21-mode search-v2 sets completed 42/42 correct each; their historical reports remain unchanged. Dinosaur-specific validation includes explicit play, the 404 Easter egg, and technical/factual queries that must remain ordinary search. See [current delivery](docs/DELIVERY.md) for measured results.
