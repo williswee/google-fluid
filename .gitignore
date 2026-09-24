@@ -10,3 +10,7 @@ artifacts/
 .DS_Store
 
 .vercel
+
+# Local design review captures and transient build state
+.impeccable/review/
+.impeccable/build/

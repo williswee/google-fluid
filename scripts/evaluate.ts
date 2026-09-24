@@ -83,8 +83,8 @@ async function loadCases(split: Split): Promise<EvalCase[]> {
   const splits = split === "all" ? ["development", "held-out"] : [split];
   const cases: EvalCase[] = [];
   for (const current of splits) {
-    const data = JSON.parse(await readFile(path.join(projectRoot, "evaluation", `${current}.json`), "utf8"));
-    if (data.schemaVersion !== 1 || data.split !== current || !Array.isArray(data.cases)) throw new Error(`Invalid ${current} dataset.`);
+    const data = JSON.parse(await readFile(path.join(projectRoot, "evaluation", "search", `${current}.json`), "utf8"));
+    if (data.schemaVersion !== 1 || data.dataset !== "search-v1" || data.split !== current || !Array.isArray(data.cases)) throw new Error(`Invalid ${current} dataset.`);
     for (const item of data.cases) {
       if (typeof item.id !== "string" || !isMode(item.expected) || typeof item.scenario !== "string" || typeof item.draft !== "string" || !item.draft.trim()) {
         throw new Error(`Invalid example in ${current} dataset.`);
@@ -118,7 +118,7 @@ export async function runEvaluation(options: Options) {
   const allCases = await loadCases(options.split);
   const cases = options.maxCases ? allCases.slice(0, options.maxCases) : allCases;
   const startedAt = new Date().toISOString();
-  const defaultName = `${startedAt.replace(/[:.]/g, "-")}-${options.split}.json`;
+  const defaultName = `${startedAt.replace(/[:.]/g, "-")}-search-${options.split}.json`;
   const destination = path.resolve(projectRoot, options.output ?? path.join("evaluation", "results", defaultName));
   await mkdir(path.dirname(destination), { recursive: true });
   // Reserve the output before spending any live allowance. Never overwrite a report.
@@ -179,6 +179,7 @@ export async function runEvaluation(options: Options) {
   const summary = summarize(observations);
   const report = {
     schemaVersion: 1,
+    dataset: "search-v1",
     startedAt,
     finishedAt: new Date().toISOString(),
     endpointOrigin: options.baseUrl,
@@ -207,7 +208,7 @@ export async function runEvaluation(options: Options) {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   if (process.argv.includes("--help")) {
-    console.log("Usage: npm run evaluate -- [--split development|held-out|all] [--base-url http://localhost:3000] [--max-cases N] [--output evaluation/results/name.json]\nLive requests consume the same shared, capped budget as the demo. Default split: development. No automatic retries.");
+    console.log("Usage: npm run evaluate -- [--split development|held-out|all] [--base-url http://localhost:3000] [--max-cases N] [--output evaluation/results/name.json]\nLive requests consume the same shared, capped budget as the demo. Dataset: search-v1. Default split: development. No automatic retries.");
   } else {
     Promise.resolve().then(() => runEvaluation(parseArgs(process.argv.slice(2)))).catch(() => {
       console.error("Evaluation failed. Check the arguments, dataset, endpoint configuration, and output path. Raw server responses and secrets are not logged.");

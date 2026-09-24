@@ -14,6 +14,7 @@ vi.mock("@typesafe-ai/sdk", () => ({
 
 import { classifyDraft, JEV_MODEL } from "../lib/server/jev";
 import type { LiveConfig } from "../lib/server/config";
+import { MODES } from "../lib/intent";
 
 const config: LiveConfig = {
   typesafeApiKey: "test-only-placeholder",
@@ -27,15 +28,14 @@ beforeEach(() => {
   sdk.requests.mockResolvedValue({
     model: JEV_MODEL,
     answers: {
-      skill: { type: "choice", probabilities: { general: 0, image: 0, web: 1, research: 0, sketch: 0 } },
-      effort: { type: "choice", probabilities: { brief: 1, balanced: 0, deep: 0 } },
+      intent: { type: "choice", probabilities: Object.fromEntries(MODES.map((mode) => [mode, mode === "weather" ? 1 : 0])) },
     },
     usage: { input_tokens: 900 },
   });
 });
 
 describe("Jev client integration", () => {
-  it("asks both Choice questions in one request with no retries or diagnostic body logging", async () => {
+  it("asks one search Choice question in one request with no retries or diagnostic body logging", async () => {
     const signal = new AbortController().signal;
     const { result } = await classifyDraft(config, "A test draft", signal);
     expect(sdk.requests).toHaveBeenCalledTimes(1);
@@ -43,17 +43,17 @@ describe("Jev client integration", () => {
       model: JEV_MODEL,
       state: { draft: "A test draft" },
       questions: {
-        skill: expect.objectContaining({ type: "choice" }),
-        effort: expect.objectContaining({ type: "choice" }),
+        intent: expect.objectContaining({ type: "choice" }),
       },
     }, { signal });
+    expect(Object.keys(sdk.requests.mock.calls[0][0].questions)).toEqual(["intent"]);
     expect(sdk.construct).toHaveBeenLastCalledWith(expect.objectContaining({
       timeout: 5_000,
       retry: { maxRetries: 0 },
       logLevel: "off",
       baseURL: "https://api.typesafe.ai",
     }));
-    expect(result).toMatchObject({ mode: "web", effort: "brief", model: JEV_MODEL, source: "live" });
+    expect(result).toMatchObject({ mode: "weather", model: JEV_MODEL, source: "live" });
   });
 
   it("reuses the warm client while retaining per-request drafts and cancellation signals", async () => {

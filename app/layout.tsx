@@ -5,8 +5,8 @@ import '@fontsource/geist/600.css';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'ChatGPT Fluid — a Jev experiment',
-  description: 'An interface that follows your train of thought. Explore a ChatGPT-inspired composer with live intent routing by TypeSafe Jev.',
+  title: 'Google Fluid — a Jev search experiment',
+  description: 'A search bar that takes the shape of your curiosity. Explore twelve useful search interfaces powered by TypeSafe Jev.',
   robots: { index: true, follow: true },
 };
 

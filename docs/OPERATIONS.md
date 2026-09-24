@@ -17,7 +17,7 @@ Use the existing Supabase Free project and Vercel Hobby account. This demo must 
 - With inference disabled, confirm the UI clearly labels example behavior, still permits manual exploration, and never claims a live prediction.
 - With live inference configured, run the development evaluation through the protected application endpoint. Review failures and the measured report; run the held-out set only after the route criteria are settled. Do not invent results while connection is pending.
 - Check desktop, narrow mobile, keyboard navigation, reduced motion, rapid prompt edits, manual override, and failed inference. A stale prediction must not replace a newer prompt's mode.
-- Confirm the submitted route preview explicitly says this is a UI demonstration and no tool is running. Search and research previews must not invent citations or imply actual browsing.
+- Confirm search submission opens Google only after visitor action. Local panels must not invent forecasts, prices, maps, headlines or definitions. Explicit operators are labelled Search syntax, not Jev.
 - Deploy to the selected Vercel project, assign the requested `chatgptfluid.vercel.app` address if available, and verify the live public URL before advertising it. Record the reviewed commit and deployment URL in delivery notes.
 
 Do not test budget exhaustion by spending the remaining allowance. Use the unit/integration tests for that condition. Do not reset or increase the ledger to make an evaluation pass.
@@ -26,7 +26,7 @@ Do not test budget exhaustion by spending the remaining allowance. Use the unit/
 
 `vercel.json` pins the single Hobby function region to `icn1` (Seoul), alongside the existing Supabase database in AWS `ap-northeast-2`. The previous US East function region added cross-region latency to both required budget operations. Keep inference behind the same atomic reserve → Jev → settle path; do not bypass accounting to improve latency.
 
-`scripts/measure-interaction.mjs <origin> <new-report-path>` measures six authored browser cases through the protected endpoint. It records immediate typing acknowledgement separately from dispatch delay, request round trip, and server stages. Every invocation spends from the same launch allowance; it has no automatic retry. Preserve before/after reports and treat these small samples as deployment checks, not global latency guarantees.
+`scripts/measure-interaction.mjs <origin> <new-report-path>` measures twelve authored browser cases (eight live Jev decisions and four local-syntax transitions) through the protected endpoint. It records immediate typing acknowledgement separately from dispatch delay, request round trip, and server stages. Every invocation spends from the same launch allowance; it has no automatic retry. Preserve before/after reports and treat these small samples as deployment checks, not global latency guarantees.
 
 Vercel documents [region codes](https://vercel.com/docs/regions) and [function region configuration](https://vercel.com/docs/functions/configuring-functions/region).
 

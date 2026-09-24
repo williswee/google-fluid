@@ -1,0 +1,613 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-24T02:06:20.811Z",
+  "title": "Design System: Fluid Search",
+  "extensions": {
+    "shadows": [
+      {
+        "name": "search-rest",
+        "value": "0 3px 14px #20212407",
+        "purpose": "Diffuse search shell separation."
+      },
+      {
+        "name": "search-hover",
+        "value": "0 4px 20px #2021240d",
+        "purpose": "Search shell pointer feedback."
+      },
+      {
+        "name": "search-focus",
+        "value": "0 4px 24px #3c404314",
+        "purpose": "Search shell focus-within feedback."
+      },
+      {
+        "name": "selected-segment",
+        "value": "0 2px 5px #20212412",
+        "purpose": "Active Classic/Fluid segment."
+      }
+    ],
+    "motion": [
+      {
+        "name": "panel-height",
+        "value": "height .28s cubic-bezier(.16,1,.3,1)",
+        "purpose": "One measured lower panel changes height while the query stays anchored; accepted localized layout animation."
+      },
+      {
+        "name": "tool-arrive",
+        "value": ".24s cubic-bezier(.16,1,.3,1)",
+        "purpose": "Opacity .35 to 1, translateY -5px to 0, inset clip 8% to 0."
+      },
+      {
+        "name": "tool-tint",
+        "value": "background-color .3s",
+        "purpose": "Crossfade the lower tool background."
+      },
+      {
+        "name": "pending-line",
+        "value": "1s ease-in-out infinite",
+        "purpose": "Opacity .4 to 1 and back while inference is pending."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "animation:none; transition-duration:.01ms; scroll-behavior:auto",
+        "purpose": "Disable motion and clear arrival transform/clip when reduced motion is preferred."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "wide",
+        "value": "1600px"
+      },
+      {
+        "name": "compact",
+        "value": "700px"
+      },
+      {
+        "name": "narrow",
+        "value": "440px"
+      }
+    ],
+    "colorMeta": {
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0058 271.18)",
+          "oklch(26% 0.0058 271.18)",
+          "oklch(38% 0.0058 271.18)",
+          "oklch(49% 0.0058 271.18)",
+          "oklch(61% 0.0058 271.18)",
+          "oklch(72% 0.0058 271.18)",
+          "oklch(84% 0.0058 271.18)",
+          "oklch(95% 0.0058 271.18)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "tonalRamp": [
+          "oklch(15% 0.0107 258.36)",
+          "oklch(26% 0.0107 258.36)",
+          "oklch(38% 0.0107 258.36)",
+          "oklch(49% 0.0107 258.36)",
+          "oklch(61% 0.0107 258.36)",
+          "oklch(72% 0.0107 258.36)",
+          "oklch(84% 0.0107 258.36)",
+          "oklch(95% 0.0107 258.36)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "tonalRamp": [
+          "oklch(15% 0.0000 89.88)",
+          "oklch(26% 0.0000 89.88)",
+          "oklch(38% 0.0000 89.88)",
+          "oklch(49% 0.0000 89.88)",
+          "oklch(61% 0.0000 89.88)",
+          "oklch(72% 0.0000 89.88)",
+          "oklch(84% 0.0000 89.88)",
+          "oklch(95% 0.0000 89.88)"
+        ]
+      },
+      "soft": {
+        "role": "neutral",
+        "displayName": "Soft",
+        "tonalRamp": [
+          "oklch(15% 0.0017 247.84)",
+          "oklch(26% 0.0017 247.84)",
+          "oklch(38% 0.0017 247.84)",
+          "oklch(49% 0.0017 247.84)",
+          "oklch(61% 0.0017 247.84)",
+          "oklch(72% 0.0017 247.84)",
+          "oklch(84% 0.0017 247.84)",
+          "oklch(95% 0.0017 247.84)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line",
+        "tonalRamp": [
+          "oklch(15% 0.0058 264.53)",
+          "oklch(26% 0.0058 264.53)",
+          "oklch(38% 0.0058 264.53)",
+          "oklch(49% 0.0058 264.53)",
+          "oklch(61% 0.0058 264.53)",
+          "oklch(72% 0.0058 264.53)",
+          "oklch(84% 0.0058 264.53)",
+          "oklch(95% 0.0058 264.53)"
+        ]
+      },
+      "blue": {
+        "role": "primary",
+        "displayName": "Blue",
+        "tonalRamp": [
+          "oklch(15% 0.1807 258.26)",
+          "oklch(26% 0.1807 258.26)",
+          "oklch(38% 0.1807 258.26)",
+          "oklch(49% 0.1807 258.26)",
+          "oklch(61% 0.1807 258.26)",
+          "oklch(72% 0.1807 258.26)",
+          "oklch(84% 0.1807 258.26)",
+          "oklch(95% 0.1807 258.26)"
+        ]
+      },
+      "action": {
+        "role": "primary",
+        "displayName": "Action",
+        "tonalRamp": [
+          "oklch(15% 0.1946 257.86)",
+          "oklch(26% 0.1946 257.86)",
+          "oklch(38% 0.1946 257.86)",
+          "oklch(49% 0.1946 257.86)",
+          "oklch(61% 0.1946 257.86)",
+          "oklch(72% 0.1946 257.86)",
+          "oklch(84% 0.1946 257.86)",
+          "oklch(95% 0.1946 257.86)"
+        ]
+      },
+      "action-hover": {
+        "role": "primary",
+        "displayName": "Action Hover",
+        "tonalRamp": [
+          "oklch(15% 0.1694 259.01)",
+          "oklch(26% 0.1694 259.01)",
+          "oklch(38% 0.1694 259.01)",
+          "oklch(49% 0.1694 259.01)",
+          "oklch(61% 0.1694 259.01)",
+          "oklch(72% 0.1694 259.01)",
+          "oklch(84% 0.1694 259.01)",
+          "oklch(95% 0.1694 259.01)"
+        ]
+      },
+      "focus": {
+        "role": "primary",
+        "displayName": "Focus",
+        "tonalRamp": [
+          "oklch(15% 0.1083 259.79)",
+          "oklch(26% 0.1083 259.79)",
+          "oklch(38% 0.1083 259.79)",
+          "oklch(49% 0.1083 259.79)",
+          "oklch(61% 0.1083 259.79)",
+          "oklch(72% 0.1083 259.79)",
+          "oklch(84% 0.1083 259.79)",
+          "oklch(95% 0.1083 259.79)"
+        ]
+      },
+      "error": {
+        "role": "primary",
+        "displayName": "Error",
+        "tonalRamp": [
+          "oklch(15% 0.1783 28.70)",
+          "oklch(26% 0.1783 28.70)",
+          "oklch(38% 0.1783 28.70)",
+          "oklch(49% 0.1783 28.70)",
+          "oklch(61% 0.1783 28.70)",
+          "oklch(72% 0.1783 28.70)",
+          "oklch(84% 0.1783 28.70)",
+          "oklch(95% 0.1783 28.70)"
+        ]
+      },
+      "brand-blue": {
+        "role": "secondary",
+        "displayName": "Brand Blue",
+        "tonalRamp": [
+          "oklch(15% 0.1800 259.96)",
+          "oklch(26% 0.1800 259.96)",
+          "oklch(38% 0.1800 259.96)",
+          "oklch(49% 0.1800 259.96)",
+          "oklch(61% 0.1800 259.96)",
+          "oklch(72% 0.1800 259.96)",
+          "oklch(84% 0.1800 259.96)",
+          "oklch(95% 0.1800 259.96)"
+        ]
+      },
+      "brand-red": {
+        "role": "secondary",
+        "displayName": "Brand Red",
+        "tonalRamp": [
+          "oklch(15% 0.2058 29.08)",
+          "oklch(26% 0.2058 29.08)",
+          "oklch(38% 0.2058 29.08)",
+          "oklch(49% 0.2058 29.08)",
+          "oklch(61% 0.2058 29.08)",
+          "oklch(72% 0.2058 29.08)",
+          "oklch(84% 0.2058 29.08)",
+          "oklch(95% 0.2058 29.08)"
+        ]
+      },
+      "brand-yellow": {
+        "role": "secondary",
+        "displayName": "Brand Yellow",
+        "tonalRamp": [
+          "oklch(15% 0.1581 83.28)",
+          "oklch(26% 0.1581 83.28)",
+          "oklch(38% 0.1581 83.28)",
+          "oklch(49% 0.1581 83.28)",
+          "oklch(61% 0.1581 83.28)",
+          "oklch(72% 0.1581 83.28)",
+          "oklch(84% 0.1581 83.28)",
+          "oklch(95% 0.1581 83.28)"
+        ]
+      },
+      "brand-green": {
+        "role": "secondary",
+        "displayName": "Brand Green",
+        "tonalRamp": [
+          "oklch(15% 0.1603 148.50)",
+          "oklch(26% 0.1603 148.50)",
+          "oklch(38% 0.1603 148.50)",
+          "oklch(49% 0.1603 148.50)",
+          "oklch(61% 0.1603 148.50)",
+          "oklch(72% 0.1603 148.50)",
+          "oklch(84% 0.1603 148.50)",
+          "oklch(95% 0.1603 148.50)"
+        ]
+      },
+      "general-tint": {
+        "role": "primary",
+        "displayName": "General Tint",
+        "tonalRamp": [
+          "oklch(15% 0.0099 267.36)",
+          "oklch(26% 0.0099 267.36)",
+          "oklch(38% 0.0099 267.36)",
+          "oklch(49% 0.0099 267.36)",
+          "oklch(61% 0.0099 267.36)",
+          "oklch(72% 0.0099 267.36)",
+          "oklch(84% 0.0099 267.36)",
+          "oklch(95% 0.0099 267.36)"
+        ]
+      },
+      "weather-accent": {
+        "role": "primary",
+        "displayName": "Weather Accent",
+        "tonalRamp": [
+          "oklch(15% 0.1230 60.80)",
+          "oklch(26% 0.1230 60.80)",
+          "oklch(38% 0.1230 60.80)",
+          "oklch(49% 0.1230 60.80)",
+          "oklch(61% 0.1230 60.80)",
+          "oklch(72% 0.1230 60.80)",
+          "oklch(84% 0.1230 60.80)",
+          "oklch(95% 0.1230 60.80)"
+        ]
+      },
+      "weather-tint": {
+        "role": "primary",
+        "displayName": "Weather Tint",
+        "tonalRamp": [
+          "oklch(15% 0.0171 84.59)",
+          "oklch(26% 0.0171 84.59)",
+          "oklch(38% 0.0171 84.59)",
+          "oklch(49% 0.0171 84.59)",
+          "oklch(61% 0.0171 84.59)",
+          "oklch(72% 0.0171 84.59)",
+          "oklch(84% 0.0171 84.59)",
+          "oklch(95% 0.0171 84.59)"
+        ]
+      },
+      "finance-accent": {
+        "role": "primary",
+        "displayName": "Finance Accent",
+        "tonalRamp": [
+          "oklch(15% 0.1297 148.95)",
+          "oklch(26% 0.1297 148.95)",
+          "oklch(38% 0.1297 148.95)",
+          "oklch(49% 0.1297 148.95)",
+          "oklch(61% 0.1297 148.95)",
+          "oklch(72% 0.1297 148.95)",
+          "oklch(84% 0.1297 148.95)",
+          "oklch(95% 0.1297 148.95)"
+        ]
+      },
+      "finance-tint": {
+        "role": "primary",
+        "displayName": "Finance Tint",
+        "tonalRamp": [
+          "oklch(15% 0.0107 158.85)",
+          "oklch(26% 0.0107 158.85)",
+          "oklch(38% 0.0107 158.85)",
+          "oklch(49% 0.0107 158.85)",
+          "oklch(61% 0.0107 158.85)",
+          "oklch(72% 0.0107 158.85)",
+          "oklch(84% 0.0107 158.85)",
+          "oklch(95% 0.0107 158.85)"
+        ]
+      },
+      "places-accent": {
+        "role": "primary",
+        "displayName": "Places Accent",
+        "tonalRamp": [
+          "oklch(15% 0.0969 171.24)",
+          "oklch(26% 0.0969 171.24)",
+          "oklch(38% 0.0969 171.24)",
+          "oklch(49% 0.0969 171.24)",
+          "oklch(61% 0.0969 171.24)",
+          "oklch(72% 0.0969 171.24)",
+          "oklch(84% 0.0969 171.24)",
+          "oklch(95% 0.0969 171.24)"
+        ]
+      },
+      "places-tint": {
+        "role": "primary",
+        "displayName": "Places Tint",
+        "tonalRamp": [
+          "oklch(15% 0.0093 171.80)",
+          "oklch(26% 0.0093 171.80)",
+          "oklch(38% 0.0093 171.80)",
+          "oklch(49% 0.0093 171.80)",
+          "oklch(61% 0.0093 171.80)",
+          "oklch(72% 0.0093 171.80)",
+          "oklch(84% 0.0093 171.80)",
+          "oklch(95% 0.0093 171.80)"
+        ]
+      },
+      "movies-accent": {
+        "role": "primary",
+        "displayName": "Movies Accent",
+        "tonalRamp": [
+          "oklch(15% 0.1591 303.81)",
+          "oklch(26% 0.1591 303.81)",
+          "oklch(38% 0.1591 303.81)",
+          "oklch(49% 0.1591 303.81)",
+          "oklch(61% 0.1591 303.81)",
+          "oklch(72% 0.1591 303.81)",
+          "oklch(84% 0.1591 303.81)",
+          "oklch(95% 0.1591 303.81)"
+        ]
+      },
+      "movies-tint": {
+        "role": "primary",
+        "displayName": "Movies Tint",
+        "tonalRamp": [
+          "oklch(15% 0.0126 306.03)",
+          "oklch(26% 0.0126 306.03)",
+          "oklch(38% 0.0126 306.03)",
+          "oklch(49% 0.0126 306.03)",
+          "oklch(61% 0.0126 306.03)",
+          "oklch(72% 0.0126 306.03)",
+          "oklch(84% 0.0126 306.03)",
+          "oklch(95% 0.0126 306.03)"
+        ]
+      },
+      "conversion-tint": {
+        "role": "primary",
+        "displayName": "Conversion Tint",
+        "tonalRamp": [
+          "oklch(15% 0.0119 259.82)",
+          "oklch(26% 0.0119 259.82)",
+          "oklch(38% 0.0119 259.82)",
+          "oklch(49% 0.0119 259.82)",
+          "oklch(61% 0.0119 259.82)",
+          "oklch(72% 0.0119 259.82)",
+          "oklch(84% 0.0119 259.82)",
+          "oklch(95% 0.0119 259.82)"
+        ]
+      },
+      "dictionary-accent": {
+        "role": "primary",
+        "displayName": "Dictionary Accent",
+        "tonalRamp": [
+          "oklch(15% 0.1308 41.06)",
+          "oklch(26% 0.1308 41.06)",
+          "oklch(38% 0.1308 41.06)",
+          "oklch(49% 0.1308 41.06)",
+          "oklch(61% 0.1308 41.06)",
+          "oklch(72% 0.1308 41.06)",
+          "oklch(84% 0.1308 41.06)",
+          "oklch(95% 0.1308 41.06)"
+        ]
+      },
+      "dictionary-tint": {
+        "role": "primary",
+        "displayName": "Dictionary Tint",
+        "tonalRamp": [
+          "oklch(15% 0.0103 67.71)",
+          "oklch(26% 0.0103 67.71)",
+          "oklch(38% 0.0103 67.71)",
+          "oklch(49% 0.0103 67.71)",
+          "oklch(61% 0.0103 67.71)",
+          "oklch(72% 0.0103 67.71)",
+          "oklch(84% 0.0103 67.71)",
+          "oklch(95% 0.0103 67.71)"
+        ]
+      },
+      "documents-accent": {
+        "role": "primary",
+        "displayName": "Documents Accent",
+        "tonalRamp": [
+          "oklch(15% 0.1572 24.46)",
+          "oklch(26% 0.1572 24.46)",
+          "oklch(38% 0.1572 24.46)",
+          "oklch(49% 0.1572 24.46)",
+          "oklch(61% 0.1572 24.46)",
+          "oklch(72% 0.1572 24.46)",
+          "oklch(84% 0.1572 24.46)",
+          "oklch(95% 0.1572 24.46)"
+        ]
+      },
+      "documents-tint": {
+        "role": "primary",
+        "displayName": "Documents Tint",
+        "tonalRamp": [
+          "oklch(15% 0.0087 26.02)",
+          "oklch(26% 0.0087 26.02)",
+          "oklch(38% 0.0087 26.02)",
+          "oklch(49% 0.0087 26.02)",
+          "oklch(61% 0.0087 26.02)",
+          "oklch(72% 0.0087 26.02)",
+          "oklch(84% 0.0087 26.02)",
+          "oklch(95% 0.0087 26.02)"
+        ]
+      },
+      "news-tint": {
+        "role": "primary",
+        "displayName": "News Tint",
+        "tonalRamp": [
+          "oklch(15% 0.0068 247.89)",
+          "oklch(26% 0.0068 247.89)",
+          "oklch(38% 0.0068 247.89)",
+          "oklch(49% 0.0068 247.89)",
+          "oklch(61% 0.0068 247.89)",
+          "oklch(72% 0.0068 247.89)",
+          "oklch(84% 0.0068 247.89)",
+          "oklch(95% 0.0068 247.89)"
+        ]
+      },
+      "date-accent": {
+        "role": "primary",
+        "displayName": "Date Accent",
+        "tonalRamp": [
+          "oklch(15% 0.1434 357.77)",
+          "oklch(26% 0.1434 357.77)",
+          "oklch(38% 0.1434 357.77)",
+          "oklch(49% 0.1434 357.77)",
+          "oklch(61% 0.1434 357.77)",
+          "oklch(72% 0.1434 357.77)",
+          "oklch(84% 0.1434 357.77)",
+          "oklch(95% 0.1434 357.77)"
+        ]
+      },
+      "date-tint": {
+        "role": "primary",
+        "displayName": "Date Tint",
+        "tonalRamp": [
+          "oklch(15% 0.0109 348.42)",
+          "oklch(26% 0.0109 348.42)",
+          "oklch(38% 0.0109 348.42)",
+          "oklch(49% 0.0109 348.42)",
+          "oklch(61% 0.0109 348.42)",
+          "oklch(72% 0.0109 348.42)",
+          "oklch(84% 0.0109 348.42)",
+          "oklch(95% 0.0109 348.42)"
+        ]
+      },
+      "precision-accent": {
+        "role": "primary",
+        "displayName": "Precision Accent",
+        "tonalRamp": [
+          "oklch(15% 0.0299 261.06)",
+          "oklch(26% 0.0299 261.06)",
+          "oklch(38% 0.0299 261.06)",
+          "oklch(49% 0.0299 261.06)",
+          "oklch(61% 0.0299 261.06)",
+          "oklch(72% 0.0299 261.06)",
+          "oklch(84% 0.0299 261.06)",
+          "oklch(95% 0.0299 261.06)"
+        ]
+      },
+      "precision-tint": {
+        "role": "primary",
+        "displayName": "Precision Tint",
+        "tonalRamp": [
+          "oklch(15% 0.0029 264.54)",
+          "oklch(26% 0.0029 264.54)",
+          "oklch(38% 0.0029 264.54)",
+          "oklch(49% 0.0029 264.54)",
+          "oklch(61% 0.0029 264.54)",
+          "oklch(72% 0.0029 264.54)",
+          "oklch(84% 0.0029 264.54)",
+          "oklch(95% 0.0029 264.54)"
+        ]
+      }
+    }
+  },
+  "components": [
+    {
+      "name": "Search action",
+      "kind": "button",
+      "refersTo": "search-button",
+      "description": "Circular submit action; enabled only for a valid non-composing query.",
+      "html": "<button class=\"ds-search-button\" aria-label=\"Search Google\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></button>",
+      "css": ".ds-search-button{font-family:Geist,Arial,sans-serif;width:44px;height:44px;border:0;border-radius:50%;background:#1a73e8;color:white;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s,transform .15s}.ds-search-button:hover{background:#1559bc}.ds-search-button:active{transform:scale(.94)}.ds-search-button:disabled{background:#f1f3f4;color:#81868d;cursor:default}.ds-search-button:focus-visible,.ds-input:focus-visible,.ds-choice:focus-visible,.ds-nav button:focus-visible,.ds-chip:focus-visible,.ds-example:focus-visible{outline:3px solid #8ab4f8;outline-offset:3px}"
+    },
+    {
+      "name": "Tool input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "White editable field inside a tinted tool.",
+      "html": "<label style=\"font:11px Geist,Arial,sans-serif;color:#59616c\">Website domain<input class=\"ds-input\" placeholder=\"example.com\" aria-label=\"Website domain\"></label>",
+      "css": ".ds-input{font-family:Geist,Arial,sans-serif;display:block;margin-top:8px;background:#fff;border:1px solid color-mix(in srgb,var(--accent,#1967d2) 20%,white);color:var(--ink,#202124);border-radius:8px;padding:11px;font-size:13px;min-height:44px;box-sizing:border-box}.ds-search-button:focus-visible,.ds-input:focus-visible,.ds-choice:focus-visible,.ds-nav button:focus-visible,.ds-chip:focus-visible,.ds-example:focus-visible{outline:3px solid #8ab4f8;outline-offset:3px}"
+    },
+    {
+      "name": "Tool choices",
+      "kind": "button",
+      "description": "Pressed choices use the current tool accent.",
+      "html": "<div class=\"ds-choices\" role=\"group\" aria-label=\"Forecast period\"><button class=\"ds-choice\" aria-pressed=\"true\">Today</button><button class=\"ds-choice\" aria-pressed=\"false\">Tomorrow</button></div>",
+      "css": ".ds-choices{display:flex;flex-wrap:wrap;gap:6px;padding:8px;background:var(--tint,#f5f8ff)}.ds-choice{font-family:Geist,Arial,sans-serif;min-height:44px;min-width:44px;font-size:11px;border:1px solid color-mix(in srgb,var(--accent,#1967d2) 15%,white);border-radius:8px;padding:8px 12px;background:#ffffff70;color:var(--ink,#202124);cursor:pointer;transition:background .15s,color .15s}.ds-choice[aria-pressed=true]{background:var(--accent,#1967d2);color:white;border-color:var(--accent,#1967d2)}.ds-choice:hover:not([aria-pressed=true]){background:white}.ds-search-button:focus-visible,.ds-input:focus-visible,.ds-choice:focus-visible,.ds-nav button:focus-visible,.ds-chip:focus-visible,.ds-example:focus-visible{outline:3px solid #8ab4f8;outline-offset:3px}"
+    },
+    {
+      "name": "Classic / Fluid switch",
+      "kind": "nav",
+      "description": "Compact comparison switch with a lifted active segment.",
+      "html": "<div class=\"ds-nav\" role=\"group\" aria-label=\"Search interface\"><button aria-pressed=\"false\">Classic</button><button aria-pressed=\"true\">Fluid</button></div>",
+      "css": ".ds-nav{display:inline-flex;background:#f3f4f5;border:1px solid #e9eaec;border-radius:24px;padding:3px}.ds-nav button{font-family:Geist,Arial,sans-serif;border:0;background:none;color:#202124;min-width:66px;height:44px;border-radius:20px;font-size:12px;cursor:pointer;transition:background .15s,color .15s,box-shadow .15s}.ds-nav button[aria-pressed=true]{background:white;color:#174ea6;box-shadow:0 2px 5px #20212412}.ds-nav button:hover{color:#174ea6}.ds-search-button:focus-visible,.ds-input:focus-visible,.ds-choice:focus-visible,.ds-nav button:focus-visible,.ds-chip:focus-visible,.ds-example:focus-visible{outline:3px solid #8ab4f8;outline-offset:3px}"
+    },
+    {
+      "name": "Search filter chip",
+      "kind": "chip",
+      "description": "Removable syntax token with a full touch target.",
+      "html": "<button class=\"ds-chip\" aria-label=\"Remove Website: example.com\"><span>Website: example.com</span><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"m18 6-12 12M6 6l12 12\"/></svg></button>",
+      "css": ".ds-chip{font-family:Geist,Arial,sans-serif;display:flex;align-items:center;gap:7px;min-height:44px;min-width:44px;background:#fff9;border:1px solid color-mix(in srgb,var(--accent,#1967d2) 18%,white);border-radius:7px;color:var(--accent,#1967d2);font-size:11px;padding:8px 10px;text-align:left;cursor:pointer}.ds-chip span{overflow-wrap:anywhere}.ds-chip:hover{background:white}.ds-search-button:focus-visible,.ds-input:focus-visible,.ds-choice:focus-visible,.ds-nav button:focus-visible,.ds-chip:focus-visible,.ds-example:focus-visible{outline:3px solid #8ab4f8;outline-offset:3px}"
+    },
+    {
+      "name": "Example tile",
+      "kind": "card",
+      "refersTo": "example",
+      "description": "Compact interactive entry point into a search tool.",
+      "html": "<button class=\"ds-example\"><svg width=\"17\" height=\"17\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><circle cx=\"10.5\" cy=\"10.5\" r=\"7.5\"/><path d=\"m16 16 5 5\"/></svg><span>Try a search</span></button>",
+      "css": ".ds-example{font-family:Geist,Arial,sans-serif;display:flex;align-items:center;gap:9px;padding:10px 15px;min-height:48px;min-width:44px;background:white;border:1px solid #e5e8ec;border-radius:12px;font-size:12px;color:#575f69;text-align:left;cursor:pointer;transition:background .15s,border-color .15s,color .15s}.ds-example svg{color:#77808b;flex-shrink:0}.ds-example:hover{background:#f6f8fc;border-color:#c8d8f1;color:#1967d2}.ds-example.is-active{background:var(--tint,#f5f8ff);color:var(--accent,#1967d2)}.ds-search-button:focus-visible,.ds-input:focus-visible,.ds-choice:focus-visible,.ds-nav button:focus-visible,.ds-chip:focus-visible,.ds-example:focus-visible{outline:3px solid #8ab4f8;outline-offset:3px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "A search bar that takes the shape of your curiosity.",
+    "overview": "The user-pinned Google-style world uses a white canvas, a familiar multicolour wordmark, charcoal text and restrained blue actions. Fluid Search keeps its independent identity in the header and its non-affiliation notice in the footer. The former dark ChatGPT composer direction is superseded.\n\nThe query is the visual anchor. A softly tinted lower shell reveals one useful tool at a time, while compact examples invite exploration. The current implementation in `components/FluidSearch.tsx`, `components/SearchTools.tsx` and `app/globals.css` is the evidence for this system; home composition belongs in the surface brief.",
+    "keyCharacteristics": [
+      "White space around a single search surface.",
+      "Familiar controls with intent-specific accents and restrained illustrations.",
+      "Visible source, pending state and disclosure beside the interaction."
+    ],
+    "rules": [
+      {
+        "name": "The Local Colour Rule",
+        "body": "Change the tool tint, icon and related controls with the active intent; keep the page white.",
+        "section": "colors"
+      },
+      {
+        "name": "The Anchored Query Rule",
+        "body": "Tool changes affect the lower shell. The textarea grows only with its content, up to 112px; inference must not reposition its caret.",
+        "section": "layout"
+      }
+    ],
+    "dos": [
+      "Do retain the white canvas, anchored query and independent Fluid Search identity.",
+      "Do keep provenance, privacy disclosure, readable muted text and visible keyboard focus.",
+      "Do preserve 44px targets and useful controls across responsive sizes.",
+      "Do describe external destinations and illustrative content honestly."
+    ],
+    "donts": [
+      "Don't restore the superseded dark composer, model selector or capability trays.",
+      "Don't fabricate results or present local syntax parsing as a Jev decision.",
+      "Don't move the active input or require animation to understand state."
+    ]
+  }
+}

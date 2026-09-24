@@ -1,4 +1,26 @@
-# Delivery status — 23 September 2026
+# Current delivery — Fluid Search, 24 September 2026
+
+The user replaced the ChatGPT composer concept with a white Google-style fluid search bar and explicitly deferred video work. The standalone folder, private repository, Vercel hostname, server secrets, Seoul function region, and shared US$5 Jev ledger are retained.
+
+## Search experience
+
+Twelve routes: general, weather, finance, places, movies, convert, define, documents, site, news, date and precise. Jev classifies natural-language searches with one Choice question. Explicit syntax is parsed on-device, supports mixed removable filters and partial prefixes, and is labelled Search syntax. Manual and example states retain their own labels. The input/caret stays anchored while the lower shell changes height and presents useful controls.
+
+Length/weight/temperature conversions calculate locally. Currency and unsupported conversions open Google instead of displaying an unrelated number. Other modes offer editable refinements and real Google/Maps destinations on explicit action. No weather, financial, map, film, dictionary or news data is invented. Retired cache:/related: operators receive a notice.
+
+## Current verification
+
+- 181 unit/integration tests pass, including atomic PostgreSQL budget tests, 57 syntax cases and 29 conversion cases.
+- 20 browser cases passed: the 19-case fixture suite plus the additional unsupported-conversion regression. The API is intercepted in these tests; these counts do not measure Jev accuracy.
+- Production build passes. Desktop/mobile visual verification covers all twelve shapes; the final 390px check has no overflow and no interactive targets below 44px.
+- New search-v1 live evaluation: development 24/24, held-out 24/24, both completed without errors. The protected local endpoint's development client p50/p95 was 684.54/1147.82 ms; held-out 695.66/1125.46 ms. These small authored English sets are acceptance checks, not general accuracy guarantees or production latency measurements.
+- Reports: evaluation/results/2026-09-24T01-58-28-580Z-search-development.json and 2026-09-24T02-00-24-744Z-search-held-out.json. Prior chat reports remain historical evidence only.
+
+Public deployment details and browser measurements are added after verification below. No search video was created or re-recorded.
+
+---
+
+# Historical delivery — ChatGPT prototype, 23 September 2026
 
 ## Project and outputs
 

@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "dataset": "search-v1",
+  "split": "development",
+  "language": "en",
+  "description": "Authored English search-intent cases for the twelve-mode fluid search demo; not user data. Separate from the archived five-mode composer datasets.",
+  "cases": [
+    {
+      "id": "search-development-general-01",
+      "expected": "general",
+      "scenario": "ordinary explanation",
+      "draft": "How do solar panels work?",
+      "rationale": "An ordinary explanation needs no specialized search controls."
+    },
+    {
+      "id": "search-development-general-02",
+      "expected": "general",
+      "scenario": "negated forecast request",
+      "draft": "Do not show me the weather forecast. Explain why clouds form.",
+      "rationale": "The requested action is an explanation and the forecast is negated."
+    },
+    {
+      "id": "search-development-weather-01",
+      "expected": "weather",
+      "scenario": "implicit short forecast query",
+      "draft": "umbrella tomorrow",
+      "rationale": "Practical rain planning implies a forecast without a command word."
+    },
+    {
+      "id": "search-development-weather-02",
+      "expected": "weather",
+      "scenario": "city forecast",
+      "draft": "Singapore weather this weekend",
+      "rationale": "The time qualifies a weather forecast, not publication filtering."
+    },
+    {
+      "id": "search-development-finance-01",
+      "expected": "finance",
+      "scenario": "ticker quote",
+      "draft": "AAPL share price",
+      "rationale": "A ticker and share-price request imply a market quote."
+    },
+    {
+      "id": "search-development-finance-02",
+      "expected": "finance",
+      "scenario": "cryptocurrency price",
+      "draft": "bitcoin price today",
+      "rationale": "Current market pricing is finance, not generic news."
+    },
+    {
+      "id": "search-development-places-01",
+      "expected": "places",
+      "scenario": "nearby venue discovery",
+      "draft": "cafes nearby",
+      "rationale": "The user wants physical nearby places."
+    },
+    {
+      "id": "search-development-places-02",
+      "expected": "places",
+      "scenario": "opening hours",
+      "draft": "National Gallery Singapore opening hours",
+      "rationale": "Opening hours belong to local place discovery."
+    },
+    {
+      "id": "search-development-movies-01",
+      "expected": "movies",
+      "scenario": "screening times",
+      "draft": "Dune showtimes",
+      "rationale": "A film screening query belongs to movies."
+    },
+    {
+      "id": "search-development-movies-02",
+      "expected": "movies",
+      "scenario": "cinema discovery",
+      "draft": "family films in cinemas this weekend",
+      "rationale": "The weekend qualifies cinema availability rather than publication dates."
+    },
+    {
+      "id": "search-development-convert-01",
+      "expected": "convert",
+      "scenario": "short unit conversion",
+      "draft": "10 km in miles",
+      "rationale": "A quantity and target unit imply conversion."
+    },
+    {
+      "id": "search-development-convert-02",
+      "expected": "convert",
+      "scenario": "currency conversion",
+      "draft": "100 USD to SGD",
+      "rationale": "Changing a monetary amount between currencies is conversion, not a stock quote."
+    },
+    {
+      "id": "search-development-define-01",
+      "expected": "define",
+      "scenario": "word meaning",
+      "draft": "meaning of serendipity",
+      "rationale": "The user asks for a word meaning."
+    },
+    {
+      "id": "search-development-define-02",
+      "expected": "define",
+      "scenario": "short translation",
+      "draft": "bonjour in English",
+      "rationale": "A short phrase translation belongs to dictionary controls."
+    },
+    {
+      "id": "search-development-documents-01",
+      "expected": "documents",
+      "scenario": "download format",
+      "draft": "annual report pdf",
+      "rationale": "An explicit PDF target requests a document search."
+    },
+    {
+      "id": "search-development-documents-02",
+      "expected": "documents",
+      "scenario": "spreadsheet file",
+      "draft": "download a household budget spreadsheet",
+      "rationale": "A downloadable spreadsheet is a document-format search."
+    },
+    {
+      "id": "search-development-site-01",
+      "expected": "site",
+      "scenario": "source restriction",
+      "draft": "apple support website only",
+      "rationale": "The query restricts results to a particular website."
+    },
+    {
+      "id": "search-development-site-02",
+      "expected": "site",
+      "scenario": "natural domain filter",
+      "draft": "search only NASA website for moon missions",
+      "rationale": "Source restriction is the primary refinement."
+    },
+    {
+      "id": "search-development-news-01",
+      "expected": "news",
+      "scenario": "short headline request",
+      "draft": "latest space news",
+      "rationale": "The user wants recent headlines."
+    },
+    {
+      "id": "search-development-news-02",
+      "expected": "news",
+      "scenario": "current affairs",
+      "draft": "What happened in technology today?",
+      "rationale": "Recent developments are a news search."
+    },
+    {
+      "id": "search-development-date-01",
+      "expected": "date",
+      "scenario": "publication period",
+      "draft": "climate reports since 2024",
+      "rationale": "This filters reports by date without requesting a downloadable format."
+    },
+    {
+      "id": "search-development-date-02",
+      "expected": "date",
+      "scenario": "bounded publication years",
+      "draft": "battery articles published between 2020 and 2023",
+      "rationale": "The main refinement is a publication date range."
+    },
+    {
+      "id": "search-development-precise-01",
+      "expected": "precise",
+      "scenario": "exact phrase match",
+      "draft": "Find pages containing this exact phrase: a room of ones own",
+      "rationale": "The user requests an exact phrase match."
+    },
+    {
+      "id": "search-development-precise-02",
+      "expected": "precise",
+      "scenario": "excluded meaning",
+      "draft": "jaguar animal results without the car company",
+      "rationale": "Excluding an unwanted meaning is the requested refinement."
+    }
+  ]
+}

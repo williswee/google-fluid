@@ -1,5 +1,5 @@
-import FluidComposer from '@/components/FluidComposer';
+import FluidSearch from '@/components/FluidSearch';
 
 export default function Home() {
-  return <FluidComposer />;
+  return <FluidSearch />;
 }

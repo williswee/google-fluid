@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "dataset": "search-v1",
+  "split": "held-out",
+  "language": "en",
+  "description": "Authored English search-intent cases for the twelve-mode fluid search demo; not user data. Separate from the archived five-mode composer datasets.",
+  "cases": [
+    {
+      "id": "search-held-out-general-01",
+      "expected": "general",
+      "scenario": "ambiguous single topic",
+      "draft": "apple",
+      "rationale": "The topic alone does not distinguish a company, fruit, quote, or source restriction."
+    },
+    {
+      "id": "search-held-out-general-02",
+      "expected": "general",
+      "scenario": "mention without requesting mode",
+      "draft": "Explain how a stock exchange works; no live prices needed.",
+      "rationale": "The user requests an explanation and explicitly excludes live pricing."
+    },
+    {
+      "id": "search-held-out-weather-01",
+      "expected": "weather",
+      "scenario": "clothing decision",
+      "draft": "Will I need a raincoat in Tokyo on Friday?",
+      "rationale": "Practical rain planning implies a forecast."
+    },
+    {
+      "id": "search-held-out-weather-02",
+      "expected": "weather",
+      "scenario": "short condition query",
+      "draft": "wind forecast Wellington tonight",
+      "rationale": "A brief forecast query is sufficient without a complete sentence."
+    },
+    {
+      "id": "search-held-out-finance-01",
+      "expected": "finance",
+      "scenario": "equity performance",
+      "draft": "How is Microsoft stock trading right now?",
+      "rationale": "Current equity trading performance is a finance lookup."
+    },
+    {
+      "id": "search-held-out-finance-02",
+      "expected": "finance",
+      "scenario": "market chart",
+      "draft": "Show the past month of gold prices",
+      "rationale": "A market price history belongs to finance rather than generic date filtering."
+    },
+    {
+      "id": "search-held-out-places-01",
+      "expected": "places",
+      "scenario": "spatial discovery",
+      "draft": "Where can I get vegan lunch around Bugis?",
+      "rationale": "The user wants nearby physical restaurants."
+    },
+    {
+      "id": "search-held-out-places-02",
+      "expected": "places",
+      "scenario": "directions",
+      "draft": "Walking directions to the nearest pharmacy",
+      "rationale": "Directions to a local service use place controls."
+    },
+    {
+      "id": "search-held-out-movies-01",
+      "expected": "movies",
+      "scenario": "alternative showtime phrasing",
+      "draft": "Where is Inside Out 2 playing near Orchard?",
+      "rationale": "The request concerns cinema screenings."
+    },
+    {
+      "id": "search-held-out-movies-02",
+      "expected": "movies",
+      "scenario": "film discovery",
+      "draft": "Which animated movies can I watch at the cinema tonight?",
+      "rationale": "Film discovery with a screening time belongs to movies."
+    },
+    {
+      "id": "search-held-out-convert-01",
+      "expected": "convert",
+      "scenario": "imperial to metric",
+      "draft": "How many millilitres are in two cups?",
+      "rationale": "A quantity in different units asks for conversion."
+    },
+    {
+      "id": "search-held-out-convert-02",
+      "expected": "convert",
+      "scenario": "time zones",
+      "draft": "9am in Singapore is what time in London?",
+      "rationale": "Translating a clock time between zones is conversion."
+    },
+    {
+      "id": "search-held-out-define-01",
+      "expected": "define",
+      "scenario": "synonym",
+      "draft": "another word for meticulous",
+      "rationale": "The request is for a word synonym."
+    },
+    {
+      "id": "search-held-out-define-02",
+      "expected": "define",
+      "scenario": "definition phrasing",
+      "draft": "What does ephemeral mean?",
+      "rationale": "The request asks for a word definition."
+    },
+    {
+      "id": "search-held-out-documents-01",
+      "expected": "documents",
+      "scenario": "manual format",
+      "draft": "Canon camera instruction manual as a PDF",
+      "rationale": "The user wants a downloadable document format."
+    },
+    {
+      "id": "search-held-out-documents-02",
+      "expected": "documents",
+      "scenario": "presentation template",
+      "draft": "Find a downloadable PowerPoint project proposal template",
+      "rationale": "A downloadable slide deck is a document-format search."
+    },
+    {
+      "id": "search-held-out-site-01",
+      "expected": "site",
+      "scenario": "government-only source",
+      "draft": "Find passport renewal instructions only on the Singapore government website",
+      "rationale": "The user explicitly limits the source website."
+    },
+    {
+      "id": "search-held-out-site-02",
+      "expected": "site",
+      "scenario": "organization domain",
+      "draft": "Limit my search for panda conservation to WWF pages",
+      "rationale": "An organization website restriction is the requested refinement."
+    },
+    {
+      "id": "search-held-out-news-01",
+      "expected": "news",
+      "scenario": "recent developments",
+      "draft": "What are the newest developments in reusable rockets?",
+      "rationale": "The user asks for recent developments rather than an explanatory history."
+    },
+    {
+      "id": "search-held-out-news-02",
+      "expected": "news",
+      "scenario": "breaking headline",
+      "draft": "Breaking headlines about the election",
+      "rationale": "This is explicitly a news request."
+    },
+    {
+      "id": "search-held-out-date-01",
+      "expected": "date",
+      "scenario": "before cutoff",
+      "draft": "Find articles about remote work published before 2020",
+      "rationale": "The primary search refinement is a publication-date cutoff."
+    },
+    {
+      "id": "search-held-out-date-02",
+      "expected": "date",
+      "scenario": "recent publication window",
+      "draft": "Show urban planning studies released during the last six months",
+      "rationale": "The user requests a time window for publications without a download-format requirement."
+    },
+    {
+      "id": "search-held-out-precise-01",
+      "expected": "precise",
+      "scenario": "exact wording requirement",
+      "draft": "Only results with the exact words sustainable urban drainage",
+      "rationale": "The refinement requires exact wording."
+    },
+    {
+      "id": "search-held-out-precise-02",
+      "expected": "precise",
+      "scenario": "remove unwanted term",
+      "draft": "Coffee brewing guides with every espresso result excluded",
+      "rationale": "The user explicitly removes an unwanted topic from the results."
+    }
+  ]
+}

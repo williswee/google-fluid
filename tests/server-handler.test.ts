@@ -3,7 +3,7 @@ vi.mock("server-only", () => ({}));
 
 import { clientHash, handleIntent, isSameOrigin, type IntentDependencies } from "../lib/server/handler";
 import type { LiveConfig } from "../lib/server/config";
-import type { IntentResult } from "../lib/intent";
+import { MODES, type IntentResult, type ModeId } from "../lib/intent";
 
 const config: LiveConfig = {
   typesafeApiKey: "test-only-placeholder",
@@ -13,10 +13,8 @@ const config: LiveConfig = {
   onVercel: false,
 };
 const result: IntentResult = {
-  mode: "image",
-  probabilities: { general: 0.05, image: 0.95, web: 0, research: 0, sketch: 0 },
-  effort: "balanced",
-  effortProbabilities: { brief: 0.1, balanced: 0.8, deep: 0.1 },
+  mode: "weather",
+  probabilities: Object.fromEntries(MODES.map((mode) => [mode, mode === "weather" ? 0.95 : mode === "general" ? 0.05 : 0])) as Record<ModeId, number>,
   model: "jev-1.13.0",
   latencyMs: 170,
   source: "live",
@@ -32,7 +30,7 @@ function setup() {
   } satisfies IntentDependencies;
 }
 
-function request(body: unknown = { draft: "Create a poster of a red moon" }, init?: RequestInit) {
+function request(body: unknown = { draft: "Do I need an umbrella tomorrow?" }, init?: RequestInit) {
   return new Request("https://chatgptfluid.vercel.app/api/intent", {
     method: "POST",
     headers: { origin: "https://chatgptfluid.vercel.app", "content-type": "application/json" },
@@ -196,7 +194,7 @@ describe("same-origin validation behind Next", () => {
     const req = new Request("http://localhost:3000/api/intent", {
       method: "POST",
       headers: { host: "127.0.0.1:3000", origin: "http://127.0.0.1:3000", "content-type": "application/json" },
-      body: JSON.stringify({ draft: "Make an image of a moon" }),
+      body: JSON.stringify({ draft: "Singapore weather tomorrow" }),
     });
     expect((await handleIntent(req, deps)).status).toBe(200);
     expect(deps.classify).toHaveBeenCalledTimes(1);

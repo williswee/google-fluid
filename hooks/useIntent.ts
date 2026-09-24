@@ -41,9 +41,9 @@ export function useIntent(draft: string, enabled: boolean, retryKey: number) {
           body: JSON.stringify({ draft: job.draft }),
         });
         const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Live routing is unavailable. Choose a capability or try again.');
-        if (!data || !MODES.includes(data.mode) || !['brief', 'balanced', 'deep'].includes(data.effort) || data.source !== 'live') {
-          throw new Error('Live routing is unavailable. Choose a capability or try again.');
+        if (!response.ok) throw new Error(data.error || 'Live routing is unavailable. Choose a search tool or try again.');
+        if (!data || !MODES.includes(data.mode) || data.source !== 'live') {
+          throw new Error('Live routing is unavailable. Choose a search tool or try again.');
         }
         const result: DisplayResult = { ...data, roundTripMs: Math.round(performance.now() - startedAt) };
         if (cache.current.size >= 30) cache.current.delete(cache.current.keys().next().value!);
@@ -55,7 +55,7 @@ export function useIntent(draft: string, enabled: boolean, retryKey: number) {
       } catch (error) {
         if (mounted.current && job.revision === revision.current) {
           setDecision(null);
-          setFailure({ draft: job.draft, message: error instanceof Error ? error.message : 'Live routing is unavailable. Choose a capability or try again.' });
+          setFailure({ draft: job.draft, message: error instanceof Error ? error.message : 'Live routing is unavailable. Choose a search tool or try again.' });
         }
       } finally {
         active.current = false;

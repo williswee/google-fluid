@@ -1,369 +1,333 @@
-import { expect, test, type Page, type Route } from "@playwright/test";
-import { EFFORTS, MODES, type EffortId, type ModeId } from "../lib/intent";
+import { expect, test, type Page, type Route } from '@playwright/test';
+import { MODES, type ModeId } from '../lib/intent';
+import { SEARCH_MODES } from '../lib/search-presets';
 
-// All inference in this suite is an intercepted test fixture. These checks
-// verify interaction behavior, not Jev accuracy or live inference latency.
-function fixture(mode: ModeId, effort: EffortId = "balanced") {
+// These browser checks intercept every inference call. They measure interaction
+// behavior, not Jev accuracy, provider latency, or live external search results.
+function fixture(mode: ModeId) {
   return {
     mode,
-    probabilities: Object.fromEntries(MODES.map((candidate) => [candidate, candidate === mode ? 0.8 : 0.05])),
-    effort,
-    effortProbabilities: Object.fromEntries(EFFORTS.map((candidate) => [candidate, candidate === effort ? 0.9 : 0.05])),
-    model: "jev-1.13.0",
-    latencyMs: 81,
-    source: "live",
+    probabilities: Object.fromEntries(MODES.map(candidate => [candidate, candidate === mode ? .89 : .01])),
+    model: 'jev-1.13.0', latencyMs: 81, source: 'live',
   };
 }
 
 async function setup(page: Page, options: { live?: boolean; delayed?: boolean; mode?: ModeId } = {}) {
   const requests: { draft: string; route: Route }[] = [];
-  await page.route("**/api/status", (route) => route.fulfill({ json: { liveAvailable: options.live !== false } }));
-  await page.route("**/api/intent", async (route) => {
-    const { draft } = route.request().postDataJSON() as { draft: string };
-    requests.push({ draft, route });
-    if (!options.delayed) await route.fulfill({ json: fixture(options.mode ?? "image") });
+  await page.route('**/api/status', route => route.fulfill({ json: { liveAvailable: options.live !== false } }));
+  await page.route('**/api/intent', async route => {
+    requests.push({ draft: route.request().postDataJSON().draft, route });
+    if (!options.delayed) await route.fulfill({ json: fixture(options.mode ?? 'weather') });
   });
-  await page.goto("/");
-  await expect(page.locator("#privacy-note")).toContainText(options.live === false ? "Live routing is unavailable" : "Drafts are sent to TypeSafe");
-  return { requests, prompt: page.getByRole("textbox", { name: "Your prompt" }), app: page.locator(".fluid-app") };
+  await page.goto('/');
+  await expect(page.locator('#privacy-note')).toContainText(options.live === false ? 'Live routing is unavailable' : 'Drafts are sent to TypeSafe');
+  return { requests, query: page.getByRole('textbox', { name: 'Search query' }), app: page.locator('.fluid-app') };
 }
+const panel = (page: Page, mode: ModeId) => page.getByRole('region', { name: `${SEARCH_MODES[mode].label} search tools` });
+const example = (page: Page, mode: ModeId) => page.getByRole('button', { name: `Try ${SEARCH_MODES[mode].label}: ${SEARCH_MODES[mode].example}`, exact: true });
 
-test("debounces edits and keeps the caret and prompt stable through a prediction", async ({ page }) => {
-  const { requests, prompt, app } = await setup(page, { delayed: true });
+// The clock assertions distinguish immediate acknowledgement from a paid decision.
+test('acknowledges typing immediately, debounces, and preserves the caret and input bounds', async ({ page }) => {
+  const { requests, query, app } = await setup(page, { delayed: true });
   await page.clock.install();
-  await prompt.fill("Create a poster");
-  // Acknowledge the keystroke before the 150 ms debounce or any network result.
-  await expect(app).toHaveAttribute("data-pending", "true");
-  await expect(page.getByText("Reading intent…", { exact: true })).toBeVisible();
+  await query.fill('Will it rain');
+  await expect(app).toHaveAttribute('data-pending', 'true');
+  await expect(page.getByText('Reading your search…', { exact: true })).toBeVisible();
   expect(requests).toHaveLength(0);
   await page.clock.runFor(75);
-  await prompt.fill("Create a poster for a rooftop garden");
+  await query.fill('Will it rain in Tokyo tomorrow');
   await page.clock.runFor(75);
   expect(requests).toHaveLength(0);
   await page.clock.runFor(76);
   await expect.poll(() => requests.length).toBe(1);
-  expect(requests[0].draft).toBe("Create a poster for a rooftop garden");
-  await expect(page.getByText("Reading intent…", { exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Preview selected route" })).toBeDisabled();
-  const before = await prompt.boundingBox();
-  const selection = await prompt.evaluate((element: HTMLTextAreaElement) => [element.selectionStart, element.selectionEnd]);
-  await requests[0].route.fulfill({ json: fixture("image") });
-  await expect(app).toHaveAttribute("data-mode", "image");
-  await expect(prompt).toBeFocused();
-  await expect(prompt).toHaveValue("Create a poster for a rooftop garden");
-  expect(await prompt.evaluate((element: HTMLTextAreaElement) => [element.selectionStart, element.selectionEnd])).toEqual(selection);
-  expect(await prompt.boundingBox()).toEqual(before);
-  await expect(page.getByRole("button", { name: "Suggested: Create image. Choose a capability" })).toBeVisible();
+  const before = await query.boundingBox();
+  const caret = await query.evaluate((el: HTMLTextAreaElement) => [el.selectionStart, el.selectionEnd]);
+  await requests[0].route.fulfill({ json: fixture('weather') });
+  await expect(panel(page, 'weather')).toBeVisible();
+  await expect(app).toHaveAttribute('data-pending', 'false');
+  await expect(query).toHaveValue('Will it rain in Tokyo tomorrow');
+  await expect(query).toBeFocused();
+  expect(await query.evaluate((el: HTMLTextAreaElement) => [el.selectionStart, el.selectionEnd])).toEqual(caret);
+  expect(await query.boundingBox()).toEqual(before);
 });
 
-test("coalesces edits into one latest draft while one request is in flight", async ({ page }) => {
-  const { requests, prompt, app } = await setup(page, { delayed: true });
+test('coalesces rapid edits and never commits a stale response', async ({ page }) => {
+  const { requests, query, app } = await setup(page, { delayed: true });
   await page.clock.install();
-  await prompt.fill("Create a poster for the park");
+  await query.fill('Will it rain tomorrow');
   await page.clock.runFor(151);
   await expect.poll(() => requests.length).toBe(1);
-  await prompt.fill("Find official park opening hours");
+  await query.fill('Find a cafe');
   await page.clock.runFor(151);
-  await prompt.fill("Find the latest official park opening hours");
+  await query.fill('Find a quiet cafe in Singapore');
   await page.clock.runFor(151);
   expect(requests).toHaveLength(1);
-  await expect(app).toHaveAttribute("data-pending", "true");
-  await requests[0].route.fulfill({ json: fixture("image") });
+  await requests[0].route.fulfill({ json: fixture('weather') });
   await expect.poll(() => requests.length).toBe(2);
-  expect(requests[1].draft).toBe("Find the latest official park opening hours");
-  // The stale image decision must never be committed while the latest request waits.
-  await expect(app).toHaveAttribute("data-mode", "general");
-  await expect(page.getByRole("button", { name: /^Suggested:/ })).toHaveCount(0);
-  await requests[1].route.fulfill({ json: fixture("web", "brief") });
-  await expect(app).toHaveAttribute("data-mode", "web");
-  await expect(app).toHaveAttribute("data-pending", "false");
-  await expect(page.getByRole("button", { name: "Suggested: Web search. Choose a capability" })).toBeVisible();
-  await expect(prompt).toHaveValue("Find the latest official park opening hours");
+  expect(requests[1].draft).toBe('Find a quiet cafe in Singapore');
+  await expect(app).toHaveAttribute('data-mode', 'general');
+  await expect(panel(page, 'weather')).toHaveCount(0);
+  await requests[1].route.fulfill({ json: fixture('places') });
+  await expect(panel(page, 'places')).toBeVisible();
+  await expect(app).toHaveAttribute('data-pending', 'false');
 });
 
-test("keeps the confirmed presentation marked as updating until the new result arrives", async ({ page }) => {
-  const { requests, prompt, app } = await setup(page, { delayed: true });
-  await prompt.fill("Create a poster");
+test('keeps the previous presentation marked Updating until a new decision arrives', async ({ page }) => {
+  const { requests, query, app } = await setup(page, { delayed: true });
+  await query.fill('weather in Tokyo');
   await expect.poll(() => requests.length).toBe(1);
-  await requests[0].route.fulfill({ json: fixture("image") });
-  await expect(app).toHaveAttribute("data-mode", "image");
+  await requests[0].route.fulfill({ json: fixture('weather') });
+  await expect(panel(page, 'weather')).toBeVisible();
   await page.clock.install();
-  await prompt.fill("Create a checklist");
-  await expect(app).toHaveAttribute("data-pending", "true");
-  await expect(page.getByText("Updating suggestion…", { exact: true })).toBeVisible();
-  await expect(app).toHaveAttribute("data-mode", "image");
-  await expect(page.getByRole("button", { name: "Preview selected route" })).toBeDisabled();
+  await query.fill('10 km in miles');
+  await expect(page.getByText('Updating…', { exact: true })).toBeVisible();
+  await expect(app).toHaveAttribute('data-mode', 'weather');
   expect(requests).toHaveLength(1);
   await page.clock.runFor(151);
   await expect.poll(() => requests.length).toBe(2);
-  await requests[1].route.fulfill({ json: fixture("general", "brief") });
-  await expect(app).toHaveAttribute("data-mode", "general");
-  await expect(app).toHaveAttribute("data-pending", "false");
-  await expect(prompt).toHaveValue("Create a checklist");
+  await requests[1].route.fulfill({ json: fixture('convert') });
+  await expect(panel(page, 'convert')).toBeVisible();
+  await expect(app).toHaveAttribute('data-pending', 'false');
 });
 
-test("deleting the draft clears pending state and ignores the dispatched result", async ({ page }) => {
-  const { requests, prompt, app } = await setup(page, { delayed: true });
-  await prompt.fill("Create an illustration");
+test('clearing the query ignores an already-dispatched decision', async ({ page }) => {
+  const { requests, query, app } = await setup(page, { delayed: true });
+  await query.fill('Tokyo forecast');
   await expect.poll(() => requests.length).toBe(1);
-  await prompt.fill("");
-  await expect(app).toHaveAttribute("data-pending", "false");
-  await requests[0].route.fulfill({ json: fixture("image") });
-  await expect(app).toHaveAttribute("data-mode", "general");
-  await expect(prompt).toBeEmpty();
-  await expect(page.getByRole("button", { name: /^Suggested:/ })).toHaveCount(0);
+  await page.getByRole('button', { name: 'Clear search', exact: true }).click();
+  await expect(query).toBeEmpty();
+  await expect(app).toHaveAttribute('data-pending', 'false');
+  await requests[0].route.fulfill({ json: fixture('weather') });
+  await expect(app).toHaveAttribute('data-mode', 'general');
+  await expect(panel(page, 'weather')).toHaveCount(0);
   expect(requests).toHaveLength(1);
 });
 
-test("manual selection holds through edits and in-flight responses until Auto returns", async ({ page }) => {
-  const { requests, prompt, app } = await setup(page, { delayed: true });
-  await prompt.fill("Create an illustration of a garden");
-  await expect.poll(() => requests.length).toBe(1);
-  await page.getByRole("button", { name: "Choose a capability", exact: true }).click();
-  await page.getByRole("menuitemradio", { name: /Sketch/ }).click();
-  await expect(app).toHaveAttribute("data-mode", "sketch");
-  await requests[0].route.fulfill({ json: fixture("image") });
-  await prompt.fill("Now find the latest news");
-  await page.waitForTimeout(450);
-  expect(requests).toHaveLength(1);
-  await expect(page.getByRole("button", { name: "Selected: Sketch. Choose a capability" })).toBeVisible();
-  await page.getByRole("button", { name: "Return to automatic routing" }).click();
-  await expect.poll(() => requests.length).toBe(2);
-  await requests[1].route.fulfill({ json: fixture("web") });
-  await expect(app).toHaveAttribute("data-mode", "web");
-  await expect(page.getByRole("button", { name: "Suggested: Web search. Choose a capability" })).toBeVisible();
-});
-
-test("provider failure preserves the draft and permits an honest manual fallback", async ({ page }) => {
-  const { requests, prompt, app } = await setup(page, { delayed: true });
-  await prompt.fill("Research urban cooling in depth");
-  await expect.poll(() => requests.length).toBe(1);
-  await requests[0].route.fulfill({ status: 503, json: { code: "UNAVAILABLE", error: "Live routing could not finish. Choose a capability." } });
-  await expect(page.locator(".error-copy")).toContainText("Live routing could not finish. Choose a capability.");
-  await expect(page.getByRole("button", { name: "Try again" })).toBeVisible();
-  await expect(prompt).toHaveValue("Research urban cooling in depth");
-  await expect(app).toHaveAttribute("data-mode", "general");
-  await expect(page.getByRole("button", { name: /^Suggested:/ })).toHaveCount(0);
-  await page.getByRole("button", { name: "Choose a capability", exact: true }).click();
-  await page.getByRole("menuitemradio", { name: /Deep research/ }).click();
-  await expect(page.getByText("Manual", { exact: true })).toBeVisible();
-  await expect(app).toHaveAttribute("data-mode", "research");
-  expect(requests).toHaveLength(1);
-});
-
-test("IME composition does not route partial text or submit on composing Enter", async ({ page }) => {
-  const { requests, prompt } = await setup(page);
-  await prompt.dispatchEvent("compositionstart");
-  await prompt.fill("自分で部屋の間取りを描きたい");
-  await prompt.dispatchEvent("keydown", { key: "Enter", code: "Enter", isComposing: true });
-  await page.waitForTimeout(450);
+test('explicit search syntax reveals tools immediately without a Jev request', async ({ page }) => {
+  const { requests, query, app } = await setup(page);
+  await page.clock.install();
+  await query.fill('climate report filetype:pdf');
+  await expect(panel(page, 'documents')).toBeVisible();
+  await expect(app).toHaveAttribute('data-pending', 'false');
+  await expect(page.getByText('Search syntax · instant', { exact: true })).toBeVisible();
+  await page.clock.runFor(500);
   expect(requests).toHaveLength(0);
-  await expect(page.getByText(/UI demonstration only/)).toHaveCount(0);
-  await prompt.dispatchEvent("compositionend", { data: "自分で部屋の間取りを描きたい" });
-  await expect.poll(() => requests.length).toBe(1);
-  expect(requests[0].draft).toBe("自分で部屋の間取りを描きたい");
-});
-
-test("oversized UTF-8 prompts are kept locally and never sent", async ({ page }) => {
-  const { requests, prompt, app } = await setup(page);
-  await prompt.fill("猫".repeat(667));
-  await expect(prompt).toHaveAttribute("aria-invalid", "true");
-  await expect(page.getByText("Your prompt is 2,001 bytes. Keep it under 2,000.", { exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Preview selected route" })).toBeDisabled();
-  await page.waitForTimeout(450);
-  expect(requests).toHaveLength(0);
-  await expect(app).toHaveAttribute("data-mode", "general");
-  await prompt.fill("Create an image of a cat");
-  await expect.poll(() => requests.length).toBe(1);
-  await expect(prompt).toHaveAttribute("aria-invalid", "false");
-});
-
-test("offline examples stay labeled as samples, including their source details", async ({ page }) => {
-  const { requests, app } = await setup(page, { live: false });
-  await page.getByRole("button", { name: "Try sketch mode" }).click();
-  await expect(app).toHaveAttribute("data-mode", "sketch");
-  await expect(page.getByRole("button", { name: "Example: Sketch. Choose a capability" })).toBeVisible();
-  await expect(page.getByText("Example", { exact: true })).toBeVisible();
-  await page.getByText("How it works", { exact: true }).click();
-  await expect(page.locator("dd").filter({ hasText: "Example transition" })).toBeVisible();
-  await expect(page.getByText("No live measurement yet", { exact: true })).toBeVisible();
-  await page.waitForTimeout(450);
+  await panel(page, 'documents').getByRole('button', { name: /PPTX/ }).click();
+  await expect(query).toHaveValue('climate report filetype:pptx');
+  await page.clock.runFor(500);
   expect(requests).toHaveLength(0);
 });
 
-test("live predictions and submitted previews use distinct, truthful labels", async ({ page }) => {
-  const { requests, prompt } = await setup(page, { mode: "image" });
-  await prompt.fill("Generate a pencil sketch of a cat");
-  await expect(page.getByRole("button", { name: "Suggested: Create image. Choose a capability" })).toBeVisible();
-  await expect(page.getByText("Example", { exact: true })).toHaveCount(0);
-  await page.getByText("How it works", { exact: true }).click();
-  await expect(page.locator("dd").filter({ hasText: "Live Jev decision" })).toBeVisible();
-  await page.getByText("How it works", { exact: true }).click();
-  await page.getByRole("button", { name: "Preview selected route" }).click();
-  await expect(page.getByText("Create image selected. UI demonstration only — no tool is running.", { exact: true })).toBeVisible();
+test('literal syntax supersedes a pending natural-language result', async ({ page }) => {
+  const { requests, query, app } = await setup(page, { delayed: true });
+  await query.fill('rain tomorrow');
+  await expect.poll(() => requests.length).toBe(1);
+  await query.fill('rain research site:gov');
+  await expect(panel(page, 'site')).toBeVisible();
+  await expect(app).toHaveAttribute('data-pending', 'false');
+  await requests[0].route.fulfill({ json: fixture('weather') });
+  await expect(app).toHaveAttribute('data-mode', 'site');
+  await expect(query).toHaveValue('rain research site:gov');
   expect(requests).toHaveLength(1);
 });
 
-test("Classic keeps the draft and neutral interface without new inference requests", async ({ page }) => {
-  const { requests, prompt, app } = await setup(page);
-  await prompt.fill("Create an image of a garden");
-  await expect(app).toHaveAttribute("data-mode", "image");
-  await page.getByRole("button", { name: "Classic", exact: true }).click();
-  await expect(app).toHaveAttribute("data-interface", "classic");
-  await expect(app).toHaveAttribute("data-mode", "general");
-  await expect(prompt).toHaveValue("Create an image of a garden");
-  await prompt.fill("Find the latest news");
-  await page.waitForTimeout(450);
+test('IME composition does not route partial text or submit a composing Enter', async ({ page }) => {
+  const { requests, query } = await setup(page);
+  const popups: Page[] = [];
+  page.on('popup', popup => popups.push(popup));
+  await query.dispatchEvent('compositionstart');
+  await query.fill('東京の明日の天気');
+  await query.dispatchEvent('keydown', { key: 'Enter', code: 'Enter', isComposing: true });
+  await page.waitForTimeout(250);
+  expect(requests).toHaveLength(0);
+  expect(popups).toHaveLength(0);
+  await query.dispatchEvent('compositionend', { data: '東京の明日の天気' });
+  await expect.poll(() => requests.length).toBe(1);
+  expect(requests[0].draft).toBe('東京の明日の天気');
+});
+
+test('oversized UTF-8 queries remain local and recover when shortened', async ({ page }) => {
+  const { requests, query, app } = await setup(page);
+  await query.fill('猫'.repeat(667));
+  await expect(query).toHaveAttribute('aria-invalid', 'true');
+  await page.waitForTimeout(250);
+  expect(requests).toHaveLength(0);
+  await expect(app).toHaveAttribute('data-pending', 'false');
+  await query.fill('rain in Tokyo');
+  await expect.poll(() => requests.length).toBe(1);
+  await expect(query).toHaveAttribute('aria-invalid', 'false');
+});
+
+test('provider errors preserve the query and an explicit retry recovers', async ({ page }) => {
+  const { requests, query, app } = await setup(page, { delayed: true });
+  await query.fill('Tokyo forecast');
+  await expect.poll(() => requests.length).toBe(1);
+  await requests[0].route.fulfill({ status: 503, json: { code: 'UNAVAILABLE', error: 'Live routing is unavailable. Try again.' } });
+  await expect(page.getByText('Live routing is unavailable. Try again.', { exact: false })).toBeVisible();
+  await expect(query).toHaveValue('Tokyo forecast');
+  await expect(app).toHaveAttribute('data-mode', 'general');
+  await expect(app).toHaveAttribute('data-pending', 'false');
+  await page.getByRole('button', { name: /Retry|Try again/, exact: true }).click();
+  await expect.poll(() => requests.length).toBe(2);
+  await requests[1].route.fulfill({ json: fixture('weather') });
+  await expect(panel(page, 'weather')).toBeVisible();
+});
+
+test('Classic keeps the query, hides specialized tools, and skips inference', async ({ page }) => {
+  const { requests, query, app } = await setup(page);
+  await query.fill('Tokyo weather');
+  await expect(panel(page, 'weather')).toBeVisible();
+  await page.getByRole('button', { name: 'Classic', exact: true }).click();
+  await expect(app).toHaveAttribute('data-mode', 'general');
+  await expect(panel(page, 'weather')).toHaveCount(0);
+  await expect(query).toHaveValue('Tokyo weather');
+  await query.fill('Singapore weather');
+  await page.waitForTimeout(250);
   expect(requests).toHaveLength(1);
-  await page.getByRole("button", { name: "Fluid", exact: true }).click();
+  await page.getByRole('button', { name: 'Fluid', exact: true }).click();
   await expect.poll(() => requests.length).toBe(2);
 });
 
-test("the mode menu supports keyboard navigation, selection, and Escape focus", async ({ page }) => {
-  await setup(page, { live: false });
-  const chooser = page.getByRole("button", { name: "Choose a capability", exact: true });
-  await chooser.click();
-  await expect(page.getByRole("menuitemradio", { name: /Auto/ })).toBeFocused();
-  await page.keyboard.press("End");
-  await expect(page.getByRole("menuitemradio", { name: /Sketch/ })).toBeFocused();
-  await page.keyboard.press("Home");
-  await expect(page.getByRole("menuitemradio", { name: /Auto/ })).toBeFocused();
-  await page.keyboard.press("Escape");
-  await expect(page.getByRole("menu")).toHaveCount(0);
-  await expect(chooser).toBeFocused();
+test('offline examples remain explicitly labelled examples', async ({ page }) => {
+  const { requests, query } = await setup(page, { live: false });
+  await example(page, 'weather').click();
+  await expect(query).toHaveValue(SEARCH_MODES.weather.example);
+  await expect(panel(page, 'weather')).toBeVisible();
+  await expect(page.getByText('Example · live routing unavailable', { exact: true })).toBeVisible();
+  await page.waitForTimeout(250);
+  expect(requests).toHaveLength(0);
 });
 
-test("Jev's effort changes the model preset, while a manual effort stays locked", async ({ page }) => {
-  const { requests, prompt } = await setup(page, { delayed: true });
-  const setupButton = page.getByRole("button", { name: "Response setup preview", exact: true });
-  await prompt.fill("Write a quick greeting");
+test('natural-language examples wait for real classification when live routing is available', async ({ page }) => {
+  const { requests, app } = await setup(page, { delayed: true });
+  await page.getByRole('button', { name: 'All 12 searches', exact: true }).click();
+  await example(page, 'movies').click();
+  await expect(app).toHaveAttribute('data-pending', 'true');
+  await expect(panel(page, 'movies')).toHaveCount(0);
   await expect.poll(() => requests.length).toBe(1);
-  await requests[0].route.fulfill({ json: fixture("general", "brief") });
-  await expect(setupButton).toContainText("Brief");
-  await expect(setupButton).toContainText("GPT-6 Luna");
-  await setupButton.click();
-  const setupDialog = page.getByRole("dialog", { name: "Response setup preview" });
-  await expect(setupDialog).toBeVisible();
-  await setupDialog.getByLabel("Effort", { exact: true }).selectOption("deep");
-  await page.keyboard.press("Escape");
-  await expect(setupButton).toContainText("Deep");
-  await expect(setupButton).toContainText("GPT-6 Astra");
-
-  await prompt.fill("Find today's weather forecast");
-  await expect.poll(() => requests.length).toBe(2);
-  await requests[1].route.fulfill({ json: fixture("web", "balanced") });
-  await expect(page.getByRole("button", { name: "Suggested: Web search. Choose a capability" })).toBeVisible();
-  await expect(setupButton).toContainText("Deep");
-  await expect(setupButton).toContainText("GPT-6 Astra");
-  await setupButton.click();
-  await setupDialog.getByLabel("Effort", { exact: true }).selectOption("auto");
-  await page.keyboard.press("Escape");
-  await expect(setupButton).toContainText("Balanced");
-  await expect(setupButton).toContainText("GPT-6 Sol");
-  expect(requests).toHaveLength(2);
+  expect(requests[0].draft).toBe(SEARCH_MODES.movies.example);
+  await requests[0].route.fulfill({ json: fixture('movies') });
+  await expect(panel(page, 'movies')).toBeVisible();
+  await expect(page.getByText('Example · live routing unavailable', { exact: true })).toHaveCount(0);
 });
 
-test("model overrides are local previews and never trigger extra inference", async ({ page }) => {
-  const { requests, prompt } = await setup(page, { delayed: true });
-  const setupButton = page.getByRole("button", { name: "Response setup preview", exact: true });
-  await prompt.fill("Compare these ideas with a detailed reasoning process");
-  await expect.poll(() => requests.length).toBe(1);
-  await requests[0].route.fulfill({ json: fixture("general", "deep") });
-  await expect(setupButton).toContainText("GPT-6 Astra");
-  await setupButton.click();
-  const setupDialog = page.getByRole("dialog", { name: "Response setup preview" });
-  const modelSelect = setupDialog.getByLabel("Model", { exact: true });
-  await modelSelect.selectOption({ label: "GPT-6 Luna" });
-  await page.keyboard.press("Escape");
-  await expect(setupButton).toContainText("GPT-6 Luna");
-  await expect(setupButton).toContainText("Deep");
-  await prompt.fill("Explain these design tradeoffs step by step in detail");
-  await expect.poll(() => requests.length).toBe(2);
-  await requests[1].route.fulfill({ json: fixture("general", "deep") });
-  await expect(setupButton).toContainText("GPT-6 Luna");
-  await setupButton.click();
-  await modelSelect.selectOption("auto");
-  await page.keyboard.press("Escape");
-  await expect(setupButton).toContainText("GPT-6 Astra");
-  await page.getByRole("button", { name: "Preview selected route" }).click();
-  await expect(page.getByText("General selected. UI demonstration only — no tool is running.", { exact: true })).toBeVisible();
-  expect(requests).toHaveLength(2);
+test('the local converter calculates, swaps units, and rejects impossible temperatures', async ({ page }) => {
+  const { requests } = await setup(page, { live: false });
+  await example(page, 'convert').click();
+  const converter = panel(page, 'convert');
+  const result = converter.getByLabel('Converted value');
+  await expect(result).toHaveText('6.213712');
+  await converter.getByRole('button', { name: 'Swap units', exact: true }).click();
+  await expect(converter.getByRole('combobox', { name: 'Convert from' })).toHaveValue('mi');
+  await expect(converter.getByRole('combobox', { name: 'Convert to' })).toHaveValue('km');
+  await expect(result).toHaveText('10');
+  await converter.getByRole('combobox', { name: 'Measurement type' }).selectOption('Temperature');
+  await converter.getByRole('spinbutton', { name: 'Amount', exact: true }).fill('-300');
+  await expect(result).toHaveText('—');
+  await converter.getByRole('spinbutton', { name: 'Amount', exact: true }).fill('0');
+  await expect(result).toHaveText('32');
+  expect(requests).toHaveLength(0);
 });
 
-test("mobile keeps source labels visible and all visible buttons at least 44 pixels", async ({ page }) => {
+test('currency requests link to a live lookup without fabricating an exchange rate', async ({ page }) => {
+  const { query } = await setup(page, { mode: 'convert' });
+  await query.fill('100 USD in SGD');
+  const currency = panel(page, 'convert');
+  await expect(currency.getByRole('heading', { name: 'Currency exchange' })).toBeVisible();
+  await expect(currency.getByLabel('Converted value')).toHaveCount(0);
+  const destination = await currency.getByRole('link', { name: /Look up the live rate/ }).getAttribute('href');
+  expect(new URL(destination!).host).toBe('www.google.com');
+  expect(new URL(destination!).searchParams.get('q')).toBe('100 USD in SGD');
+});
+
+test('place filters change a Maps destination without fetching invented places', async ({ page }) => {
+  const { requests } = await setup(page, { live: false });
+  await example(page, 'places').click();
+  const places = panel(page, 'places');
+  await places.getByRole('button', { name: 'Parks', exact: true }).click();
+  const destination = new URL((await places.getByRole('link', { name: /Explore on Maps/ }).getAttribute('href'))!);
+  expect(destination.host).toBe('www.google.com');
+  expect(destination.pathname).toBe('/maps/search/');
+  expect(destination.searchParams.get('query')).toBe(`${SEARCH_MODES.places.example} parks`);
+  await expect(places.getByText(/Illustrative map/)).toBeVisible();
+  expect(requests).toHaveLength(0);
+});
+
+test('mobile has no horizontal overflow and visible buttons retain 44px targets', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  const { prompt, app } = await setup(page);
-  await prompt.fill("Create a poster for a rooftop garden");
-  const suggestion = page.getByRole("button", { name: "Suggested: Create image. Choose a capability" });
-  await expect(suggestion).toBeVisible();
-  await expect(suggestion.getByText("Suggested:", { exact: true })).toBeVisible();
-  const tooSmall = await app.getByRole("button").evaluateAll((elements) => elements.flatMap((element) => {
+  const { app, query } = await setup(page, { live: false });
+  await example(page, 'convert').click();
+  await expect(panel(page, 'convert')).toBeVisible();
+  await query.fill('climate report site:gov filetype:pdf');
+  await expect(panel(page, 'documents')).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  const undersized = await app.getByRole('button').evaluateAll(elements => elements.flatMap(element => {
     const bounds = element.getBoundingClientRect();
     return bounds.width > 0 && bounds.height > 0 && (bounds.width < 43.5 || bounds.height < 43.5)
-      ? [{ name: element.getAttribute("aria-label") ?? element.textContent?.trim(), width: bounds.width, height: bounds.height }]
+      ? [{ name: element.getAttribute('aria-label') ?? element.textContent?.trim(), width: bounds.width, height: bounds.height }]
       : [];
   }));
-  expect(tooSmall).toEqual([]);
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-  await page.getByRole("button", { name: "Choose a capability", exact: true }).click();
-  await page.getByRole("menuitemradio", { name: /Sketch/ }).click();
-  const selected = page.getByRole("button", { name: "Selected: Sketch. Choose a capability" });
-  await expect(selected.getByText("Selected:", { exact: true })).toBeVisible();
+  expect(undersized).toEqual([]);
 });
 
-test("mode trays keep local options across capability changes without inference", async ({ page }) => {
-  const { requests } = await setup(page, { live: false });
-  const choose = async (mode: string) => {
-    await page.getByRole("button", { name: "Choose a capability", exact: true }).click();
-    await page.getByRole("menuitemradio", { name: new RegExp(`^${mode}`) }).click();
-  };
-  await page.getByRole("button", { name: "Imagine something" }).click();
-  const imageTray = page.getByRole("region", { name: "Image setup preview" });
-  await imageTray.getByRole("button", { name: "Landscape 16:9" }).click();
-  await expect(imageTray.getByRole("button", { name: "Landscape 16:9" })).toHaveAttribute("aria-pressed", "true");
-  await choose("Web search");
-  const searchTray = page.getByRole("region", { name: "Search setup preview" });
-  await searchTray.getByRole("combobox", { name: "Sources", exact: true }).selectOption("Primary sources");
-  await searchTray.getByRole("combobox", { name: "Recency", exact: true }).selectOption("Past week");
-  await choose("Deep research");
-  const researchTray = page.getByRole("region", { name: "Research setup preview" });
-  await researchTray.getByRole("combobox", { name: "Output structure", exact: true }).selectOption("Comparison");
-  await expect(researchTray.getByLabel("Comparison outline preview", { exact: true })).toBeVisible();
-  await choose("Create image");
-  await expect(imageTray.getByRole("button", { name: "Landscape 16:9" })).toHaveAttribute("aria-pressed", "true");
-  await choose("Web search");
-  await expect(searchTray.getByRole("combobox", { name: "Sources", exact: true })).toHaveValue("Primary sources");
-  await expect(searchTray.getByRole("combobox", { name: "Recency", exact: true })).toHaveValue("Past week");
-  await page.getByRole("button", { name: "Preview selected route" }).click();
-  await expect(page.getByText("Web search selected. UI demonstration only — no tool is running.", { exact: true })).toBeVisible();
-  expect(requests).toHaveLength(0);
+test('reduced motion disables presentation animation and Escape clears the query', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const { app, query } = await setup(page, { live: false });
+  await example(page, 'weather').click();
+  await expect(panel(page, 'weather')).toBeVisible();
+  const moving = await app.evaluate(element => [...element.querySelectorAll('*')].filter(node => {
+    const style = getComputedStyle(node);
+    return [...style.animationDuration.split(','), ...style.transitionDuration.split(',')].some(value => parseFloat(value) > .001);
+  }).map(node => node.className));
+  expect(moving).toEqual([]);
+  await query.focus();
+  await page.keyboard.press('Escape');
+  await expect(query).toBeEmpty();
+  await expect(query).toBeFocused();
 });
 
-test("drawing and its text alternative stay local, survive mode changes, and clear on reset", async ({ page }) => {
-  const { requests } = await setup(page, { live: false });
-  await page.getByRole("button", { name: "Try sketch mode" }).click();
-  const canvas = page.locator(".sketch-canvas");
-  const bounds = await canvas.boundingBox();
-  expect(bounds).not.toBeNull();
-  await page.mouse.move(bounds!.x + 30, bounds!.y + 40);
-  await page.mouse.down();
-  await page.mouse.move(bounds!.x + 85, bounds!.y + 70, { steps: 5 });
-  await page.mouse.up();
-  await expect(canvas.locator("path")).toHaveCount(1);
-  await expect(page.getByRole("button", { name: "Undo last stroke" })).toBeEnabled();
-  await page.getByLabel("Describe the drawing instead").fill("A room with a window on the left");
-  await expect(canvas).toHaveAttribute("aria-label", "A room with a window on the left");
-  await page.getByRole("button", { name: "Choose a capability", exact: true }).click();
-  await page.getByRole("menuitemradio", { name: /^Create image/ }).click();
-  await page.getByRole("button", { name: "Choose a capability", exact: true }).click();
-  await page.getByRole("menuitemradio", { name: /^Sketch/ }).click();
-  await expect(canvas.locator("path")).toHaveCount(1);
-  await expect(page.getByLabel("Describe the drawing instead")).toHaveValue("A room with a window on the left");
-  await page.getByRole("button", { name: "Undo last stroke" }).click();
-  await expect(canvas.locator("path")).toHaveCount(0);
-  await page.getByRole("button", { name: "Reset prompt" }).click();
-  await page.getByRole("button", { name: "Try sketch mode" }).click();
-  await expect(page.getByLabel("Describe the drawing instead")).toBeEmpty();
-  await expect(canvas.locator("path")).toHaveCount(0);
+test('removing mixed syntax chips preserves other filters and the original search words', async ({ page }) => {
+  const { requests, query, app } = await setup(page, { delayed: true });
+  await query.fill('climate custom:keep site:gov filetype:pdf after:2024-01-01');
+  await expect(panel(page, 'documents')).toBeVisible();
+  await page.getByRole('button', { name: 'Remove File type: pdf', exact: true }).click();
+  await expect(query).toHaveValue('climate custom:keep site:gov after:2024-01-01');
+  await expect(panel(page, 'site')).toBeVisible();
+  await page.getByRole('button', { name: 'Remove Site: gov', exact: true }).click();
+  await expect(query).toHaveValue('climate custom:keep after:2024-01-01');
+  await expect(panel(page, 'date')).toBeVisible();
   expect(requests).toHaveLength(0);
+  await page.getByRole('button', { name: 'Remove After: 2024-01-01', exact: true }).click();
+  await expect(query).toHaveValue('climate custom:keep');
+  await expect.poll(() => requests.length).toBe(1);
+  expect(requests[0].draft).toBe('climate custom:keep');
+  await requests[0].route.fulfill({ json: fixture('general') });
+  await expect(app).toHaveAttribute('data-mode', 'general');
+});
+
+test('a manually chosen search tool stays selected through edits until Auto returns', async ({ page }) => {
+  const { requests, query, app } = await setup(page, { delayed: true });
+  await query.fill('rain tomorrow');
+  await expect.poll(() => requests.length).toBe(1);
+  const picker = page.getByRole('combobox', { name: 'Choose search tool' });
+  await picker.selectOption('movies');
+  await expect(panel(page, 'movies')).toBeVisible();
+  await requests[0].route.fulfill({ json: fixture('weather') });
+  await query.fill('quiet cafes in Singapore');
+  await page.waitForTimeout(250);
+  await expect(app).toHaveAttribute('data-mode', 'movies');
+  expect(requests).toHaveLength(1);
+  await picker.selectOption('auto');
+  await expect.poll(() => requests.length).toBe(2);
+  await requests[1].route.fulfill({ json: fixture('places') });
+  await expect(panel(page, 'places')).toBeVisible();
+});
+
+// A specialized route must never display an unrelated default calculation.
+test("unsupported conversions keep the original query without inventing a value", async ({ page }) => {
+  const { query } = await setup(page, { mode: "convert" });
+  await query.fill("9am Singapore in London");
+  await expect(page.getByRole("heading", { name: "Find the right conversion." })).toBeVisible();
+  await expect(page.getByLabel("Converted value")).toHaveCount(0);
+  await expect(page.getByRole("link", { name: /Convert on Google/ })).toHaveAttribute("href", "https://www.google.com/search?q=9am+Singapore+in+London");
 });

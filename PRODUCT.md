@@ -1,4 +1,4 @@
-# ChatGPT Fluid
+# Fluid Search
 
 <!-- impeccable:product-schema 1 -->
 
@@ -6,28 +6,21 @@
 web
 
 ## Stack
-User-approved Next.js App Router, React, TypeScript, Vercel Hobby. Existing Supabase Free for an isolated usage counter. TypeSafe Jev with an explicitly authorized US$5 total launch budget.
+Next.js App Router, React, TypeScript, Vercel Hobby, existing Supabase Free budget ledger, and TypeSafe Jev. One authorized US$5 shared allowance, no refills or new AI providers.
 
-## Users
-AI builders, product designers, and curious visitors exploring what an interface can reveal about intent while a person types.
+## Users and purpose
+AI builders, designers, and curious visitors exploring fluid interfaces through a familiar Google-style search bar. The interface unfolds into a useful tool as the query's meaning changes, before submission.
 
-## Product Purpose
-A working demonstration of a fluid composer: Jev classifies the current draft and the interface reveals the likely capability through a compact composer, an unfolding capability-specific tool tray, and a named model/effort setup preview before submission.
+## Current scope
+The 24 September user pivot replaces the ChatGPT composer with a fresh white Google-style search experience. Deliver and verify the Vercel app first. Video work is deferred. Keep the existing deployment URL and private repository; do not change visibility or touch the parent venture board.
 
-## Capabilities and Constraints
-General, Create image, Web search, Deep research, and Sketch. Sketch means the visitor drawing and attaching an image. No downstream AI tool execution, generated content, mock answers, account system, conversation history, or additional AI providers. The sketch input is a local drawing preview with a keyboard alternative; it is never uploaded. Classification is live when configured; samples and manual selection are explicitly identified. No hidden keyword classifier.
+## Capabilities
+Twelve routes: general search, weather, stocks, places, movies, conversion, dictionary, documents, website, news, date range, and precise search. Jev classifies ordinary language. Explicit syntax is parsed locally and labelled Search syntax; it is never passed off as a Jev decision. Manual selection is labelled Selected; outage examples are labelled Example. No keyword fallback for natural-language routing.
 
-## Operating Context
-Standalone private GitHub repository, public Vercel demo, and a captioned 45–60 second landscape video recorded from the working build. No auto refill or paid hosting upgrade. Retain no drafts in the database or application logs. Drafts are transmitted to TypeSafe while typing; disclose that plainly.
+The unit converter performs deterministic calculations locally. Other tools edit a query or open real Google/Google Maps results on explicit visitor action. Do not fabricate forecasts, stock prices, places, headlines, film data, definitions, or generated results. Currency conversions open current Google results. Retired cache:/related: operators receive a notice.
 
-## Brand Commitments
-Independent ChatGPT-inspired concept, not affiliated with OpenAI or TypeSafe. User-pinned screenshot: a quiet dark canvas, rounded charcoal composer, restrained typography and familiar plus menu. Own ChatGPT Fluid wordmark. Build interactively first, not from an image mockup.
+## Brand commitments
+User-pinned white Google-style page with a familiar multicolour wordmark and independent Fluid Search branding. Show the non-affiliation notice. The search field stays anchored while its lower shell changes shape and reveals interactive, intent-specific controls. Controls and content remain recognizable and accessible.
 
-## Product Principles
-- Keep the draft and caret anchored through state changes.
-- Distinguish a suggested capability from a running tool.
-- Expose ambiguity instead of presenting guesses as certainty.
-- Let visitors correct the mode and compare Classic with Fluid.
-
-## Accessibility & Inclusion
-Keyboard support, accessible mode labels independent of color, visible focus, reduced motion, responsive desktop and mobile.
+## Constraints
+Server-only credentials; no stored queries, history, accounts, or application prompt logs. Disclose drafts sent to TypeSafe while typing. Retain shared atomic budget reservation/settlement, kill switch, rate limits, request coalescing, stale response protection, byte limit, IME handling, reduced motion and visible provenance. Never reset the allowance to make tests pass.

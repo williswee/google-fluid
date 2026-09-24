@@ -7,10 +7,11 @@ import { latencySummary, MODES, parseArgs, runEvaluation, summarize } from "../s
 describe("evaluation datasets", () => {
   it("keeps disjoint, balanced, labeled development and held-out cases", async () => {
     const datasets = await Promise.all(["development", "held-out"].map(async (split) => {
-      const data = JSON.parse(await readFile(new URL(`../evaluation/${split}.json`, import.meta.url), "utf8"));
+      const data = JSON.parse(await readFile(new URL(`../evaluation/search/${split}.json`, import.meta.url), "utf8"));
       expect(data.split).toBe(split);
-      expect(data.cases).toHaveLength(15);
-      for (const mode of MODES) expect(data.cases.filter((item: { expected: string }) => item.expected === mode)).toHaveLength(3);
+      expect(data.dataset).toBe("search-v1");
+      expect(data.cases).toHaveLength(24);
+      for (const mode of MODES) expect(data.cases.filter((item: { expected: string }) => item.expected === mode)).toHaveLength(2);
       for (const item of data.cases) {
         expect(item.id).toEqual(expect.any(String));
         expect(item.draft.trim().length).toBeGreaterThan(0);
@@ -28,14 +29,14 @@ describe("evaluation datasets", () => {
 describe("evaluation report integrity", () => {
   it("separates request failures from completed classification accuracy", () => {
     const summary = summarize([
-      { id: "one", scenario: "test", expected: "web", actual: "web", correct: true, elapsedMs: 100, serverLatencyMs: 70 },
-      { id: "two", scenario: "test", expected: "web", actual: "general", correct: false, elapsedMs: 200, serverLatencyMs: 120 },
-      { id: "three", scenario: "test", expected: "image", elapsedMs: 900, error: { code: "BUDGET_EXHAUSTED" } },
+      { id: "one", scenario: "test", expected: "news", actual: "news", correct: true, elapsedMs: 100, serverLatencyMs: 70 },
+      { id: "two", scenario: "test", expected: "news", actual: "general", correct: false, elapsedMs: 200, serverLatencyMs: 120 },
+      { id: "three", scenario: "test", expected: "weather", elapsedMs: 900, error: { code: "BUDGET_EXHAUSTED" } },
     ]);
     expect(summary).toMatchObject({ attempted: 3, completed: 2, failed: 1, correct: 1, accuracy: 0.5 });
     expect(summary.clientRoundTripMs).toEqual({ count: 2, p50: 100, p95: 200, max: 200 });
-    expect(summary.perMode.image.accuracy).toBeNull();
-    expect(summary.confusionMatrix.web.general).toBe(1);
+    expect(summary.perMode.weather.accuracy).toBeNull();
+    expect(summary.confusionMatrix.news.general).toBe(1);
   });
 
   it("does not turn an unavailable result into zero latency or zero accuracy", () => {
@@ -74,7 +75,7 @@ describe("protected evaluation requests", () => {
     const output = await outputPath();
     const request = vi.fn()
       .mockResolvedValueOnce(Response.json({ liveAvailable: true }))
-      .mockResolvedValueOnce(Response.json({ mode: "general", probabilities: { general: 0.8, image: 0.05, web: 0.05, research: 0.05, sketch: 0.05 }, model: "jev-1.13.0", source: "live", latencyMs: 52 }));
+      .mockResolvedValueOnce(Response.json({ mode: "general", probabilities: Object.fromEntries(MODES.map((mode) => [mode, mode === "general" ? 1 : 0])), model: "jev-1.13.0", source: "live", latencyMs: 52 }));
     vi.stubGlobal("fetch", request);
     await runEvaluation({ split: "development", baseUrl: "http://localhost:3000", output, maxCases: 1 });
     expect(request).toHaveBeenCalledTimes(2);
