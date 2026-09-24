@@ -14,7 +14,9 @@ Verification:
 
 Same private repository, Vercel Hobby project and US$5 ledger. No video work.
 
-Production verification will be recorded after publication.
+Production verified at https://chatgptfluid.vercel.app. Deployment https://chatgptfluid-4ou0np8j7-williswees-projects.vercel.app (`dpl_5aDsong8uBFbp6x8c2g25HPgKFvW`), implementation commit `70f8de9`.
+
+The public browser smoke check passed without fixtures or retries: no header/toggle, correct footer Notes and author links, real Jev routing of `404` to dino, keyboard jump, automatic pause when returning to the search field, mobile fit, playable HTTP404 response and return-home navigation. No page errors. The single live routing check measured 1,120 ms server latency and 1,549 ms from input to confirmed mode; this is one observation, not a latency guarantee. Report: `evaluation/results/search-v3-dino-production.json`.
 
 ---
 

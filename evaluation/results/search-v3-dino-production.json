@@ -1,0 +1,20 @@
+{
+  "at": "2026-09-24T03:01:47.941Z",
+  "origin": "https://chatgptfluid.vercel.app",
+  "methodology": "Public browser smoke check with real Jev and local gameplay. No fixtures or retries.",
+  "errors": [],
+  "routing": {
+    "query": "404",
+    "mode": "dino",
+    "source": "live",
+    "model": "jev-1.13.0",
+    "serverLatencyMs": 1120,
+    "inputToConfirmedMs": 1549
+  },
+  "playable": true,
+  "focusPause": true,
+  "mobileFits": true,
+  "missingStatus": 404,
+  "returnHome": true,
+  "passed": true
+}
