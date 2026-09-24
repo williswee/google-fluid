@@ -4,7 +4,7 @@ import { ArrowRight, ArrowUpRight, Info, X } from 'lucide-react';
 import { MAX_DRAFT_BYTES, type ModeId } from '../lib/intent';
 import { useIntent } from '../hooks/useIntent';
 import { EXAMPLES, SEARCH_MODES, filterExamples, type SearchExample } from '../lib/search-presets';
-import { parseSearchSyntax, removeSearchToken } from '../lib/search-syntax';
+import { parseSearchSyntax, removeSearchToken, getDateRangeError } from '../lib/search-syntax';
 import { SEARCH_ICONS } from './search-icons';
 import SearchTools from './SearchTools';
 import SearchHints from './SearchHints';
@@ -30,9 +30,10 @@ export default function FluidSearch() {
   const syntax = useMemo(() => parseSearchSyntax(draft), [draft]);
   const options = useMemo(() => filterExamples(palette ?? ''), [palette]);
   const oversized = new TextEncoder().encode(draft).length > MAX_DRAFT_BYTES;
+  const dateRangeError = getDateRangeError(draft);
   const hasDraft = Boolean(draft.trim());
   const selected = selection?.draft === draft ? selection : null;
-  const enabled = live === true && hasDraft && !oversized && !composing && !syntax.mode && !manual && !selected && palette === null;
+  const enabled = live === true && hasDraft && !oversized && !dateRangeError && !composing && !syntax.mode && !manual && !selected && palette === null;
   const intent = useIntent(draft, enabled, retry);
   const effectiveMode: ModeId = manual ?? selected?.mode ?? syntax.mode ?? (hasDraft && !intent.error ? intent.result?.mode : undefined) ?? 'general';
   const mode = effectiveMode;
@@ -40,6 +41,8 @@ export default function FluidSearch() {
   const Icon = SEARCH_ICONS[mode];
   const source = manual || selected ? 'Selected' : syntax.mode ? 'Search syntax' : intent.result && hasDraft && !intent.error ? 'Jev' : 'Search';
   const showPanel = palette === null && hasDraft && !oversized && (mode !== 'general' || Boolean(intent.result && !pending) || Boolean(manual));
+  const dateFeedbackInPanel = Boolean(dateRangeError && showPanel && mode === 'date');
+  const queryFeedback = oversized ? 'Keep the search under 2,000 bytes.' : dateFeedbackInPanel ? intent.error : dateRangeError ?? intent.error;
   const currentResult = intent.resultDraft === draft ? intent.result : null;
   const status = pending ? (intent.result ? 'Updating…' : 'Reading your search…') : source === 'Jev' ? `Jev · ${currentResult?.roundTripMs ?? intent.result?.roundTripMs} ms` : source === 'Search syntax' ? 'Search syntax · instant' : source === 'Selected' ? 'Selected by you' : '';
   const privacy = live === true ? 'Drafts are sent to TypeSafe while you type. Nothing is saved here.' : live === false ? 'Live routing is unavailable. Choose any tool with / to explore it.' : 'Checking live routing…';
@@ -134,9 +137,9 @@ export default function FluidSearch() {
       return;
     }
     if (event.key === 'Escape') { event.preventDefault(); clear(); }
-    if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); if (hasDraft && !oversized) event.currentTarget.form?.requestSubmit(); }
+    if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); if (hasDraft && !oversized && !dateRangeError) event.currentTarget.form?.requestSubmit(); }
   }
-  function submit(event: FormEvent<HTMLFormElement>) { if (!hasDraft || oversized || composing || palette !== null) event.preventDefault(); }
+  function submit(event: FormEvent<HTMLFormElement>) { if (!hasDraft || oversized || dateRangeError || composing || palette !== null) event.preventDefault(); }
 
   return <div className="fluid-app" data-mode={mode} data-pending={pending}>
     <main className="search-main">
@@ -146,10 +149,10 @@ export default function FluidSearch() {
           <form className="query-form" action="https://www.google.com/search" method="get" target="_blank" rel="noopener noreferrer" onSubmit={submit}>
             <span className="query-icon" aria-hidden="true"><Icon size={23} strokeWidth={1.8} /></span>
             <label className="sr-only" htmlFor="query">Search query</label>
-            <textarea ref={input} id="query" name="q" rows={1} value={palette !== null ? '/' + palette : draft} role="combobox" aria-autocomplete="list" aria-expanded={palette !== null} aria-controls={palette !== null ? 'search-palette' : undefined} aria-activedescendant={palette !== null && options[activeOption] ? `search-option-${activeOption}` : undefined} aria-describedby="privacy-note query-error" aria-invalid={oversized} placeholder="Search anything, or type /" autoComplete="off" spellCheck={false} onChange={e => changeInput(e.target.value)} onCompositionStart={() => setComposing(true)} onCompositionEnd={() => setComposing(false)} onKeyDown={keyDown} />
+            <textarea ref={input} id="query" name="q" rows={1} value={palette !== null ? '/' + palette : draft} role="combobox" aria-autocomplete="list" aria-expanded={palette !== null} aria-controls={palette !== null ? 'search-palette' : undefined} aria-activedescendant={palette !== null && options[activeOption] ? `search-option-${activeOption}` : undefined} aria-describedby={`privacy-note ${dateFeedbackInPanel ? 'date-range-feedback' : 'query-error'}`} aria-invalid={oversized || Boolean(dateRangeError)} placeholder="Search anything, or type /" autoComplete="off" spellCheck={false} onChange={e => changeInput(e.target.value)} onCompositionStart={() => setComposing(true)} onCompositionEnd={() => setComposing(false)} onKeyDown={keyDown} />
             {(hasDraft || palette !== null) && <button className="clear-button icon-button" type="button" aria-label={palette !== null ? 'Close search tools' : 'Clear search'} onClick={palette !== null ? closePalette : clear}><X size={18} /></button>}
             <button className="slash-button" type="button" aria-label="Browse all search tools" aria-expanded={palette !== null} aria-controls="search-palette" onClick={palette !== null ? closePalette : openPalette}><span aria-hidden="true">/</span></button>
-            <button className="search-button" type="submit" aria-label="Search Google" disabled={!hasDraft || oversized || composing || palette !== null}><ArrowRight size={22} /></button>
+            <button className="search-button" type="submit" aria-label="Search Google" disabled={!hasDraft || oversized || Boolean(dateRangeError) || composing || palette !== null}><ArrowRight size={22} /></button>
           </form>
           {palette !== null && <div className="command-menu">
             <div className="command-heading"><span>{options.length} {options.length === 1 ? 'search' : 'searches'} to try</span><span><kbd>↑</kbd><kbd>↓</kbd> to explore <kbd>esc</kbd> to close</span></div>
@@ -167,7 +170,7 @@ export default function FluidSearch() {
         <SearchHints active={!hasDraft && palette === null && !about} onBrowse={openPalette} onChoose={choose} />
         <span className="sr-only" aria-live="polite" aria-atomic="true">{pending ? '' : showPanel ? `${SEARCH_MODES[mode].label} ready. ${status}` : ''}</span>
         <p id="privacy-note" className="sr-only">{privacy}</p>
-        {(oversized || intent.error) && <p id="query-error" className="query-error" role="alert">{oversized ? 'Keep the search under 2,000 bytes.' : intent.error}{intent.error && <><button type="button" onClick={() => setRetry(v => v + 1)}>Retry</button><button type="button" onClick={openPalette}>Choose a tool</button></>}</p>}
+        {queryFeedback && <p id="query-error" className="query-error" role="alert">{queryFeedback}{intent.error && <><button type="button" onClick={() => setRetry(v => v + 1)}>Retry</button><button type="button" onClick={openPalette}>Choose a tool</button></>}</p>}
         {syntax.deprecated.length > 0 && <p className="syntax-notice">{syntax.deprecated.join(' and ')} {syntax.deprecated.length > 1 ? 'are' : 'is'} no longer supported by Google. <button type="button" onClick={() => choose({ id: 'site', mode: 'site', query: SEARCH_MODES.site.example })}>Try a website filter</button></p>}
       </div>
     </main>

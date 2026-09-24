@@ -12,7 +12,9 @@ export default function SearchHints({ active, onBrowse, onChoose }: { active: bo
   const [reduced, setReduced] = useState(true);
   const [visible, setVisible] = useState(false);
   const [hidden, setHidden] = useState(false);
-  const [engaged, setEngaged] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const engaged = hovered || focused;
   const root = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -22,7 +24,7 @@ export default function SearchHints({ active, onBrowse, onChoose }: { active: bo
     preference.addEventListener('change', sync); document.addEventListener('visibilitychange', visibility);
     return () => { preference.removeEventListener('change', sync); document.removeEventListener('visibilitychange', visibility); };
   }, []);
-  useEffect(() => { if (!active) setEngaged(false); }, [active]);
+  useEffect(() => { if (!active) { setHovered(false); setFocused(false); } }, [active]);
   useEffect(() => {
     if (!active || !root.current) return;
     const observer = new IntersectionObserver(entries => setVisible(entries[0].isIntersecting));
@@ -35,7 +37,7 @@ export default function SearchHints({ active, onBrowse, onChoose }: { active: bo
   }, [active, visible, hidden, paused, reduced, engaged]);
   if (!active) return null;
   const example = index ? hints[index - 1] : null;
-  return <div ref={root} className="search-hints" aria-label="Search tips" onMouseEnter={() => setEngaged(true)} onMouseLeave={() => setEngaged(false)} onFocus={() => setEngaged(true)} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setEngaged(false); }}>
+  return <div ref={root} className="search-hints" aria-label="Search tips" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} onFocus={() => setFocused(true)} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocused(false); }}>
     <button className="search-hint" type="button" onClick={() => example ? onChoose(example) : onBrowse()}><span key={index}>{example ? <>Try <strong>{example.query}</strong></> : <>Type <kbd>/</kbd> to explore all {EXAMPLES.length} tools</>}</span></button>
     {!reduced && <button className="hint-pause" type="button" aria-label={paused ? 'Resume search tips' : 'Pause search tips'} onClick={() => setPaused(value => !value)}>{paused ? <Play size={13} /> : <Pause size={13} />}</button>}
   </div>;

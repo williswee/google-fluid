@@ -1,0 +1,31 @@
+{
+  "date": "2026-09-24",
+  "scope": "Control and interaction polish of the existing27-mode Fluid Search demo. Explicit selections; paid inference disabled in local browser checks.",
+  "viewports": [
+    {
+      "width": 1440,
+      "states": 47
+    },
+    {
+      "width": 813,
+      "states": 47
+    },
+    {
+      "width": 390,
+      "states": 47
+    },
+    {
+      "width": 320,
+      "states": 47
+    }
+  ],
+  "examplesPerViewport": 43,
+  "horizontalOverflow": 0,
+  "pageErrors": 0,
+  "unitTests": 393,
+  "browserScenarios": 60,
+  "postCorrectionTargetedBrowserScenarios": 6,
+  "productionBuild": "passed",
+  "finishReview": "ship after one duplicate date-error correction",
+  "limits": "Chromium desktop/mobile viewport checks; not a new model accuracy or latency evaluation. A development capture interrupted by in-progress import wiring was discarded and replaced after code froze."
+}

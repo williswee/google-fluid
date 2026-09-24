@@ -43,6 +43,17 @@ describe('local unit conversions', () => {
     expect(convertValue(2, 'kg', 'C')).toBeNull();
   });
 
+  it('avoids intermediate overflow for a finite conversion', () => {
+    expect(convertValue(1e308, 'km', 'mi')! / 1e308).toBeCloseTo(0.6213711922, 9);
+    expect(convertValue(9e307, 'C', 'F')! / 9e307).toBeCloseTo(1.8, 9);
+    expect(convertValue(1e308, 'F', 'C')! / 1e308).toBeCloseTo(5 / 9, 9);
+  });
+
+  it('rejects results that overflow the supported number range', () => {
+    expect(convertValue(1e308, 'km', 'cm')).toBeNull();
+    expect(convertValue(1e308, 'C', 'F')).toBeNull();
+  });
+
   it('identifies measurement families for compatible selectors', () => {
     expect(unitGroup('mi')).toBe('Length');
     expect(unitGroup('oz')).toBe('Weight');

@@ -10,13 +10,15 @@ export function unitGroup(unit: Unit) { return (Object.keys(UNIT_GROUPS) as (key
 export function convertValue(value: number, from: Unit, to: Unit): number | null {
   if (!Number.isFinite(value) || unitGroup(from) !== unitGroup(to)) return null;
   if (unitGroup(from) === 'Temperature') {
-    let c = from === 'F' ? (value - 32) * 5 / 9 : from === 'K' ? value - 273.15 : value;
+    let c = from === 'F' ? (value - 32) * (5 / 9) : from === 'K' ? value - 273.15 : value;
     if (c < -273.15 - 1e-10) return null;
     c = Math.max(c, -273.15);
-    return to === 'F' ? c * 9 / 5 + 32 : to === 'K' ? c + 273.15 : c;
+    const result = to === 'F' ? c * (9 / 5) + 32 : to === 'K' ? c + 273.15 : c;
+    return Number.isFinite(result) ? result : null;
   }
   const factors: Partial<Record<Unit, number>> = { km:1000,m:1,cm:.01,mi:1609.344,ft:.3048,in:.0254,kg:1,g:.001,lb:.45359237,oz:.028349523125 };
-  return value * factors[from]! / factors[to]!;
+  const result = value * (factors[from]! / factors[to]!);
+  return Number.isFinite(result) ? result : null;
 }
 export function parseConversion(draft: string): { value: number; from: Unit; to: Unit } | null {
   const match = draft.match(/(?:^|\s)(-?\d+(?:\.\d+)?)\s*°?([a-z]+)\s+(?:into|in|to|as)\s+°?([a-z]+)\b/i);

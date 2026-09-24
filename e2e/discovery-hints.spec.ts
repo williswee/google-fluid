@@ -15,3 +15,10 @@ test('guidance rotates, pauses, and chooses a clearly labelled example',async({p
 test('reduced motion keeps guidance still and slash remains actionable',async({page})=>{
  await page.emulateMedia({reducedMotion:'reduce'});await page.clock.install();await setup(page);await page.clock.runFor(15000);await expect(page.locator('.search-hints')).toContainText('27 tools');await expect(page.getByRole('button',{name:'Pause search tips'})).toHaveCount(0);await page.locator('.search-hint').click();await expect(page.getByRole('listbox',{name:'Search tools'})).toBeVisible();
 });
+
+test('guidance stays paused while keyboard focus remains after the pointer leaves',async({page})=>{
+ await page.clock.install();await setup(page);
+ const hint=page.locator('.search-hint');await hint.hover();await hint.focus();await page.mouse.move(1,1);
+ await page.clock.runFor(13000);await expect(hint).toContainText('27 tools');
+ await page.getByRole('heading',{name:'Google Fluid'}).click();await page.clock.runFor(6100);await expect(hint).toContainText('flights from Singapore to Tokyo');
+});

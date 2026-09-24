@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildGoogleSearchUrl, parseSearchSyntax, removeSearchToken, upsertSearchOperator } from '../lib/search-syntax';
+import { buildGoogleSearchUrl, getDateRangeError, parseSearchSyntax, removeSearchToken, upsertSearchOperator } from '../lib/search-syntax';
 
 describe('literal local search syntax', () => {
   it.each(['', 'weather in Singapore', 'stocks and maps', 'define a new product', 'news this week', 'PDF report on climate change', 'convert 32 F to C', 'temperature -5 degrees', "don't change this", 'ordinary (parenthetical) wording', 'constructor:unknown toString:unknown'])('leaves natural-language intent to Jev: %s', draft => {
@@ -172,4 +172,25 @@ describe('Google destination', () => {
 
 it.each(['24 * 18 + 6', '(12 + 8) * 5', '18 / 3', '2^3'])('leaves arithmetic %s for Jev rather than exposing search filters', draft => {
   expect(parseSearchSyntax(draft)).toEqual({ mode: null, tokens: [], deprecated: [] });
+});
+
+
+describe('complete date range validation', () => {
+  it.each([
+    'solar energy after:2026-01-01 before:2025-01-01',
+    'solar energy after:2025-01-01 before:2025-01-01',
+  ])('explains an impossible range: %s', draft => {
+    expect(getDateRangeError(draft)).toBe('Choose an After date earlier than the Before date.');
+  });
+
+  it.each([
+    'solar energy after:2024-01-01 before:2025-01-01',
+    'after:2025-01-01', 'before:2025-01-01',
+    'after:2026 before:2025', 'after: before:2025-01-01',
+    '"after:2026-01-01 before:2025-01-01"',
+    'after:2026-02-30 before:2025-01-01',
+    'after:2026-01-01 before:"2025-01-01',
+  ])('leaves valid, incomplete and unsupported date syntax untouched: %s', draft => {
+    expect(getDateRangeError(draft)).toBeNull();
+  });
 });

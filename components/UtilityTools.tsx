@@ -41,6 +41,7 @@ function Calculator({ draft }: { draft: string }) {
 }
 
 function Timer({ draft }: { draft: string }) {
+  const feedbackId = useId();
   const duration = parseDuration(draft);
   const [minutes, setMinutes] = useState(String((duration ?? 300000) / 60000));
   const [total, setTotal] = useState(duration ?? 300000);
@@ -56,13 +57,14 @@ function Timer({ draft }: { draft: string }) {
     return () => window.clearInterval(interval);
   }, [deadline]);
   const validMinutes = minutes.trim() !== '' && Number(minutes) > 0 && Number(minutes) <= 1440;
-  const reset = () => { setDeadline(null); setRemaining(total); setFinished(false); };
+  const reset = () => { setDeadline(null); setMinutes(String(total / 60000)); setRemaining(total); setFinished(false); };
   return <div className="utility-widget timer-widget">
-    <div className="tool-topline"><h2>Timer</h2><label className="timer-duration">Minutes<input aria-label="Timer duration in minutes" type="number" min="0.01" max="1440" step="any" value={minutes} disabled={running} onChange={event => { setMinutes(event.target.value); const next = Number(event.target.value) * 60000; if (next > 0 && next <= 86400000) { setTotal(next); setRemaining(next); setFinished(false); } }} /></label></div>
+    <div className="tool-topline"><h2>Timer</h2><label className="timer-duration">Minutes<input aria-label="Timer duration in minutes" type="number" min="0.01" max="1440" step="any" value={minutes} disabled={running} aria-invalid={!validMinutes} aria-describedby={!validMinutes ? feedbackId : undefined} onChange={event => { setMinutes(event.target.value); const next = Number(event.target.value) * 60000; if (next > 0 && next <= 86400000) { setTotal(next); setRemaining(next); setFinished(false); } }} /></label></div>
     <output className="utility-clock" aria-label="Time remaining" aria-live="off">{formatDuration(remaining)}</output>
     <div className="timer-track" aria-hidden="true"><span style={{ width: `${Math.max(0, Math.min(100, remaining / total * 100))}%` }} /></div>
     <div className="utility-actions"><button className="utility-primary" type="button" disabled={!validMinutes} onClick={() => { if (running) { setRemaining(remainingMilliseconds(deadline, Date.now())); setDeadline(null); } else { const start = remaining > 0 ? remaining : total; setRemaining(start); setFinished(false); setDeadline(Date.now() + start); } }}>{running ? <Pause size={17} /> : <Play size={17} />}{running ? 'Pause' : remaining < total && remaining > 0 ? 'Resume' : 'Start timer'}</button><button type="button" onClick={reset}><RotateCcw size={16} />Reset</button></div>
-    <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">{finished ? 'Time is up.' : running ? 'Timer running.' : remaining < total ? `Timer paused at ${formatDuration(remaining)}.` : 'Timer ready.'}</p>{finished && <p className="timer-done"><Check size={17} />Time is up.</p>}
+    <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">{!validMinutes ? 'Timer duration needs a valid value.' : finished ? 'Time is up.' : running ? 'Timer running.' : remaining < total ? `Timer paused at ${formatDuration(remaining)}.` : 'Timer ready.'}</p>{finished && <p className="timer-done"><Check size={17} />Time is up.</p>}
+    {!validMinutes && <p id={feedbackId} className="utility-feedback">Enter a duration greater than 0 and up to 1,440 minutes, or Reset to the last valid duration.</p>}
     {!duration && <span className="utility-default">5 minutes to start. Set your own duration above.</span>}
   </div>;
 }

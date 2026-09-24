@@ -240,3 +240,17 @@ export function upsertSearchOperator(draft: string, key: EditableSearchOperator,
   if (parsed.openQuote) return `${replacement} ${draft}`;
   return draft ? `${draft}${/\s$/.test(draft) ? '' : ' '}${replacement}` : replacement;
 }
+
+/** A complete paired range must contain at least one possible date. */
+export function getDateRangeError(draft: string): string | null {
+  const { tokens } = parseSearchSyntax(draft);
+  const after = tokens.find(token => token.key === 'after' && token.complete)?.value;
+  const before = tokens.find(token => token.key === 'before' && token.complete)?.value;
+  const fullDate = (value: string) => {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+    const date = new Date(value + 'T00:00:00Z');
+    return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value;
+  };
+  if (after && before && fullDate(after) && fullDate(before) && after >= before) return 'Choose an After date earlier than the Before date.';
+  return null;
+}

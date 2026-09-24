@@ -1,4 +1,24 @@
-# Current delivery — expanded search tools, 24 September 2026
+# Current delivery — controls and interaction polish, 24 September 2026
+
+Preserved all 27 tools, 43 examples and the white Google-style surface. The annotated Notes selector now has a consistent 16px chevron, 12px right inset and 36px reserved end padding. The same treatment applies across tool dropdowns while preserving native menus, keyboard selection, 44px targets and forced-colors fallback. Notes has a stable 170px selector width.
+
+The complete-path audit also fixed four functional gaps and one focus issue:
+
+- Knowledge selections now synchronize their dictionary/film query and retain the explicitly selected tool.
+- Reversed/equal complete date ranges show one recovery message, referenced by the query and date inputs, and block search until repaired.
+- Invalid timer durations explain recovery; Reset restores the last valid duration.
+- Unit conversion avoids intermediate numeric overflow and rejects non-finite results without losing the input.
+- Rotating hints stay paused while either hovered or focused, including after the pointer leaves a focused hint.
+
+Verification: 393 unit/integration tests, production build and 60 browser scenarios pass. The final date-message correction additionally passed 6 targeted browser cases. The slash panel was checked at first/last selection, no-match filtering, keyboard navigation and cancel/restore. All 43 examples opened correctly at 1440, 813, 390 and 320px: 188 recorded states including Notes/menu variants, no horizontal overflow or page errors. The user’s 813×1354 viewport was included. Independent finish review: **ship**, after consolidating the date validation message. A development capture interrupted by in-progress import wiring was discarded; the complete frozen-source pass is the evidence.
+
+Travel, shopping, stock, media, map, clock, knowledge, converter, game and refinement interactions were covered through browser scenarios, source review and targeted invalid/recovery checks. Provider fixtures and explicit tool choices avoided paid inference; no fresh routing/latency benchmark is claimed. Checks use Chromium viewports rather than physical devices. Summary: `evaluation/results/search-controls-polish-review.json`.
+
+The one static design scan retained the documented Geist/serif treatments and bounded 280ms panel-height transition. Advisory documentation mismatches were not treated as authorization to change the visual system or repair unrelated metadata. No provider, budget, secret, hosting-tier or repository-visibility changes. Video remains deferred.
+
+---
+
+# Historical delivery — expanded search tools, 24 September 2026
 
 Expanded the demo to **27 interfaces and 43 distinctly named examples**. Added Flights, Hotels, Shopping, Videos and Images; expanded Finance, News and Maps. Preserved the white search surface, anchored query, footer Notes and private repository.
 

@@ -54,3 +54,15 @@
 .fluid-app[data-mode=flights]{--accent:#225c9e;--tint:#f2f7fe}.fluid-app[data-mode=hotels]{--accent:#8b5033;--tint:#fcf6f0}.fluid-app[data-mode=shopping]{--accent:#7950a2;--tint:#f8f4fc}.fluid-app[data-mode=images]{--accent:#76557e;--tint:#faf5fb}.fluid-app[data-mode=video]{--accent:#a14343;--tint:#fff6f5}
 @keyframes hint-reveal{from{opacity:.3}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){.search-hint>span{animation:none}}
+/* Consistent select affordances without replacing native menus or keyboard behavior. */
+.fluid-app :is(.search-tools,.about-panel) select:not([multiple]){
+  appearance:none;
+  -webkit-appearance:none;
+  padding-inline-end:36px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23596471' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 12px center;
+  background-size:16px;
+}
+.about-picker select{min-width:160px;width:170px}
+@media(forced-colors:active){.fluid-app :is(.search-tools,.about-panel) select:not([multiple]){appearance:auto;-webkit-appearance:auto;background-image:none;padding-inline-end:12px}}
