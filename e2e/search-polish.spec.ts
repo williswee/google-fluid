@@ -4,7 +4,7 @@ async function setup(page: Page) {
   await page.route('**/api/status', route => route.fulfill({ json: { liveAvailable: false } }));
   await page.route('**/api/intent', route => route.abort());
   await page.goto('/');
-  await expect(page.locator('#privacy-note')).toContainText('Live routing is unavailable');
+  await expect(page.locator('#privacy-note')).toContainText('Automatic tool selection is unavailable');
 }
 
 test('slash keyboard navigation scrolls only the list in a short mobile viewport', async ({ page }) => {

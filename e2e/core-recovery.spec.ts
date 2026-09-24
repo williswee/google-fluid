@@ -11,7 +11,7 @@ async function setup(page: Page) {
   await page.route('**/api/weather?**', route => route.fulfill({ status: 503, json: { error: 'Fixture unavailable' } }));
   await page.route('**/api/currency?**', route => route.fulfill({ status: 503, json: { error: 'Fixture unavailable' } }));
   await page.goto('/');
-  await expect(page.locator('#privacy-note')).toContainText('Live routing is unavailable');
+  await expect(page.locator('#privacy-note')).toContainText('Automatic tool selection is unavailable');
   return { query: page.getByRole('combobox', { name: 'Search query' }), inferenceRequests, errors };
 }
 

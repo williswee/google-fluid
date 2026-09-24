@@ -21,7 +21,7 @@ test.beforeEach(async ({ page }) => {
     return route.abort();
   });
   await page.goto('/');
-  await expect(page.locator('#privacy-note')).toContainText('Live routing is unavailable');
+  await expect(page.locator('#privacy-note')).toContainText('Automatic tool selection is unavailable');
 });
 test.afterEach(() => expect(inferenceRequests).toEqual([]));
 

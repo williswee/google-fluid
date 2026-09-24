@@ -37,7 +37,7 @@ page.on('request', request => { if (new URL(request.url()).pathname === '/api/in
 const report = { recordedAt: new Date().toISOString(), baseUrl: origin.origin, dataset: 'search-v2-browser', context: 'Twenty-one authored production browser smoke cases: seventeen real Jev requests and four explicit local-syntax transitions. No fixtures, retries, or fake results. Round trip excludes typing pause and subsequent rendering; acknowledgement is input-to-next-frame pending feedback.', cases: [], pageErrors };
 try {
   await page.goto(origin.origin, { waitUntil: 'networkidle' });
-  await expect(page.locator('#privacy-note')).toContainText('Drafts are sent to TypeSafe');
+  await expect(page.locator('#privacy-note')).toContainText('Your search is sent to TypeSafe');
   await page.evaluate(() => {
     const input = document.querySelector('textarea');
     const app = document.querySelector('.fluid-app');

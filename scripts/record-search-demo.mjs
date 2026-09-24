@@ -142,7 +142,7 @@ async function record() {
   try {
     await page.goto(base,{waitUntil:'networkidle'});
     await page.evaluate(()=>document.fonts.ready);
-    await expect(page.locator('#privacy-note')).toContainText('Drafts are sent to TypeSafe');
+    await expect(page.locator('#privacy-note')).toContainText('Your search is sent to TypeSafe');
     // A visible pointer and a removable alignment marker only; no app state, routing or response modification.
     await page.evaluate(()=>{
       const pointer=document.createElement('div'); pointer.id='film-pointer';

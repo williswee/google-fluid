@@ -29,7 +29,7 @@ async function setup(page: Page, options: { live?: boolean; delayed?: boolean; m
     return route.fulfill({ json: { base: from, quote: to, rate: from === 'USD' ? .9 : 1 / .9, date: '2026-09-23' } });
   });
   await page.goto('/');
-  await expect(page.locator('#privacy-note')).toContainText(options.live === false ? 'Live routing is unavailable' : 'Drafts are sent to TypeSafe');
+  await expect(page.locator('#privacy-note')).toContainText(options.live === false ? 'Automatic tool selection is unavailable' : 'Your search is sent to TypeSafe');
   return { requests, query: page.getByRole('combobox', { name: 'Search query' }), app: page.locator('.fluid-app') };
 }
 const panel = (page: Page, mode: ModeId) => page.getByRole('region', { name: `${SEARCH_MODES[mode].label} search tools` });
@@ -264,7 +264,7 @@ test('place filters change a Maps destination without fetching invented places',
   expect(destination.pathname).toBe('/maps/search/');
   expect(destination.searchParams.get('query')).toBe(`${SEARCH_MODES.places.example} parks`);
   await page.getByRole('button', { name: 'Notes', exact: true }).click();
-  await expect(page.getByRole('region', { name: 'Fluid Search notes' })).toContainText('OpenStreetMap only when you choose');
+  await expect(page.getByRole('region', { name: 'Fluid Search notes' })).toContainText('Maps load from OpenStreetMap when you click Load map.');
   expect(requests).toHaveLength(0);
 });
 
@@ -355,8 +355,8 @@ test('the quiet landing view puts notices behind Notes and lists every tool with
   await expect(page.getByRole('region', { name: 'Fluid Search notes' })).toHaveCount(0);
   await page.getByRole('button', { name: 'Notes', exact: true }).click();
   const about = page.getByRole('region', { name: 'Fluid Search notes' });
-  await expect(about).toContainText('Drafts are sent to TypeSafe');
-  await expect(about).toContainText('not affiliated with Google');
+  await expect(about).toContainText('Your search is sent to TypeSafe');
+  await expect(about).toContainText('not a Google product');
   await expect(about.getByRole('link', { name: /ShapeShift/ })).toHaveAttribute('href', 'https://github.com/anishfn/shapeshift');
   await expect(about.getByRole('link', { name: /Anish Gupta/ })).toHaveAttribute('href', 'https://github.com/anishfn');
   await page.getByRole('button', { name: 'Close notes' }).click();
@@ -610,7 +610,7 @@ test('the source information button opens Notes without changing the current que
   await page.getByRole('button', { name: 'Selected by you. Notes', exact: true }).click();
   const notes = page.getByRole('region', { name: 'Fluid Search notes', exact: true });
   await expect(notes).toBeVisible();
-  await expect(notes).toContainText('Drafts are sent to TypeSafe');
+  await expect(notes).toContainText('Your search is sent to TypeSafe');
   await expect(query).toHaveValue(originalQuery);
   await expect(app).toHaveAttribute('data-mode', 'calculate');
   await page.getByRole('button', { name: 'Close notes', exact: true }).click();

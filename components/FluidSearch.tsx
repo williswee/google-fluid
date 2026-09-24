@@ -45,7 +45,7 @@ export default function FluidSearch() {
   const queryFeedback = oversized ? 'Keep the search under 2,000 bytes.' : dateFeedbackInPanel ? intent.error : dateRangeError ?? intent.error;
   const currentResult = intent.resultDraft === draft ? intent.result : null;
   const status = pending ? (intent.result ? 'Updating…' : 'Reading your search…') : source === 'Jev' ? `Jev · ${currentResult?.roundTripMs ?? intent.result?.roundTripMs} ms` : source === 'Search syntax' ? 'Search syntax · instant' : source === 'Selected' ? 'Selected by you' : '';
-  const privacy = live === true ? 'Drafts are sent to TypeSafe while you type. Nothing is saved here.' : live === false ? 'Live routing is unavailable. Choose any tool with / to explore it.' : 'Checking live routing…';
+  const privacy = live === true ? 'Your search is sent to TypeSafe as you type. This demo doesn’t save your searches.' : live === false ? 'Automatic tool selection is unavailable. Type / to choose a tool yourself.' : 'Checking whether Jev is available…';
 
   useEffect(() => {
     let active = true;
@@ -177,24 +177,28 @@ export default function FluidSearch() {
     <footer className="site-footer footer-with-notes">
       {about && <section id="search-notes" className="about-panel" aria-label="Fluid Search notes" onKeyDown={event => { if (event.key === 'Escape') { event.preventDefault(); closeNotes(); } }}>
         <div className="about-title"><h2 id="notes-title" tabIndex={-1}>Notes</h2><button type="button" className="icon-button" aria-label="Close notes" onClick={closeNotes}><X size={18} /></button></div>
-        <p>{privacy} This is an independent experiment, not affiliated with Google.</p>
-        <div className="notes-section"><h3>How routing works</h3>
-        <p>TypeSafe Jev chooses an interface from the meaning of your search. Type <code>/</code> to explore every tool immediately. Selecting one is labelled “Selected by you”; editing its query returns to automatic routing. Explicit search operators are recognized on your device.</p>
-        <div className="how-flow"><span>Your query</span><ArrowRight size={15} /><span>Jev intent</span><ArrowRight size={15} /><span>A useful interface</span></div>
+        <p>{privacy} This is an independent demo, not a Google product.</p>
+        <div className="notes-section"><h3>How it works</h3>
+        <p>TypeSafe Jev reads your search and chooses a tool to show below it. The tools are already built. Jev doesn’t write answers or run tools for you.</p>
+        <p>Type <code>/</code> to choose a tool yourself. It will say “Selected by you”. Edit that search to let Jev choose again. Filters such as <code>site:</code> are read in your browser.</p>
+        <div className="how-flow"><span>You type</span><ArrowRight size={15} /><span>Jev chooses</span><ArrowRight size={15} /><span>A tool opens</span></div>
         </div>
-        <div className="notes-section"><h3>Tools & data</h3>
-        <p>Calculators, clocks, color controls, the orbit lab and game run on your device. Knowledge cards cover a small set of examples; their source buttons explain the data. Weather loads a real forecast for Singapore or Tokyo. Currency conversion uses daily ECB reference rates. Flights, hotels, shopping, finance, video and news controls prepare searches for current results. Image previews are curated references, not live search results. Interactive maps load OpenStreetMap only when you choose to load them.</p>
-        <p>The orbit lab is a prebuilt Newtonian model, not an AI-generated simulation or a model of black holes. Nothing in this demo generates answers or executes AI tools. Enter opens your query on Google in a new tab.</p>
+        <div className="notes-section"><h3>What works here</h3>
+        <p>Calculators, timers, color controls and games work in your browser. Weather covers Singapore and Tokyo. Currency conversion uses the European Central Bank’s daily reference rates. Dictionary, movie and comparison cards have a few examples, with links to their sources.</p>
+        <p>Flights, hotels, shopping, stocks, videos and news help you build a Google search. Images are a small set of examples. Maps load from OpenStreetMap when you click Load map. Press Enter to open your search on Google in a new tab.</p>
+        <p>The orbit tool is a simple gravity model. It isn’t an AI-generated simulation or a model of black holes.</p>
         </div>
-        <div className="notes-section"><h3>Controls & limits</h3>
-        {currentResult && <p className="timing-details">Last live request: {currentResult.roundTripMs} ms round trip · {currentResult.model}{currentResult.timings ? ` · Budget check ${currentResult.timings.reserveMs} ms · Jev ${currentResult.timings.inferenceMs} ms · Settlement ${currentResult.timings.settleMs} ms` : ''}</p>}
-        <p className="about-small">A 150 ms typing pause, one live request at a time, and a shared US$5 allowance. No keyword rules pretend to be Jev. The / menu works even when live routing is unavailable. Timers and games are kept only while their panel is open; nothing is saved. Metronome audio starts only when you press Start.</p>
-        <label className="about-picker">Keep a tool selected <select aria-label="Choose search tool" value={manual ?? 'auto'} onChange={e => { setManual(e.target.value === 'auto' ? null : e.target.value as ModeId); if(e.target.value === 'auto') setSelection(null); }}><option value="auto">Auto</option>{EXAMPLES.map(m => <option key={m} value={m}>{SEARCH_MODES[m].label}</option>)}</select></label>
+        <div className="notes-section"><h3>A few limits</h3>
+        {currentResult && <p className="timing-details">Last response: {currentResult.roundTripMs} milliseconds. Model: {currentResult.model}.</p>}
+        <p>The demo waits for a 150-millisecond pause in typing before asking Jev, one request at a time. Everyone shares a total US$5 budget. If Jev is unavailable or the budget runs out, you can still choose tools with <code>/</code>.</p>
+        <p>Timers and games reset when you close their tool. The metronome plays sound only after you press Start sound.</p>
+        <p>To keep using the same tool as you edit, choose it below. Choose Auto to let Jev decide.</p>
+        <label className="about-picker">Keep using one tool <select aria-label="Choose search tool" value={manual ?? 'auto'} onChange={e => { setManual(e.target.value === 'auto' ? null : e.target.value as ModeId); if(e.target.value === 'auto') setSelection(null); }}><option value="auto">Auto</option>{EXAMPLES.map(m => <option key={m} value={m}>{SEARCH_MODES[m].label}</option>)}</select></label>
         </div>
         <div className="notes-section"><h3>Credits</h3>
+        <p className="notes-credit">Inspired by <a href="https://github.com/anishfn/shapeshift" target="_blank" rel="noopener noreferrer">ShapeShift</a>, an open-source project by <a href="https://github.com/anishfn" target="_blank" rel="noopener noreferrer">Anish Gupta (@anishfn)</a>. Its <code>/</code> menu and changing tools helped shape this demo.</p>
+        <p>The dinosaur game was built for this demo, inspired by <a href="https://blog.google/products-and-platforms/products/chrome/chrome-dino/" target="_blank" rel="noopener noreferrer">Chrome’s offline dinosaur game</a>. You can also find it on this demo’s 404 page. Press Start game to play.</p>
         <p className="notes-credit">Built by <a href="https://williswee.com/" target="_blank" rel="noopener noreferrer">Willis</a> using <a href="https://openai.com/codex/" target="_blank" rel="noopener noreferrer">Codex</a>.</p>
-        <p className="notes-credit">Inspired by <a href="https://github.com/anishfn/shapeshift" target="_blank" rel="noopener noreferrer">ShapeShift</a>, the open-source fluid interface by <a href="https://github.com/anishfn" target="_blank" rel="noopener noreferrer">Anish Gupta (@anishfn)</a>. Its slash discovery and intent-driven widgets helped shape this experiment.</p>
-        <p className="about-small">Our dinosaur runner is an original implementation inspired by <a href="https://blog.google/products-and-platforms/products/chrome/chrome-dino/" target="_blank" rel="noopener noreferrer">Chrome’s offline dinosaur game</a>. You can also play it on this demo’s 404 page. It starts only when you choose to play.</p>
         </div>
       </section>}
       <div className="footer-links"><button ref={aboutButton} className="notes-button" type="button" aria-label="Notes" onClick={toggleNotes} aria-expanded={about} aria-controls="search-notes"><Info size={14}/><span>Notes</span></button><span aria-hidden="true">·</span><a href="https://typesafe.ai" target="_blank" rel="noopener noreferrer">Built with <strong>TypeSafe Jev</strong><ArrowUpRight size={13} /></a></div>

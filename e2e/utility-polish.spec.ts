@@ -8,7 +8,7 @@ async function setup(page: Page) {
   await page.route('**/api/status', route => route.fulfill({ json: { liveAvailable: false } }));
   await page.route('**/api/intent', route => { requests.push(route.request().url()); return route.fulfill({ status: 503, json: { error: 'Mocked unavailable' } }); });
   await page.goto('/');
-  await expect(page.locator('#privacy-note')).toContainText('Live routing is unavailable');
+  await expect(page.locator('#privacy-note')).toContainText('Automatic tool selection is unavailable');
   return requests;
 }
 async function choose(page: Page, mode: ModeId) {
