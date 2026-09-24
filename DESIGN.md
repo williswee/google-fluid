@@ -10,7 +10,8 @@ colors:
   blue: "#1967d2"
   action: "#1a73e8"
   action-hover: "#1559bc"
-  focus: "#8ab4f8"
+  focus: "#1967d2"
+  focus-soft: "#8ab4f8"
   error: "#b3261e"
   brand-blue: "#4285f4"
   brand-red: "#ea4335"
@@ -58,6 +59,15 @@ typography:
     fontSize: "16px"
     fontWeight: 400
     lineHeight: "24px"
+  query-placeholder-mobile:
+    fontFamily: "Geist, Arial, sans-serif"
+    fontSize: "14px"
+    fontWeight: 400
+  notes-body:
+    fontFamily: "Geist, Arial, sans-serif"
+    fontSize: "13px"
+    fontWeight: 400
+    lineHeight: 1.75
   clock:
     fontFamily: "Geist, Arial, sans-serif"
     fontSize: "clamp(37px, 8vw, 64px)"
@@ -154,13 +164,13 @@ Intent colour stays in the lower tool, icon, selection and related controls. Whi
 
 Geist is locally bundled at regular, medium and semibold weights, with Arial and sans-serif fallbacks. Its familiar workhorse character is retained. Georgia gives dictionary terms, definitions and examples a distinct reference-book voice.
 
-The query uses the desktop and mobile tokens; the narrow-screen text is 16px. Tool titles step from 19px to 17px or 16px. The wordmark steps from 78px to 65px to 61px. Palette rows pair a medium-weight 13px tool name with a 12px example. Tabular numerals stabilize converter, calculator, clock, weather, comparison and orbit readings. Large numerals express an actual result or changing measurement, not general decoration.
+The query uses the desktop and mobile tokens; narrow-screen text remains 16px and its placeholder is 14px. Tool titles step from 19px to 17px or 16px. The wordmark steps from 78px to 65px to 61px. Palette rows pair a medium-weight 14px tool name with a 12px example. Tabular numerals stabilize converter, calculator, clock, weather, comparison and orbit readings. Large numerals express an actual result or changing measurement, not general decoration.
 
 ## Layout
 
 The main column is centred and at most 760px wide. Below 700px, its side clearance is 16px. Notes remains a labelled footer button on every screen size.
 
-The command menu lives inside the lower shell. Its list scrolls within the smaller of 390px and 49svh, with an active row and keyboard guidance; the guidance hides on narrow screens. Tool-specific layouts use keypads, paired values, tabs, fields, an illustration beside controls, or a playable board. Colour controls stack below 500px; orbit and game layouts stack below 560px. Forecast days retain a minimum 44px width and scroll horizontally when needed. Four document-format tiles remain in a row.
+The command menu lives inside the lower shell. Its scrollable list is capped by 390px, 49svh and the space below it in the visual viewport. Keyboard navigation scrolls the list itself to reveal the active row, without scrolling the page. Keyboard guidance hides on narrow screens. Tool-specific layouts use keypads, paired values, tabs, fields, an illustration beside controls, or a playable board. Colour controls stack below 500px; orbit and game layouts stack below 560px. Forecast days retain a minimum 44px width and scroll horizontally when needed. Four document-format tiles remain in a row.
 
 **The Anchored Query Rule.** Tool changes affect the lower shell. The textarea grows only with its content, up to 112px; inference must not reposition its caret.
 
@@ -174,15 +184,17 @@ The pill-like search shell becomes slightly squarer when open and clips its lowe
 
 ## Components
 
-The search field has an intent icon, growing textarea, clear control, slash control and blue submit arrow. Empty, oversized, composing and open-menu states disable submission. The shell carries focus-within feedback; controls retain visible focus. The former Classic/Fluid switch and header identity are removed. Notes and the TypeSafe credit share the footer.
+The search field has an intent icon, growing textarea, clear control, slash control and blue submit arrow. Empty, oversized, composing and open-menu states disable submission. The shell carries focus-within feedback and an explicit 2px blue outline when the query has keyboard focus. Shared controls use the same 2px focus outline with a 3px offset; command rows inset it inside their rounded edge. Widget-specific focus treatments remain local. Brief colour transitions and pressed fills give shared controls visible feedback. The former Classic/Fluid switch and header identity are removed. Notes and the TypeSafe credit share the footer.
 
 The slash menu filters tool names and examples while preserving the underlying query. Arrow keys move the active option, Enter selects it, and Escape restores the prior draft and caret. Pointer selection produces the same result. Selection fills an editable example and opens its tool immediately, including during a routing outage. A persistent manual selector lives in Notes.
 
 Routing badges remain visible above the tool: **Jev** with measured timing, **Search syntax · instant**, or **Selected by you**. Pending edits show Reading or Updating while retaining the previous tool. The badge opens Notes. That disclosure contains draft transmission, non-affiliation, source behaviour, diagnostics and the persistent selector. A screen-reader description still associates privacy status with the query. Errors and retry actions remain beside the shell.
 
+Notes is divided into How routing works, Tools & data, Controls & limits, and Credits. Its neutral panel uses the Notes body token, 14px section headings and thin separators, with more space above each new section. Opening Notes focuses its heading. Close or Escape within the panel restores focus to the footer button or source badge that opened it; the footer button is the fallback if that opener has disappeared.
+
 Tool families preserve their own working affordances:
 
-- **Utilities:** arithmetic keypad, tip and bill fields, timer progress and completion, stopwatch laps, metronome tempo and beat state, and a swatch with hex/RGB controls. Defaults are labelled when they are editable examples. Metronome audio starts only through **Start sound**, can be stopped, and stops when the page is hidden or the tool closes.
+- **Utilities:** arithmetic keypad, tip and bill fields, timer progress and completion, stopwatch laps, metronome tempo and beat state, and a swatch with hex/RGB controls. Defaults are labelled when they are editable examples. Enter retains native button activation. Invalid hex input keeps the last valid swatch, exposes a linked inline error and disables Copy; editing clears stale copy success. Timer and stopwatch readouts stay available without announcing every tick: separate polite status messages describe state changes, completion and laps. Metronome audio starts only through **Start sound**, can be stopped, and stops when the page is hidden or the tool closes.
 - **Knowledge:** weather has city/day/temperature controls, loading, retry and source disclosure; the large temperature is the daily high. Dictionary tabs use serif reading text. Film tabs combine original illustration, facts and a runtime planner. Planet comparison uses paired values, relative bars and an editable age conversion. Supported examples and external-search paths stay explicit.
 - **Conversion:** paired amount and result with selectors and swap. Unit calculations are local. Currency values use dated daily ECB reference rates with an expandable rate/source explanation and visible failure handling.
 - **Experiments:** the prebuilt orbit model pairs an original SVG scene with mass/radius sliders and computed readings, pause/reset, and model details. Tic-tac-toe has a playable two-person board, turn/result state, undo and reset. Barrel roll and askew affect only a contained miniature, with explicit play/replay/reset.

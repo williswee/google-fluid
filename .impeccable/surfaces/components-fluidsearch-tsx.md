@@ -15,8 +15,8 @@ THESIS: Natural language reveals a useful interface before submission; slash dis
 OWN-WORLD: White canvas, familiar multicolour wordmark, Geist, charcoal text, blue primary actions and lightly tinted tool interiors.
 STORY: Type or press /, choose or discover a tool, adjust its real controls, then continue locally or open a clearly labelled external result.
 FIRST VIEWPORT: A centred wordmark above a 760px maximum-width search shell. No permanent example grid. The / control opens a searchable list beneath the same input; a selected tool replaces that list. No header controls or top brand link. Notes and attribution share a quiet footer.
-FORM: User-pinned Google canon overrides seed 7e4568cb. Natural-language routing uses Jev; explicit operators remain local. Visible badges distinguish Jev, Search syntax and Selected by you. Tool transitions never move the caret; narrow-screen query text is 16px.
-FINISH: DESIGN.md and its sidecar describe implemented code. Desktop and mobile fixture sheets were reviewed at 1440px and 390px; fixture forecast and currency values do not establish live-data claims.
+FORM: User-pinned Google canon overrides seed 7e4568cb. Natural-language routing uses Jev; explicit operators remain local. Visible badges distinguish Jev, Search syntax and Selected by you. Tool transitions never move the caret; narrow-screen query text is 16px with a 14px placeholder. Shared controls and the keyboard-focused search shell use an explicit 2px blue outline.
+FINISH: DESIGN.md and its sidecar record implemented source changes. Verification and finish-review results are reported separately; fixture forecast and currency values do not establish live-data claims.
 
 ## Implemented surfaces
 
@@ -28,9 +28,11 @@ FINISH: DESIGN.md and its sidecar describe implemented code. Desktop and mobile 
 
 ## Interaction and disclosure
 
-The / menu supports filtering, pointer selection, arrow keys and Enter. Escape restores the prior draft and caret. Selected examples work during routing outages and remain labelled; editing returns to routing unless the persistent selector in Notes pins a tool.
+The / menu supports filtering, pointer selection, arrow keys and Enter. Its height accounts for the visual viewport, and arrow navigation scrolls only the list to reveal the active row. Escape restores the prior draft and caret. Selected examples work during routing outages and remain labelled; editing returns to routing unless the persistent selector in Notes pins a tool.
 
-Privacy, non-affiliation, diagnostics and implementation limits sit in Notes, accessible from the footer or source badge. The input retains a screen-reader privacy description; visible errors and retry actions remain adjacent. Knowledge and currency source disclosures identify reference material, retrieval/rate timing and supported scope. Unknown content exposes supported examples or real external search instead of fabricated results.
+Privacy, non-affiliation, diagnostics and implementation limits sit in Notes, accessible from the footer or source badge. The panel groups content into How routing works, Tools & data, Controls & limits, and Credits. Opening focuses the Notes heading; Close or Escape restores focus to its actual opener, with the footer button as fallback. The input retains a screen-reader privacy description; visible errors and retry actions remain adjacent. Knowledge and currency source disclosures identify reference material, retrieval/rate timing and supported scope. Unknown content exposes supported examples or real external search instead of fabricated results.
+
+Utility buttons retain native Enter activation. Invalid hex input shows a linked inline error, disables Copy and clears obsolete success feedback while preserving the last valid swatch. Clock readouts do not announce every tick; separate polite status messages announce timer/stopwatch state changes and laps.
 
 Utility and game state lives only while its tool is mounted. Audio begins only with Start sound and has an explicit stop. Orbit motion has pause/reset and model details. Easter eggs animate only their contained miniature. Reduced motion disables geometric animation; the stable input, readable results and working controls remain.
 

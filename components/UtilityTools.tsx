@@ -1,13 +1,12 @@
 'use client';
 
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { Check, Copy, Delete, Flag, Pause, Play, RotateCcw, Volume2 } from 'lucide-react';
 import { calculateTip, colorInk, evaluateExpression, formatDuration, hexToRgb, normalizeHex, parseBpm, parseColor, parseDuration, parseExpression, parseTip, remainingMilliseconds, rgbToHex } from '../lib/utility-tools';
 import './utility-tools.css';
 
 type Props = { mode: string; draft: string };
 const money = (value: number) => value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-const preventSubmit = (event: KeyboardEvent) => { if (event.key === 'Enter') event.preventDefault(); };
 
 function TipCalculator({ draft }: { draft: string }) {
   const parsed = parseTip(draft);
@@ -16,7 +15,7 @@ function TipCalculator({ draft }: { draft: string }) {
   const [people, setPeople] = useState(String(parsed?.people ?? 2));
   useEffect(() => { const next = parseTip(draft); if (next) { setBill(String(next.bill)); setPercent(String(next.percent)); setPeople(String(next.people)); } }, [draft]);
   const total = [bill, percent, people].every(value => value.trim()) ? calculateTip(Number(bill), Number(percent), Number(people)) : null;
-  return <div className="utility-widget tip-widget" onKeyDown={preventSubmit}>
+  return <div className="utility-widget tip-widget">
     <div className="tool-topline"><h2>Tip & split</h2><span>{/\$\s*\d|\d\s*(?:dollars?|usd)/i.test(draft) ? 'USD' : 'Editable example · USD'}</span></div>
     <div className="utility-fields tip-fields">
       <label>Bill amount<input aria-label="Bill amount in dollars" type="number" min="0" max="10000000" step="0.01" value={bill} onChange={event => setBill(event.target.value)} /></label>
@@ -34,7 +33,7 @@ function Calculator({ draft }: { draft: string }) {
   useEffect(() => { const next = parseExpression(draft); if (next) setExpression(next); }, [draft]);
   const result = evaluateExpression(expression);
   const keys = ['AC', '(', ')', '⌫', '7', '8', '9', '÷', '4', '5', '6', '×', '1', '2', '3', '−', '0', '.', '%', '+'];
-  return <div className="utility-widget calculator-widget" onKeyDown={preventSubmit}>
+  return <div className="utility-widget calculator-widget">
     <div className="tool-topline"><h2>Calculator</h2>{!parsed && <span>Editable example</span>}</div>
     <div className="calculator-display"><label className="sr-only" htmlFor="calculator-expression">Calculation</label><input id="calculator-expression" value={expression} maxLength={200} onChange={event => setExpression(event.target.value)} autoComplete="off" spellCheck={false} /><output aria-label="Calculation result">{result === null ? '—' : Number(result.toPrecision(12)).toLocaleString('en-US', { maximumFractionDigits: 10 })}</output></div>
     <div className="calculator-keys" aria-label="Calculator keypad">{keys.map(key => <button type="button" key={key} aria-label={key === 'AC' ? 'Clear calculation' : key === '⌫' ? 'Delete last character' : key === '×' ? 'Multiply' : key === '÷' ? 'Divide' : key === '−' ? 'Subtract' : key === '+' ? 'Add' : key === '%' ? 'Percent' : undefined} className={/[÷×−+%]/.test(key) ? 'calculator-operation' : ''} onClick={() => setExpression(value => key === 'AC' ? '' : key === '⌫' ? value.slice(0, -1) : (value + key).slice(0, 200))}>{key === '⌫' ? <Delete size={18} /> : key}</button>)}</div>
@@ -58,12 +57,12 @@ function Timer({ draft }: { draft: string }) {
   }, [deadline]);
   const validMinutes = minutes.trim() !== '' && Number(minutes) > 0 && Number(minutes) <= 1440;
   const reset = () => { setDeadline(null); setRemaining(total); setFinished(false); };
-  return <div className="utility-widget timer-widget" onKeyDown={preventSubmit}>
+  return <div className="utility-widget timer-widget">
     <div className="tool-topline"><h2>Timer</h2><label className="timer-duration">Minutes<input aria-label="Timer duration in minutes" type="number" min="0.01" max="1440" step="any" value={minutes} disabled={running} onChange={event => { setMinutes(event.target.value); const next = Number(event.target.value) * 60000; if (next > 0 && next <= 86400000) { setTotal(next); setRemaining(next); setFinished(false); } }} /></label></div>
-    <output className="utility-clock" aria-label="Time remaining">{formatDuration(remaining)}</output>
+    <output className="utility-clock" aria-label="Time remaining" aria-live="off">{formatDuration(remaining)}</output>
     <div className="timer-track" aria-hidden="true"><span style={{ width: `${Math.max(0, Math.min(100, remaining / total * 100))}%` }} /></div>
     <div className="utility-actions"><button className="utility-primary" type="button" disabled={!validMinutes} onClick={() => { if (running) { setRemaining(remainingMilliseconds(deadline, Date.now())); setDeadline(null); } else { const start = remaining > 0 ? remaining : total; setRemaining(start); setFinished(false); setDeadline(Date.now() + start); } }}>{running ? <Pause size={17} /> : <Play size={17} />}{running ? 'Pause' : remaining < total && remaining > 0 ? 'Resume' : 'Start timer'}</button><button type="button" onClick={reset}><RotateCcw size={16} />Reset</button></div>
-    <p className="sr-only" role="status">{finished ? 'Time is up.' : running ? 'Timer running.' : ''}</p>{finished && <p className="timer-done"><Check size={17} />Time is up.</p>}
+    <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">{finished ? 'Time is up.' : running ? 'Timer running.' : remaining < total ? `Timer paused at ${formatDuration(remaining)}.` : 'Timer ready.'}</p>{finished && <p className="timer-done"><Check size={17} />Time is up.</p>}
     {!duration && <span className="utility-default">5 minutes to start. Set your own duration above.</span>}
   </div>;
 }
@@ -72,14 +71,37 @@ function Stopwatch() {
   const [running, setRunning] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [laps, setLaps] = useState<number[]>([]);
+  const [announcement, setAnnouncement] = useState('Stopwatch ready.');
   const start = useRef(0);
   const accrued = useRef(0);
   useEffect(() => { if (!running) return; const interval = window.setInterval(() => setElapsed(accrued.current + performance.now() - start.current), 30); return () => window.clearInterval(interval); }, [running]);
   const current = () => accrued.current + (running ? performance.now() - start.current : 0);
+  function toggle() {
+    if (running) {
+      accrued.current = current();
+      setElapsed(accrued.current);
+      setRunning(false);
+      setAnnouncement(`Stopwatch paused at ${formatDuration(accrued.current, true)}.`);
+    } else {
+      start.current = performance.now();
+      setRunning(true);
+      setAnnouncement(elapsed > 0 ? 'Stopwatch resumed.' : 'Stopwatch running.');
+    }
+  }
+  function lap() {
+    const value = current();
+    setLaps(values => [...values, value]);
+    setAnnouncement(`Lap ${laps.length + 1} at ${formatDuration(value, true)}.`);
+  }
+  function reset() {
+    setRunning(false); accrued.current = 0; setElapsed(0); setLaps([]);
+    setAnnouncement('Stopwatch reset.');
+  }
   return <div className="utility-widget stopwatch-widget">
     <div className="tool-topline"><h2>Stopwatch</h2><span>{laps.length ? `${laps.length} lap${laps.length === 1 ? '' : 's'}` : 'Ready when you are'}</span></div>
-    <output className="utility-clock" aria-label="Elapsed time">{formatDuration(elapsed, true)}</output>
-    <div className="utility-actions"><button type="button" className="utility-primary" onClick={() => { if (running) { accrued.current = current(); setElapsed(accrued.current); setRunning(false); } else { start.current = performance.now(); setRunning(true); } }}>{running ? <Pause size={17} /> : <Play size={17} />}{running ? 'Pause' : elapsed > 0 ? 'Resume' : 'Start stopwatch'}</button><button type="button" disabled={!running || laps.length >= 20} onClick={() => setLaps(values => [...values, current()])}><Flag size={16} />Lap</button><button type="button" aria-label="Reset stopwatch" onClick={() => { setRunning(false); accrued.current = 0; setElapsed(0); setLaps([]); }}><RotateCcw size={16} />Reset</button></div>
+    <output className="utility-clock" aria-label="Elapsed time" aria-live="off">{formatDuration(elapsed, true)}</output>
+    <div className="utility-actions"><button type="button" className="utility-primary" onClick={toggle}>{running ? <Pause size={17} /> : <Play size={17} />}{running ? 'Pause' : elapsed > 0 ? 'Resume' : 'Start stopwatch'}</button><button type="button" disabled={!running || laps.length >= 20} onClick={lap}><Flag size={16} />Lap</button><button type="button" aria-label="Reset stopwatch" onClick={reset}><RotateCcw size={16} />Reset</button></div>
+    <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</p>
     {laps.length > 0 && <ol className="stopwatch-laps" aria-label="Lap times">{laps.map((lap, index) => <li key={index}><span>Lap {index + 1}</span><span>+{formatDuration(lap - (laps[index - 1] ?? 0), true)}</span><time>{formatDuration(lap, true)}</time></li>).reverse()}</ol>}
   </div>;
 }
@@ -142,11 +164,29 @@ function ColorPicker({ draft }: { draft: string }) {
   const [field, setField] = useState(hex);
   const [copied, setCopied] = useState('');
   const input = useRef<HTMLInputElement>(null);
-  useEffect(() => { const next = parseColor(draft); if (next) { setHex(next); setField(next); setCopied(''); } }, [draft]);
+  const copyRevision = useRef(0);
+  const feedbackId = useId();
+  useEffect(() => { const next = parseColor(draft); if (next) { copyRevision.current++; setHex(next); setField(next); setCopied(''); } }, [draft]);
   const rgb = hexToRgb(hex);
-  const update = (value: string) => { setHex(value); setField(value); setCopied(''); };
-  const copy = async () => { try { await navigator.clipboard.writeText(hex); setCopied('Copied'); } catch { input.current?.focus(); input.current?.select(); setCopied('Select and copy the hex value'); } };
-  return <div className="utility-widget color-widget" onKeyDown={preventSubmit}><div className="tool-topline"><h2>Color picker</h2><span>RGB</span></div><div className="color-workspace"><label className="color-swatch" style={{ backgroundColor: hex, color: colorInk(hex) }}><input aria-label="Choose a color" type="color" value={hex} onChange={event => update(event.target.value)} /><span>{hex.toUpperCase()}</span><small>Choose a color</small></label><div className="color-controls"><div className="color-hex"><label><span className="sr-only">Hex color</span><input ref={input} aria-label="Hex color" value={field} maxLength={7} spellCheck={false} aria-invalid={!normalizeHex(field)} onChange={event => { setField(event.target.value); const value = normalizeHex(event.target.value); if (value) { setHex(value); setCopied(''); } }} /></label><button type="button" aria-label="Copy hex color" onClick={() => void copy()}>{copied === 'Copied' ? <Check size={17} /> : <Copy size={17} />}</button></div>{['Red', 'Green', 'Blue'].map((name, index) => <label className="color-channel" key={name}><span>{name}</span><input type="range" aria-label={`${name} channel`} min="0" max="255" value={rgb[index]} onChange={event => { const next = [...rgb]; next[index] = Number(event.target.value); update(rgbToHex(next)); }} /><output>{rgb[index]}</output></label>)}</div></div><p className="sr-only" role="status">{copied}</p></div>;
+  const validField = normalizeHex(field);
+  const update = (value: string) => { copyRevision.current++; setHex(value); setField(value); setCopied(''); };
+  const editField = (value: string) => {
+    copyRevision.current++; setField(value); setCopied('');
+    const normalized = normalizeHex(value);
+    if (normalized) setHex(normalized);
+  };
+  const copy = async () => {
+    const value = normalizeHex(field);
+    if (!value) return;
+    const revision = ++copyRevision.current;
+    try {
+      await navigator.clipboard.writeText(value);
+      if (revision === copyRevision.current) setCopied('Copied');
+    } catch {
+      if (revision === copyRevision.current) { input.current?.focus(); input.current?.select(); setCopied('Select and copy the hex value'); }
+    }
+  };
+  return <div className="utility-widget color-widget"><div className="tool-topline"><h2>Color picker</h2><span>RGB</span></div><div className="color-workspace"><label className="color-swatch" style={{ backgroundColor: hex, color: colorInk(hex) }}><input aria-label="Choose a color" type="color" value={hex} onChange={event => update(event.target.value)} /><span>{hex.toUpperCase()}</span><small>Choose a color</small></label><div className="color-controls"><div className="color-hex"><label><span className="sr-only">Hex color</span><input ref={input} aria-label="Hex color" value={field} maxLength={7} spellCheck={false} aria-invalid={!validField} aria-describedby={!validField ? feedbackId : undefined} onChange={event => editField(event.target.value)} /></label><button type="button" aria-label="Copy hex color" disabled={!validField} onClick={() => void copy()}>{copied === 'Copied' ? <Check size={17} /> : <Copy size={17} />}</button></div>{!validField && <p id={feedbackId} className="utility-feedback">Enter a valid hex color, like #4285f4.</p>}{['Red', 'Green', 'Blue'].map((name, index) => <label className="color-channel" key={name}><span>{name}</span><input type="range" aria-label={`${name} channel`} min="0" max="255" value={rgb[index]} onChange={event => { const next = [...rgb]; next[index] = Number(event.target.value); update(rgbToHex(next)); }} /><output>{rgb[index]}</output></label>)}</div></div><p className="sr-only" role="status">{copied}</p></div>;
 }
 
 export default function UtilityTools({ mode, draft }: Props) {

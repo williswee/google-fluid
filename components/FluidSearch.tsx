@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent, type KeyboardEvent } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent, type KeyboardEvent, type MouseEvent } from 'react';
 import { ArrowRight, ArrowUpRight, Info, X } from 'lucide-react';
 import { MAX_DRAFT_BYTES, type ModeId } from '../lib/intent';
 import { useIntent } from '../hooks/useIntent';
@@ -23,6 +23,8 @@ export default function FluidSearch() {
   const savedCaret = useRef({ start: 0, end: 0 });
   const restoreCaret = useRef(false);
   const aboutButton = useRef<HTMLButtonElement>(null);
+  const notesOpener = useRef<HTMLButtonElement | null>(null);
+  const commandList = useRef<HTMLDivElement>(null);
   const [panelHeight, setPanelHeight] = useState(0);
   const syntax = useMemo(() => parseSearchSyntax(draft), [draft]);
   const options = useMemo(() => filterExamples(palette ?? ''), [palette]);
@@ -58,9 +60,33 @@ export default function FluidSearch() {
   useEffect(() => {
     if (input.current) { input.current.style.height = 'auto'; input.current.style.height = `${Math.min(112, input.current.scrollHeight)}px`; }
   }, [draft, palette]);
-  useEffect(() => {
-    if (palette !== null) document.getElementById(`search-option-${activeOption}`)?.scrollIntoView({ block: 'nearest' });
+  useLayoutEffect(() => {
+    const list = commandList.current;
+    const option = document.getElementById(`search-option-${activeOption}`);
+    if (palette === null || !list || !option) return;
+    const listBounds = list.getBoundingClientRect();
+    const optionBounds = option.getBoundingClientRect();
+    if (optionBounds.top < listBounds.top) list.scrollTop -= listBounds.top - optionBounds.top;
+    else if (optionBounds.bottom > listBounds.bottom) list.scrollTop += optionBounds.bottom - listBounds.bottom;
   }, [palette, activeOption]);
+  useLayoutEffect(() => {
+    const list = commandList.current;
+    if (palette === null || !list) return;
+    const viewport = window.visualViewport;
+    const size = () => {
+      const bottom = viewport ? viewport.offsetTop + viewport.height : window.innerHeight;
+      list.style.setProperty('--command-space', `${Math.max(128, bottom - list.getBoundingClientRect().top - 20)}px`);
+    };
+    size();
+    viewport?.addEventListener('resize', size);
+    viewport?.addEventListener('scroll', size);
+    window.addEventListener('resize', size);
+    return () => {
+      viewport?.removeEventListener('resize', size);
+      viewport?.removeEventListener('scroll', size);
+      window.removeEventListener('resize', size);
+    };
+  }, [palette !== null]);
 
   useLayoutEffect(() => {
     if (palette === null && restoreCaret.current && input.current) {
@@ -72,6 +98,15 @@ export default function FluidSearch() {
 
   useEffect(() => { if (about) document.getElementById('notes-title')?.focus(); }, [about]);
 
+  function toggleNotes(event: MouseEvent<HTMLButtonElement>) {
+    if (about) closeNotes();
+    else { notesOpener.current = event.currentTarget; setAbout(true); }
+  }
+  function closeNotes() {
+    setAbout(false);
+    const opener = notesOpener.current;
+    (opener?.isConnected ? opener : aboutButton.current)?.focus();
+  }
   function changeDraft(value: string) { setDraft(value); setSelection(null); }
   function clear() { setDraft(''); setSelection(null); setManual(null); setPalette(null); input.current?.focus(); }
   function openPalette() { savedCaret.current = { start: input.current?.selectionStart ?? draft.length, end: input.current?.selectionEnd ?? draft.length }; setPalette(''); setActiveOption(0); input.current?.focus(); }
@@ -117,13 +152,13 @@ export default function FluidSearch() {
           </form>
           {palette !== null && <div className="command-menu">
             <div className="command-heading"><span>{options.length} {options.length === 1 ? 'search' : 'searches'} to try</span><span><kbd>↑</kbd><kbd>↓</kbd> to explore <kbd>esc</kbd> to close</span></div>
-            <div id="search-palette" role="listbox" aria-label="Search tools" className="command-options">
-              {options.map((item, index) => { const ItemIcon = SEARCH_ICONS[item.mode]; return <button type="button" role="option" aria-selected={activeOption === index} id={`search-option-${index}`} key={item.id} className="command-option" onMouseDown={e => e.preventDefault()} onClick={() => choose(item)} onPointerMove={() => setActiveOption(index)}><ItemIcon size={19} /><span><strong>{SEARCH_MODES[item.mode].label}</strong><span>{item.query}</span></span><ArrowRight size={16} /></button>; })}
+            <div ref={commandList} id="search-palette" role="listbox" aria-label="Search tools" className="command-options">
+              {options.map((item, index) => { const ItemIcon = SEARCH_ICONS[item.mode]; return <button type="button" role="option" tabIndex={-1} aria-selected={activeOption === index} id={`search-option-${index}`} key={item.id} className="command-option" onMouseDown={e => e.preventDefault()} onClick={() => choose(item)} onPointerMove={event => { if (event.movementX || event.movementY) setActiveOption(index); }}><ItemIcon size={19} /><span><strong>{SEARCH_MODES[item.mode].label}</strong><span>{item.query}</span></span><ArrowRight size={16} /></button>; })}
               {options.length === 0 && <p className="command-empty">No tool matches. Try “timer”, “weather” or “color”.</p>}
             </div>
           </div>}
           <div className={`tool-reveal${showPanel ? ' is-open' : ''}`} style={{ height: showPanel ? panelHeight : 0 }}><div className="tool-clip">{showPanel && <section ref={panel} className="search-tools" aria-label={`${SEARCH_MODES[mode].label} search tools`}>
-            <div className="tool-meta"><span><Icon size={14} />{SEARCH_MODES[mode].label}</span><button type="button" className="decision-source" onClick={() => setAbout(v => !v)} aria-label={`${status}. Notes`}>{status}<Info size={12} /></button></div>
+            <div className="tool-meta"><span><Icon size={14} />{SEARCH_MODES[mode].label}</span><button type="button" className="decision-source" onClick={toggleNotes} aria-expanded={about} aria-controls="search-notes" aria-label={`${status}. Notes`}>{status}<Info size={12} /></button></div>
             {syntax.tokens.filter(t => t.provenance !== 'deprecated').length > 0 && <div className="query-tokens" aria-label="Search filters">{syntax.tokens.filter(t => t.provenance !== 'deprecated').map((token, index) => <button type="button" key={`${token.start}-${index}`} onClick={() => changeDraft(removeSearchToken(draft, token))} aria-label={`Remove ${token.label}: ${token.value || 'unfinished'}`}><span>{token.label}{token.value ? `: ${token.value}` : ': …'}</span><X size={12} /></button>)}</div>}
             <div className="mode-content" key={mode}><SearchTools mode={mode} draft={draft} onDraft={(value, keepMode) => { changeDraft(value); if (keepMode) setSelection({ draft: value, mode: keepMode }); }} /></div>
           </section>}</div></div>
@@ -135,20 +170,28 @@ export default function FluidSearch() {
       </div>
     </main>
     <footer className="site-footer footer-with-notes">
-      {about && <section id="search-notes" className="about-panel" aria-label="Fluid Search notes">
-        <div className="about-title"><h2 id="notes-title" tabIndex={-1}>Notes</h2><button type="button" className="icon-button" aria-label="Close notes" onClick={() => { setAbout(false); aboutButton.current?.focus(); }}><X size={18} /></button></div>
+      {about && <section id="search-notes" className="about-panel" aria-label="Fluid Search notes" onKeyDown={event => { if (event.key === 'Escape') { event.preventDefault(); closeNotes(); } }}>
+        <div className="about-title"><h2 id="notes-title" tabIndex={-1}>Notes</h2><button type="button" className="icon-button" aria-label="Close notes" onClick={closeNotes}><X size={18} /></button></div>
         <p>{privacy} This is an independent experiment, not affiliated with Google.</p>
+        <div className="notes-section"><h3>How routing works</h3>
         <p>TypeSafe Jev chooses an interface from the meaning of your search. Type <code>/</code> to explore every tool immediately. Selecting one is labelled “Selected by you”; editing its query returns to automatic routing. Explicit search operators are recognized on your device.</p>
         <div className="how-flow"><span>Your query</span><ArrowRight size={15} /><span>Jev intent</span><ArrowRight size={15} /><span>A useful interface</span></div>
+        </div>
+        <div className="notes-section"><h3>Tools & data</h3>
         <p>Calculators, clocks, color controls, the orbit lab and game run on your device. Knowledge cards cover a small set of examples; their source buttons explain the data. Weather loads a real forecast for Singapore or Tokyo. Currency conversion uses daily ECB reference rates. Stocks, places and news link to Google for current results. The map illustration is schematic.</p>
         <p>The orbit lab is a prebuilt Newtonian model, not an AI-generated simulation or a model of black holes. Nothing in this demo generates answers or executes AI tools. Enter opens your query on Google in a new tab.</p>
+        </div>
+        <div className="notes-section"><h3>Controls & limits</h3>
         {currentResult && <p className="timing-details">Last live request: {currentResult.roundTripMs} ms round trip · {currentResult.model}{currentResult.timings ? ` · Budget check ${currentResult.timings.reserveMs} ms · Jev ${currentResult.timings.inferenceMs} ms · Settlement ${currentResult.timings.settleMs} ms` : ''}</p>}
         <p className="about-small">A 150 ms typing pause, one live request at a time, and a shared US$5 allowance. No keyword rules pretend to be Jev. The / menu works even when live routing is unavailable. Timers and games are kept only while their panel is open; nothing is saved. Metronome audio starts only when you press Start.</p>
         <label className="about-picker">Keep a tool selected <select aria-label="Choose search tool" value={manual ?? 'auto'} onChange={e => { setManual(e.target.value === 'auto' ? null : e.target.value as ModeId); if(e.target.value === 'auto') setSelection(null); }}><option value="auto">Auto</option>{EXAMPLES.map(m => <option key={m} value={m}>{SEARCH_MODES[m].label}</option>)}</select></label>
+        </div>
+        <div className="notes-section"><h3>Credits</h3>
         <p className="notes-credit">Inspired by <a href="https://github.com/anishfn/shapeshift" target="_blank" rel="noopener noreferrer">ShapeShift</a>, the open-source fluid interface by <a href="https://github.com/anishfn" target="_blank" rel="noopener noreferrer">Anish Gupta (@anishfn)</a>. Its slash discovery and intent-driven widgets helped shape this experiment.</p>
         <p className="about-small">Our dinosaur runner is an original implementation inspired by <a href="https://blog.google/products-and-platforms/products/chrome/chrome-dino/" target="_blank" rel="noopener noreferrer">Chrome’s offline dinosaur game</a>. You can also play it on this demo’s 404 page. It starts only when you choose to play.</p>
+        </div>
       </section>}
-      <div className="footer-links"><button ref={aboutButton} className="notes-button" type="button" aria-label="Notes" onClick={() => setAbout(v => !v)} aria-expanded={about} aria-controls="search-notes"><Info size={14}/><span>Notes</span></button><span aria-hidden="true">·</span><a href="https://typesafe.ai" target="_blank" rel="noopener noreferrer">Built with <strong>TypeSafe Jev</strong><ArrowUpRight size={13} /></a></div>
+      <div className="footer-links"><button ref={aboutButton} className="notes-button" type="button" aria-label="Notes" onClick={toggleNotes} aria-expanded={about} aria-controls="search-notes"><Info size={14}/><span>Notes</span></button><span aria-hidden="true">·</span><a href="https://typesafe.ai" target="_blank" rel="noopener noreferrer">Built with <strong>TypeSafe Jev</strong><ArrowUpRight size={13} /></a></div>
     </footer>
   </div>;
 }

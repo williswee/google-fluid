@@ -1,4 +1,14 @@
-# Current delivery — quieter chrome and Dinosaur run, 24 September 2026
+# Current delivery — Impeccable polish, 24 September 2026
+
+Preserved the white Google-style world, anchored search field, all 22 modes and footer-only disclosures. Improved mobile placeholder and menu typography, shared keyboard focus, hover/pressed feedback and footer readability. Notes retains its copy and credits with clear sections; closing it or pressing Escape restores focus to the actual opener. Slash navigation scrolls only its list, whose height adapts to available viewport space. Removed obsolete header/example CSS.
+
+Fixed native Enter activation for utility controls, suppressed ticking clock announcements in favour of settled action feedback, and blocked copying an invalid hex field with linked recovery text. No server, routing, provider, budget, key, repository visibility or hosting-tier changes.
+
+Verification: 310 unit/integration tests and 44 browser scenarios pass; production build passes. One batched visual review at 1440, 813, 390 and 320px covered landing, palette, calculator, color, dinosaur and Notes. No overflow or page errors; reduced motion works at all four widths. One narrow Notes-diagram alignment correction was confirmed on desktop and mobile. Browser inference was mocked for interaction checks; no fresh routing benchmark is claimed.
+
+---
+
+# Historical delivery — quieter chrome and Dinosaur run, 24 September 2026
 
 Removed the top brand and Classic/Fluid switch. The interface is always fluid. Renamed How it works to Notes and moved its trigger/disclosure to the footer. Notes explicitly credits ShapeShift OSS and Anish Gupta (@anishfn), with links to both the project and author.
 
