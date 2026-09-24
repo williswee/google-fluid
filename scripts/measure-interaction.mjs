@@ -3,6 +3,15 @@ import { writeFileSync } from 'node:fs';
 
 // Authored cases only. Natural queries use the existing protected budget.
 const cases = [
+  ['calculate', '24 * 18 + 6', false],
+  ['timer', 'set a timer for 5 minutes', false],
+  ['stopwatch', 'start a stopwatch', false],
+  ['metronome', 'metronome at 80 bpm', false],
+  ['color', 'color picker coral', false],
+  ['compare', 'Earth vs Mars', false],
+  ['science', 'show me how gravity affects an orbit', false],
+  ['game', 'play tic-tac-toe', false],
+  ['play', 'do a barrel roll', false],
   ['weather', 'will I need an umbrella in Tokyo tomorrow', false],
   ['convert', '10 km in miles', false],
   ['places', 'quiet cafes in Singapore', false],
@@ -25,7 +34,7 @@ const pageErrors = [];
 let requestCount = 0;
 page.on('pageerror', error => pageErrors.push(error.name));
 page.on('request', request => { if (new URL(request.url()).pathname === '/api/intent') requestCount++; });
-const report = { recordedAt: new Date().toISOString(), baseUrl: origin.origin, dataset: 'search-v1-browser', context: 'Twelve authored production browser smoke cases: eight real Jev requests and four explicit local-syntax transitions. No fixtures, retries, or fake results. Round trip excludes typing pause and subsequent rendering; acknowledgement is input-to-next-frame pending feedback.', cases: [], pageErrors };
+const report = { recordedAt: new Date().toISOString(), baseUrl: origin.origin, dataset: 'search-v2-browser', context: 'Twenty-one authored production browser smoke cases: seventeen real Jev requests and four explicit local-syntax transitions. No fixtures, retries, or fake results. Round trip excludes typing pause and subsequent rendering; acknowledgement is input-to-next-frame pending feedback.', cases: [], pageErrors };
 try {
   await page.goto(origin.origin, { waitUntil: 'networkidle' });
   await expect(page.locator('#privacy-note')).toContainText('Drafts are sent to TypeSafe');
@@ -39,7 +48,7 @@ try {
       if (window.fluidMeasure.inputAt) requestAnimationFrame(() => { window.fluidMeasure.modePaintMs = performance.now() - window.fluidMeasure.inputAt; });
     }).observe(app, { attributes: true, attributeFilter: ['data-pending', 'data-mode'] });
   });
-  const input = page.getByRole('textbox', { name: 'Search query' });
+  const input = page.getByRole('combobox', { name: 'Search query' });
   for (const [expected, draft, local] of cases) {
     const beforeCount = requestCount;
     const responsePromise = local ? null : page.waitForResponse(response => new URL(response.url()).pathname === '/api/intent' && response.request().postDataJSON().draft === draft, { timeout: 18_000 });

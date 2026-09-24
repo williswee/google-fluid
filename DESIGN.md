@@ -35,12 +35,35 @@ colors:
   date-tint: "#fdf4f8"
   precision-accent: "#596374"
   precision-tint: "#f7f8fa"
+  utility-tint: "#f3f7ff"
+  metronome-accent: "#8b4521"
+  metronome-tint: "#fcf6ef"
+  color-accent: "#6647a8"
+  color-tint: "#f8f5fc"
+  science-accent: "#4b4e99"
+  science-tint: "#f5f5fc"
+  play-accent: "#187557"
+  play-tint: "#f0f9f5"
+  play-ink: "#244b65"
+  play-action: "#256087"
+  command-selected: "#f0f5fe"
 typography:
   query:
     fontFamily: "Geist, Arial, sans-serif"
     fontSize: "17px"
     fontWeight: 400
     lineHeight: "26px"
+  query-mobile:
+    fontFamily: "Geist, Arial, sans-serif"
+    fontSize: "16px"
+    fontWeight: 400
+    lineHeight: "24px"
+  clock:
+    fontFamily: "Geist, Arial, sans-serif"
+    fontSize: "clamp(37px, 8vw, 64px)"
+    fontWeight: 400
+    lineHeight: 1.3
+    letterSpacing: "-0.035em"
   title:
     fontFamily: "Geist, Arial, sans-serif"
     fontSize: "19px"
@@ -64,6 +87,7 @@ typography:
 rounded:
   field: "8px"
   tile: "12px"
+  command: "10px"
   shell: "30px"
   shell-open: "26px"
   circle: "50%"
@@ -87,10 +111,19 @@ components:
     textColor: "{colors.ink}"
     rounded: "{rounded.field}"
     padding: "11px"
-  example:
-    rounded: "{rounded.tile}"
+  command-option:
+    rounded: "{rounded.command}"
     padding: "10px 15px"
-    height: "48px"
+  command-option-selected:
+    backgroundColor: "{colors.command-selected}"
+    textColor: "{colors.blue}"
+  slash-button:
+    rounded: "{rounded.command}"
+    size: "44px"
+  utility-button:
+    backgroundColor: "{colors.blue}"
+    textColor: "{colors.surface}"
+    padding: "9px 15px"
 ---
 
 # Design System: Fluid Search
@@ -99,62 +132,72 @@ components:
 
 **Creative North Star: "A search bar that takes the shape of your curiosity."**
 
-The user-pinned Google-style world uses a white canvas, a familiar multicolour wordmark, charcoal text and restrained blue actions. Fluid Search keeps its independent identity in the header and its non-affiliation notice in the footer. The former dark ChatGPT composer direction is superseded.
+The user-pinned Google-style world uses a white canvas, a familiar multicolour wordmark, charcoal text and restrained blue actions. Fluid Search retains its independent identity in the header. Privacy, affiliation and implementation details live in How it works; the footer is a quiet TypeSafe Jev attribution.
 
-The query is the visual anchor. A softly tinted lower shell reveals one useful tool at a time, while compact examples invite exploration. The current implementation in `components/FluidSearch.tsx`, `components/SearchTools.tsx` and `app/globals.css` is the evidence for this system; home composition belongs in the surface brief.
+The query is the visual anchor. Its lower shell becomes one useful interface at a time. A slash control and searchable command menu make all 21 modes discoverable without a permanent example grid. Functional tools, curated knowledge and playful experiments share the same shell, with their own clear controls and source details.
 
 **Key Characteristics:**
 
-- White space around a single search surface.
-- Familiar controls with intent-specific accents and restrained illustrations.
-- Visible source, pending state and disclosure beside the interaction.
+- White space around one anchored search surface.
+- Discovery through the slash menu; detail through progressive disclosure.
+- Visible routing provenance and recognizably different, functional tool interiors.
 
 ## Colors
 
-Blue is the default action colour. Warm weather and dictionary accents, green market and place accents, violet movies, red documents, rose dates and slate precise-search accents distinguish tools inside pale matching tints. General and website tools share the default blue treatment; conversion and news use their own pale blue interiors.
+Blue leads actions, calculator and clock tools. Weather and dictionary use warm hues; stocks and places use green; movies and colour controls use violet; documents use red; dates use rose; precision uses slate. Orbit uses a pale violet shell with blue scientific controls. Games and Easter eggs use pale green. The Earth/Mars comparison pairs blue and terracotta values.
 
-The multicolour brand letters are identity accents, not a general-purpose content palette. Neutral text, white fields and light borders keep each tool readable. Placeholder, privacy, example-hint and footer text use the muted token after the contrast correction.
+Intent colour stays in the lower tool, icon, selection and related controls. White fields and subdued separators keep dense tools legible. The colour picker alone makes its chosen colour the working material, with black or white swatch text selected for contrast. Multicolour brand letters remain an identity treatment.
 
 **The Local Colour Rule.** Change the tool tint, icon and related controls with the active intent; keep the page white.
 
 ## Typography
 
-Geist is locally bundled at regular, medium and semibold weights, with Arial and sans-serif fallbacks. Its familiar workhorse character is part of the user-pinned direction. Georgia appears only in the dictionary term and editorial illustration details.
+Geist is locally bundled at regular, medium and semibold weights, with Arial and sans-serif fallbacks. Its familiar workhorse character is retained. Georgia gives dictionary terms, definitions and examples a distinct reference-book voice.
 
-The hierarchy is compact: query above body copy, medium-weight tool title above small choice labels and notes. Desktop query text follows the query token; narrow screens reduce it to 15px with a 24px line height. Tool titles step down to 17px and then 16px. The wordmark steps from 78px to 65px to 61px. Converter values use tabular numerals and step from 46px to 39px to 30px. These signature treatments do not enlarge ordinary labels.
+The query uses the desktop and mobile tokens; the narrow-screen text is 16px. Tool titles step from 19px to 17px or 16px. The wordmark steps from 78px to 65px to 61px. Palette rows pair a medium-weight 13px tool name with a 12px example. Tabular numerals stabilize converter, calculator, clock, weather, comparison and orbit readings. Large numerals express an actual result or changing measurement, not general decoration.
 
 ## Layout
 
-The main column is at most 760px wide, centred with 20px desktop side clearance. The header is a horizontal home link and action group. Below 700px the main clearance becomes 16px, the header tightens, and the about action becomes icon-only. Below 440px examples change from three columns to two; precise-search fields stack below 700px. Four document-format tiles remain in one row.
+The main column is centred and at most 760px wide. Below 700px, its side clearance is 16px and the header becomes more compact. The about action becomes icon-only while retaining its accessible name.
 
-Tool interiors use a compact illustration beside flexible controls, or a purpose-built converter/filter grid. Small screens reduce illustrations and hide selected decorative icons. Controls preserve a minimum 44px target in the final responsive overrides.
+The command menu lives inside the lower shell. Its list scrolls within the smaller of 390px and 49svh, with an active row and keyboard guidance; the guidance hides on narrow screens. Tool-specific layouts use keypads, paired values, tabs, fields, an illustration beside controls, or a playable board. Colour controls stack below 500px; orbit and game layouts stack below 560px. Forecast days retain a minimum 44px width and scroll horizontally when needed. Four document-format tiles remain in a row.
 
 **The Anchored Query Rule.** Tool changes affect the lower shell. The textarea grows only with its content, up to 112px; inference must not reposition its caret.
 
 ## Elevation & Depth
 
-Depth is shallow: a light shell border and diffuse shadow separate the search surface from the white canvas. Hover and focus deepen that shadow slightly. Tinted interiors, white inputs and low-contrast separators organize tool content. The active Classic/Fluid segment has a small lift; the page does not use heavy card stacking. Exact shadow and focus treatments live in the sidecar.
+A light border and diffuse shadow separate the search shell from the white canvas. Hover and focus deepen the shadow slightly. White inputs, pale interiors and subtle separators organize content without nested raised cards. The active Classic/Fluid segment has a small lift. The active command row uses a pale blue fill rather than extra elevation. Exact shadows and motion live in the sidecar.
 
 ## Shapes
 
-The search shell is pill-like at rest and slightly squarer when expanded. Fields and choices share softly rounded corners; example and document tiles use the tile radius. Search, clear and swap actions are circular. Preserve a single clipped outer shell so the tinted tool reads as an extension of the query.
+The pill-like search shell becomes slightly squarer when open and clips its lower content. Fields and choices use soft corners; document tiles and the game board use larger corners. Search, clear and swap actions are circular. The slash control resembles a small keyboard key inside a full-size target. Preserve one continuous shell for both discovery and tools.
 
 ## Components
 
-The search field uses a leading intent icon, a growing textarea, clear action and blue submit arrow. The shell carries focus-within feedback; other interactive controls use the visible blue focus outline. Empty, oversized and composing drafts disable submission. Classic/Fluid uses a two-segment pressed state.
+The search field has an intent icon, growing textarea, clear control, slash control and blue submit arrow. Empty, oversized, composing and open-menu states disable submission. The shell carries focus-within feedback; controls retain visible focus. Classic/Fluid is a pressed-state segmented switch.
 
-Tool choices use pale or translucent white surfaces and become solid accent with white text when selected. Query-filter chips expose removable syntax with an explicit accessible label. Examples use icon-and-label tiles and reflect the active intent. Inline fields pair a white input with an accent Apply or Add action.
+The slash menu filters tool names and examples while preserving the underlying query. Arrow keys move the active option, Enter selects it, and Escape restores the prior draft and caret. Pointer selection produces the same result. Selection fills an editable example and opens its tool immediately, including during a routing outage. A persistent manual selector lives in How it works.
 
-Source labels remain visible: **Jev**, **Search syntax**, **Selected**, and **Example** distinguish inference, local parsing, manual refinement and outage samples. Pending edits retain the last confirmed tool and show Reading or Updating feedback. Keep draft-transmission disclosure and errors near the query. Illustrative maps and market/weather graphics are not retrieved results; real Google destinations and the local converter remain explicitly described.
+Routing badges remain visible above the tool: **Jev** with measured timing, **Search syntax · instant**, or **Selected by you**. Pending edits show Reading or Updating while retaining the previous tool. The badge opens How it works. That disclosure contains draft transmission, non-affiliation, source behaviour, diagnostics and the persistent selector. A screen-reader description still associates privacy status with the query. Errors and retry actions remain beside the shell.
 
-The single lower panel is measured with ResizeObserver and transitions its height over 280ms using `cubic-bezier(.16,1,.3,1)`. This localized layout animation is an accepted tradeoff for content-fitting transitions. Tool content arrives over 240ms; the tint changes over 300ms. The pending underline pulses only while waiting. Reduced-motion preference removes animation and effectively disables transitions.
+Tool families preserve their own working affordances:
+
+- **Utilities:** arithmetic keypad, tip and bill fields, timer progress and completion, stopwatch laps, metronome tempo and beat state, and a swatch with hex/RGB controls. Defaults are labelled when they are editable examples. Metronome audio starts only through **Start sound**, can be stopped, and stops when the page is hidden or the tool closes.
+- **Knowledge:** weather has city/day/temperature controls, loading, retry and source disclosure; the large temperature is the daily high. Dictionary tabs use serif reading text. Film tabs combine original illustration, facts and a runtime planner. Planet comparison uses paired values, relative bars and an editable age conversion. Supported examples and external-search paths stay explicit.
+- **Conversion:** paired amount and result with selectors and swap. Unit calculations are local. Currency values use dated daily ECB reference rates with an expandable rate/source explanation and visible failure handling.
+- **Experiments:** the prebuilt orbit model pairs an original SVG scene with mass/radius sliders and computed readings, pause/reset, and model details. Tic-tac-toe has a playable two-person board, turn/result state, undo and reset. Barrel roll and askew affect only a contained miniature, with explicit play/replay/reset.
+- **Search refinements:** removable syntax chips, file-format tiles, source/date fields and exact/excluded terms edit the query. Stocks, places and news use explicit external result links. Their decorative illustrations do not imply retrieved data.
+
+The lower panel uses its measured content height and a 280ms transition with `cubic-bezier(.16,1,.3,1)`; this localized layout animation is an accepted tradeoff. Arrival lasts 240ms and tint changes last 300ms. Pending feedback is temporary. Reduced motion removes transitions and geometric animation; orbit calculations and clock readouts remain useful. Orbit movement can be paused, and Easter eggs are bounded to one user-triggered motion.
 
 ## Do's and Don'ts
 
 - **Do** retain the white canvas, anchored query and independent Fluid Search identity.
-- **Do** keep provenance, privacy disclosure, readable muted text and visible keyboard focus.
-- **Do** preserve 44px targets and useful controls across responsive sizes.
-- **Do** describe external destinations and illustrative content honestly.
-- **Don't** restore the superseded dark composer, model selector or capability trays.
-- **Don't** fabricate results or present local syntax parsing as a Jev decision.
+- **Do** keep slash discovery usable with pointer, keyboard and touch.
+- **Do** preserve routing provenance and make data sources and limitations accessible.
+- **Do** use 44px primary control targets, readable muted text and visible keyboard focus.
+- **Do** require an explicit action for audio and provide pause, stop, replay or reset where relevant.
+- **Don't** restore the superseded dark composer or permanent example-card grid.
+- **Don't** present selected tools, local syntax or reference content as Jev-generated results.
+- **Don't** invent retrieved data, hide failure states or turn fixture values into facts.
 - **Don't** move the active input or require animation to understand state.

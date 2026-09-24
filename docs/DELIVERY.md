@@ -1,4 +1,30 @@
-# Current delivery — Fluid Search, 24 September 2026
+# Current delivery — Fluid Search interactive tools, 24 September 2026
+
+The public app now has 21 interfaces and 28 prepared queries discoverable through `/`. The example grid is removed. How it works contains privacy, affiliation, routing details, limitations, and the optional manual mode lock. The query is preserved when browsing/cancelling the palette, including its selection range. Choosing a tool is immediate and labelled Selected by you; a subsequent edit returns to Jev.
+
+## Working interfaces
+
+Calculator and tip splitting; unit and currency conversion; countdown timer; stopwatch/laps; explicitly started metronome audio; RGB/color picker and clipboard; real forecasts for Singapore/Tokyo; two dictionary entries; two film cards with movie-night timing; Earth/Mars comparison; adjustable circular-orbit model; two-player tic-tac-toe; barrel roll/askew. Existing document/site/date/exact-search, Maps, market and news refinements remain available.
+
+Open-Meteo supplies actual weather through a fixed-city endpoint. Frankfurter supplies daily ECB reference rates for four allowed currencies. Both are free and require no account/key. Source details include dates and limits. Other knowledge is curated and cited; the orbit model is prebuilt Newtonian physics, not AI generation. No live stock prices, map results or news headlines are fabricated.
+
+## Verification
+
+- `npm test`: 291 unit/integration tests pass, including shared budget accounting, external-data validation, safe arithmetic and widget logic.
+- `npm run build`: passes.
+- Playwright: 34/34 fixture tests pass, including slash keyboard/caret, IME, stale responses, manual overrides, clipboard, audio start/cleanup, game outcomes, currency overflow, mobile and reduced motion.
+- One batched visual pass covered desktop 1440px, the user's 907px viewport and mobile 390px. Independent finish review: pass, no further visual fixes. Arithmetic/wildcard collision found and fixed with four regressions.
+- Real Jev development: 42/42 correct, p50 663.65 ms, p95 1245.30 ms round trip.
+- Real Jev held-out: 42/42 correct, p50 778.11 ms, p95 2219.02 ms round trip.
+- These small English sets are acceptance checks through the protected local endpoint; they do not establish broad model accuracy or worldwide performance. Reports: `evaluation/results/search-v2-development.json` and `search-v2-held-out.json`.
+
+Same Vercel Hobby project, private repo, Seoul region, encrypted secrets and US$5 shared ledger. No allowance reset, new paid provider or upgrade. No new video work.
+
+Production smoke measurements are added after deployment below.
+
+---
+
+# Historical delivery — first Fluid Search release, 24 September 2026
 
 The user replaced the ChatGPT composer concept with a white Google-style fluid search bar and explicitly deferred video work. The standalone folder, private repository, Vercel hostname, server secrets, Seoul function region, and shared US$5 Jev ledger are retained.
 

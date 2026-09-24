@@ -1,86 +1,157 @@
 'use client';
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent } from 'react';
-import { ArrowRight, ArrowUpRight, BookOpen, CalendarDays, Check, ChevronDown, CloudSun, FileText, Film, Globe2, Info, MapPin, Newspaper, Quote, Search, Shuffle, SlidersHorizontal, TrendingUp, X } from 'lucide-react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent, type KeyboardEvent } from 'react';
+import { ArrowRight, ArrowUpRight, Info, X } from 'lucide-react';
 import { MAX_DRAFT_BYTES, type ModeId } from '../lib/intent';
 import { useIntent } from '../hooks/useIntent';
-import { EXAMPLES, SEARCH_MODES } from '../lib/search-presets';
-import { buildGoogleSearchUrl, parseSearchSyntax, removeSearchToken } from '../lib/search-syntax';
+import { EXAMPLES, SEARCH_MODES, filterExamples, type SearchExample } from '../lib/search-presets';
+import { parseSearchSyntax, removeSearchToken } from '../lib/search-syntax';
+import { SEARCH_ICONS } from './search-icons';
 import SearchTools from './SearchTools';
-const icons = { general:Search,weather:CloudSun,finance:TrendingUp,places:MapPin,movies:Film,convert:Shuffle,define:BookOpen,documents:FileText,site:Globe2,news:Newspaper,date:CalendarDays,precise:Quote };
 
-export default function FluidSearch(){
-  const [draft,setDraft]=useState('');
-  const [fluid,setFluid]=useState(true);
-  const [live,setLive]=useState<boolean|null>(null);
-  const [composing,setComposing]=useState(false);
-  const [retry,setRetry]=useState(0);
-  const [example,setExample]=useState<{draft:string;mode:ModeId}|null>(null);
-  const [manual,setManual]=useState<ModeId|null>(null);
-  const [refinement,setRefinement]=useState<{draft:string;mode:ModeId}|null>(null);
-  const [showAll,setShowAll]=useState(false);
-  const [about,setAbout]=useState(false);
-  const input=useRef<HTMLTextAreaElement>(null);
-  const panel=useRef<HTMLElement>(null);
-  const [panelHeight,setPanelHeight]=useState(0);
-  const syntax=useMemo(()=>parseSearchSyntax(draft),[draft]);
-  const bytes=new TextEncoder().encode(draft).length;
-  const oversized=bytes>MAX_DRAFT_BYTES;
-  const hasDraft=Boolean(draft.trim());
-  const validExample=example?.draft===draft?example:null;
-  const selectedRefinement=refinement?.draft===draft?refinement:null;
-  const enabled=fluid&&live===true&&hasDraft&&!oversized&&!composing&&!syntax.mode&&!manual&&!validExample&&!selectedRefinement;
-  const intent=useIntent(draft,enabled,retry);
-  const effectiveMode:ModeId=manual??selectedRefinement?.mode??syntax.mode??validExample?.mode??(hasDraft&&!intent.error?intent.result?.mode:undefined)??'general';
-  const mode=fluid?effectiveMode:'general';
-  const pending=intent.pending;
-  const Icon=icons[mode];
-  const source=manual||selectedRefinement?'Selected':syntax.mode?'Search syntax':validExample?'Example':intent.result&&hasDraft&&!intent.error?'Jev':'Search';
-  const showPanel=fluid&&hasDraft&&!oversized&&(mode!=='general'||Boolean(intent.result&&!pending)||Boolean(manual));
-  const currentResult=intent.resultDraft===draft?intent.result:null;
-  const status=!fluid?'':pending?(intent.result?'Updating…':'Reading your search…'):source==='Jev'?`Jev · ${currentResult?.roundTripMs??intent.result?.roundTripMs} ms`:source==='Search syntax'?'Search syntax · instant':source==='Example'?'Example · live routing unavailable':source==='Selected'?'Selected by you':'';
+export default function FluidSearch() {
+  const [draft, setDraft] = useState('');
+  const [fluid, setFluid] = useState(true);
+  const [live, setLive] = useState<boolean | null>(null);
+  const [composing, setComposing] = useState(false);
+  const [retry, setRetry] = useState(0);
+  const [manual, setManual] = useState<ModeId | null>(null);
+  const [selection, setSelection] = useState<{ draft: string; mode: ModeId } | null>(null);
+  const [palette, setPalette] = useState<string | null>(null);
+  const [activeOption, setActiveOption] = useState(0);
+  const [about, setAbout] = useState(false);
+  const input = useRef<HTMLTextAreaElement>(null);
+  const panel = useRef<HTMLElement>(null);
+  const savedCaret = useRef({ start: 0, end: 0 });
+  const restoreCaret = useRef(false);
+  const aboutButton = useRef<HTMLButtonElement>(null);
+  const [panelHeight, setPanelHeight] = useState(0);
+  const syntax = useMemo(() => parseSearchSyntax(draft), [draft]);
+  const options = useMemo(() => filterExamples(palette ?? ''), [palette]);
+  const oversized = new TextEncoder().encode(draft).length > MAX_DRAFT_BYTES;
+  const hasDraft = Boolean(draft.trim());
+  const selected = selection?.draft === draft ? selection : null;
+  const enabled = fluid && live === true && hasDraft && !oversized && !composing && !syntax.mode && !manual && !selected && palette === null;
+  const intent = useIntent(draft, enabled, retry);
+  const effectiveMode: ModeId = manual ?? selected?.mode ?? syntax.mode ?? (hasDraft && !intent.error ? intent.result?.mode : undefined) ?? 'general';
+  const mode = fluid ? effectiveMode : 'general';
+  const pending = intent.pending;
+  const Icon = SEARCH_ICONS[mode];
+  const source = manual || selected ? 'Selected' : syntax.mode ? 'Search syntax' : intent.result && hasDraft && !intent.error ? 'Jev' : 'Search';
+  const showPanel = palette === null && fluid && hasDraft && !oversized && (mode !== 'general' || Boolean(intent.result && !pending) || Boolean(manual));
+  const currentResult = intent.resultDraft === draft ? intent.result : null;
+  const status = !fluid ? '' : pending ? (intent.result ? 'Updating…' : 'Reading your search…') : source === 'Jev' ? `Jev · ${currentResult?.roundTripMs ?? intent.result?.roundTripMs} ms` : source === 'Search syntax' ? 'Search syntax · instant' : source === 'Selected' ? 'Selected by you' : '';
+  const privacy = live === true ? 'Drafts are sent to TypeSafe while you type. Nothing is saved here.' : live === false ? 'Live routing is unavailable. Choose any tool with / to explore it.' : 'Checking live routing…';
 
-  useEffect(()=>{let active=true;fetch('/api/status',{cache:'no-store'}).then(r=>r.ok?r.json():Promise.reject()).then(v=>{if(active)setLive(v.liveAvailable===true);}).catch(()=>{if(active)setLive(false);});return()=>{active=false;};},[]);
-  useLayoutEffect(()=>{
-    const element=panel.current;
-    if(!showPanel||!element)return;
-    const measure=()=>setPanelHeight(Math.ceil(element.getBoundingClientRect().height));
+  useEffect(() => {
+    let active = true;
+    fetch('/api/status', { cache: 'no-store' }).then(r => r.ok ? r.json() : Promise.reject()).then(v => { if (active) setLive(v.liveAvailable === true); }).catch(() => { if (active) setLive(false); });
+    return () => { active = false; };
+  }, []);
+  useLayoutEffect(() => {
+    const element = panel.current;
+    if (!showPanel || !element) return;
+    const measure = () => setPanelHeight(Math.ceil(element.getBoundingClientRect().height));
     measure();
-    const observer=new ResizeObserver(measure);observer.observe(element);
-    return()=>observer.disconnect();
-  },[showPanel,mode]);
-  useEffect(()=>{if(input.current){input.current.style.height='auto';input.current.style.height=`${Math.min(112,input.current.scrollHeight)}px`;}},[draft]);
-  function changeDraft(value:string){setDraft(value);setExample(null);setRefinement(null);}
-  function clear(){setDraft('');setExample(null);setManual(null);input.current?.focus();}
-  function tryExample(next:ModeId){const text=SEARCH_MODES[next].example;setDraft(text);setManual(null);setExample(live===false||Boolean(intent.error)?{draft:text,mode:next}:null);input.current?.focus();}
-  function submit(event:FormEvent<HTMLFormElement>){if(!hasDraft||oversized||composing)event.preventDefault();}
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [showPanel, mode]);
+  useEffect(() => {
+    if (input.current) { input.current.style.height = 'auto'; input.current.style.height = `${Math.min(112, input.current.scrollHeight)}px`; }
+  }, [draft, palette]);
+  useEffect(() => {
+    if (palette !== null) document.getElementById(`search-option-${activeOption}`)?.scrollIntoView({ block: 'nearest' });
+  }, [palette, activeOption]);
+
+  useLayoutEffect(() => {
+    if (palette === null && restoreCaret.current && input.current) {
+      restoreCaret.current = false;
+      input.current.focus();
+      input.current.setSelectionRange(savedCaret.current.start, savedCaret.current.end);
+    }
+  }, [palette]);
+
+  function changeDraft(value: string) { setDraft(value); setSelection(null); }
+  function clear() { setDraft(''); setSelection(null); setManual(null); setPalette(null); input.current?.focus(); }
+  function openPalette() { savedCaret.current = { start: input.current?.selectionStart ?? draft.length, end: input.current?.selectionEnd ?? draft.length }; setPalette(''); setActiveOption(0); input.current?.focus(); }
+  function closePalette() { restoreCaret.current = true; setPalette(null); input.current?.focus(); }
+  function choose(item: SearchExample) {
+    savedCaret.current = {start:item.query.length,end:item.query.length}; restoreCaret.current = true; setDraft(item.query); setManual(null); setSelection({ draft: item.query, mode: item.mode }); setPalette(null); setFluid(true); input.current?.focus();
+  }
+  function changeInput(value: string) {
+    if (palette !== null) {
+      if (!value.startsWith('/')) { setPalette(null); changeDraft(value); }
+      else { setPalette(value.slice(1)); setActiveOption(0); }
+    } else if (value.startsWith('/') && !composing) { savedCaret.current = {start:draft.length,end:draft.length}; setPalette(value.slice(1)); setActiveOption(0); }
+    else changeDraft(value);
+  }
+  function keyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.nativeEvent.isComposing || composing) return;
+    if (palette !== null) {
+      if (event.key === 'Escape') { event.preventDefault(); closePalette(); }
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault(); setActiveOption(i => options.length ? (i + (event.key === 'ArrowDown' ? 1 : -1) + options.length) % options.length : 0);
+      }
+      if (event.key === 'Enter') { event.preventDefault(); if (options[activeOption]) choose(options[activeOption]); }
+      if (event.key === 'Tab') setPalette(null);
+      return;
+    }
+    if (event.key === 'Escape') { event.preventDefault(); clear(); }
+    if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); if (hasDraft && !oversized) event.currentTarget.form?.requestSubmit(); }
+  }
+  function submit(event: FormEvent<HTMLFormElement>) { if (!hasDraft || oversized || composing || palette !== null) event.preventDefault(); }
 
   return <div className="fluid-app" data-mode={mode} data-pending={pending}>
-    <header className="site-header"><a className="project-name" href="/" aria-label="Fluid Search home"><span className="brand-symbol" aria-hidden="true"><i/><i/><i/><i/></span>Fluid Search</a><div className="header-actions"><button className="about-button" type="button" aria-label="How it works" onClick={()=>setAbout(v=>!v)} aria-expanded={about}><Info size={17}/><span>How it works</span></button><div className="view-switch" aria-label="Search interface" role="group"><button type="button" onClick={()=>setFluid(false)} aria-pressed={!fluid}>Classic</button><button type="button" onClick={()=>setFluid(true)} aria-pressed={fluid}>Fluid</button></div></div></header>
+    <header className="site-header">
+      <a className="project-name" href="/" aria-label="Fluid Search home"><span className="brand-symbol" aria-hidden="true"><i /><i /><i /><i /></span>Fluid Search</a>
+      <div className="header-actions">
+        <button ref={aboutButton} className="about-button" type="button" aria-label="How it works" onClick={() => setAbout(v => !v)} aria-expanded={about} aria-controls="about-search"><Info size={17} /><span>How it works</span></button>
+        <div className="view-switch" aria-label="Search interface" role="group"><button type="button" onClick={() => { setFluid(false); setPalette(null); }} aria-pressed={!fluid}>Classic</button><button type="button" onClick={() => setFluid(true)} aria-pressed={fluid}>Fluid</button></div>
+      </div>
+    </header>
     <main className="search-main">
       <div className="identity"><h1 aria-label="Google Fluid"><span className="google-word" aria-hidden="true"><b>G</b><b>o</b><b>o</b><b>g</b><b>l</b><b>e</b></span><span className="fluid-word">fluid</span></h1><p>A search bar that takes the shape of your curiosity.</p></div>
       <div className="search-experience">
-        <div className={`search-shell${showPanel?' expanded':''}`}>
+        <div className={`search-shell${showPanel || palette !== null ? ' expanded' : ''}`}>
           <form className="query-form" action="https://www.google.com/search" method="get" target="_blank" rel="noopener noreferrer" onSubmit={submit}>
-            <span className="query-icon" aria-hidden="true"><Icon size={23} strokeWidth={1.8}/></span>
+            <span className="query-icon" aria-hidden="true"><Icon size={23} strokeWidth={1.8} /></span>
             <label className="sr-only" htmlFor="query">Search query</label>
-            <textarea ref={input} id="query" name="q" rows={1} value={draft} aria-describedby="privacy-note query-error" aria-invalid={oversized} placeholder="Search anything. See what it becomes." autoComplete="off" spellCheck={false} onChange={e=>changeDraft(e.target.value)} onCompositionStart={()=>setComposing(true)} onCompositionEnd={()=>setComposing(false)} onKeyDown={e=>{if(e.key==='Escape'){e.preventDefault();clear();}if(e.key==='Enter'&&!e.shiftKey&&!e.nativeEvent.isComposing){e.preventDefault();if(hasDraft&&!oversized)e.currentTarget.form?.requestSubmit();}}}/>
-            {hasDraft&&<button className="clear-button icon-button" type="button" aria-label="Clear search" onClick={clear}><X size={18}/></button>}
-            <button className="search-button" type="submit" aria-label="Search Google" disabled={!hasDraft||oversized||composing}><ArrowRight size={22}/></button>
+            <textarea ref={input} id="query" name="q" rows={1} value={palette !== null ? '/' + palette : draft} role="combobox" aria-autocomplete="list" aria-expanded={palette !== null} aria-controls={palette !== null ? 'search-palette' : undefined} aria-activedescendant={palette !== null && options[activeOption] ? `search-option-${activeOption}` : undefined} aria-describedby="privacy-note query-error" aria-invalid={oversized} placeholder="Search anything, or type /" autoComplete="off" spellCheck={false} onChange={e => changeInput(e.target.value)} onCompositionStart={() => setComposing(true)} onCompositionEnd={() => setComposing(false)} onKeyDown={keyDown} />
+            {(hasDraft || palette !== null) && <button className="clear-button icon-button" type="button" aria-label={palette !== null ? 'Close search tools' : 'Clear search'} onClick={palette !== null ? closePalette : clear}><X size={18} /></button>}
+            <button className="slash-button" type="button" aria-label="Browse all search tools" aria-expanded={palette !== null} aria-controls="search-palette" onClick={palette !== null ? closePalette : openPalette}><span aria-hidden="true">/</span></button>
+            <button className="search-button" type="submit" aria-label="Search Google" disabled={!hasDraft || oversized || composing || palette !== null}><ArrowRight size={22} /></button>
           </form>
-          <div className={`tool-reveal${showPanel?' is-open':''}`} style={{height:showPanel?panelHeight:0}}><div className="tool-clip">{showPanel&&<section ref={panel} className="search-tools" aria-label={`${SEARCH_MODES[mode].label} search tools`}>
-            <div className="tool-meta"><span><Icon size={14}/>{SEARCH_MODES[mode].label}</span><span className="decision-source">{status}</span></div>
-            {syntax.tokens.filter(t=>t.provenance!=='deprecated').length>0&&<div className="query-tokens" aria-label="Search filters">{syntax.tokens.filter(t=>t.provenance!=='deprecated').map((token,index)=><button type="button" key={`${token.start}-${index}`} onClick={()=>changeDraft(removeSearchToken(draft,token))} aria-label={`Remove ${token.label}: ${token.value||'unfinished'}`}><span>{token.label}{token.value?`: ${token.value}`:': …'}</span><X size={12}/></button>)}</div>}
-            <div className="mode-content" key={mode}><SearchTools mode={mode} draft={draft} onDraft={(value,keepMode)=>{changeDraft(value);if(keepMode)setRefinement({draft:value,mode:keepMode});}}/></div>
+          {palette !== null && <div className="command-menu">
+            <div className="command-heading"><span>{options.length} {options.length === 1 ? 'search' : 'searches'} to try</span><span><kbd>↑</kbd><kbd>↓</kbd> to explore <kbd>esc</kbd> to close</span></div>
+            <div id="search-palette" role="listbox" aria-label="Search tools" className="command-options">
+              {options.map((item, index) => { const ItemIcon = SEARCH_ICONS[item.mode]; return <button type="button" role="option" aria-selected={activeOption === index} id={`search-option-${index}`} key={item.id} className="command-option" onMouseDown={e => e.preventDefault()} onClick={() => choose(item)} onPointerMove={() => setActiveOption(index)}><ItemIcon size={19} /><span><strong>{SEARCH_MODES[item.mode].label}</strong><span>{item.query}</span></span><ArrowRight size={16} /></button>; })}
+              {options.length === 0 && <p className="command-empty">No tool matches. Try “timer”, “weather” or “color”.</p>}
+            </div>
+          </div>}
+          <div className={`tool-reveal${showPanel ? ' is-open' : ''}`} style={{ height: showPanel ? panelHeight : 0 }}><div className="tool-clip">{showPanel && <section ref={panel} className="search-tools" aria-label={`${SEARCH_MODES[mode].label} search tools`}>
+            <div className="tool-meta"><span><Icon size={14} />{SEARCH_MODES[mode].label}</span><button type="button" className="decision-source" onClick={() => setAbout(v => !v)} aria-label={`${status}. How it works`}>{status}<Info size={12} /></button></div>
+            {syntax.tokens.filter(t => t.provenance !== 'deprecated').length > 0 && <div className="query-tokens" aria-label="Search filters">{syntax.tokens.filter(t => t.provenance !== 'deprecated').map((token, index) => <button type="button" key={`${token.start}-${index}`} onClick={() => changeDraft(removeSearchToken(draft, token))} aria-label={`Remove ${token.label}: ${token.value || 'unfinished'}`}><span>{token.label}{token.value ? `: ${token.value}` : ': …'}</span><X size={12} /></button>)}</div>}
+            <div className="mode-content" key={mode}><SearchTools mode={mode} draft={draft} onDraft={(value, keepMode) => { changeDraft(value); if (keepMode) setSelection({ draft: value, mode: keepMode }); }} /></div>
           </section>}</div></div>
         </div>
-        <div className="search-status"><span className={pending?'reading':''} aria-live="polite" aria-atomic="true">{!showPanel?(status||(!fluid?'The familiar search box. Switch to Fluid to see it adapt.':'Type naturally, or try a search below.')):pending?'Your last tool stays in place while Jev reads the edit.':fluid&&showPanel?<><Check size={13}/>{SEARCH_MODES[mode].hint}</>:!fluid?'The familiar search box. Switch to Fluid to see it adapt.':'Type naturally, or try a search below.'}</span>{hasDraft&&fluid&&<label className="manual-picker"><SlidersHorizontal size={13}/><span className="sr-only">Choose search tool</span><select aria-label="Choose search tool" value={manual??'auto'} onChange={e=>setManual(e.target.value==='auto'?null:e.target.value as ModeId)}><option value="auto">Auto</option>{EXAMPLES.map(m=><option key={m} value={m}>{SEARCH_MODES[m].label}</option>)}</select></label>}</div>
-        <p id="query-error" className="query-error" role={oversized||intent.error?'alert':undefined}>{oversized?'Keep the search under 2,000 bytes.':intent.error}<span>{intent.error&&<button type="button" onClick={()=>setRetry(v=>v+1)}>Retry</button>}</span></p>
-        {syntax.deprecated.length>0&&<p className="syntax-notice">{syntax.deprecated.join(' and ')} {syntax.deprecated.length>1?'are':'is'} no longer supported by Google. Try <button type="button" onClick={()=>tryExample('site')}>a website filter</button>.</p>}
-        <p className="privacy-note" id="privacy-note">{live===true?'Drafts are sent to TypeSafe while you type. Nothing is saved here.':live===false?'Live routing is unavailable. Try a labelled example or type a search operator.':'Checking live routing…'}</p>
+        <span className="sr-only" aria-live="polite" aria-atomic="true">{pending ? '' : showPanel ? `${SEARCH_MODES[mode].label} ready. ${status}` : ''}</span>
+        <p id="privacy-note" className="sr-only">{privacy}</p>
+        {(oversized || intent.error) && <p id="query-error" className="query-error" role="alert">{oversized ? 'Keep the search under 2,000 bytes.' : intent.error}{intent.error && <><button type="button" onClick={() => setRetry(v => v + 1)}>Retry</button><button type="button" onClick={openPalette}>Choose a tool</button></>}</p>}
+        {syntax.deprecated.length > 0 && <p className="syntax-notice">{syntax.deprecated.join(' and ')} {syntax.deprecated.length > 1 ? 'are' : 'is'} no longer supported by Google. <button type="button" onClick={() => choose({ id: 'site', mode: 'site', query: SEARCH_MODES.site.example })}>Try a website filter</button></p>}
       </div>
-      <section className="examples" aria-label="Try a search"><div className="examples-heading"><span>Try a little curiosity</span><button type="button" onClick={()=>setShowAll(v=>!v)} aria-expanded={showAll}>{showAll?'Show less':'All 12 searches'}<ChevronDown size={14} className={showAll?'flipped':''}/></button></div><div className="example-list">{(showAll?EXAMPLES:EXAMPLES.slice(0,6)).map(m=>{const ExampleIcon=icons[m];return <button type="button" key={m} className={m===mode&&hasDraft?'active':''} onClick={()=>tryExample(m)} aria-label={`Try ${SEARCH_MODES[m].label}: ${SEARCH_MODES[m].example}`}><ExampleIcon size={16}/><span>{m==='weather'?'Need an umbrella?':m==='convert'?'10 km in miles':m==='places'?'Cafes nearby':m==='define'?'Serendipity':m==='documents'?'Find a PDF':m==='finance'?'AAPL stock':SEARCH_MODES[m].label}</span></button>;})}</div><p className="example-hint">Same search bar. A different possibility with every thought.</p></section>
-      {about&&<section className="about-panel" aria-label="How Fluid Search works"><div className="about-title"><h2>From a thought to a useful tool.</h2><button type="button" className="icon-button" aria-label="Close explanation" onClick={()=>setAbout(false)}><X size={18}/></button></div><p>TypeSafe Jev reads natural-language intent and chooses a search interface. Explicit operators such as <code>site:</code> and <code>filetype:</code> are recognized locally and labelled “Search syntax”.</p><p>The converter calculates on your device. Other controls refine a query and open real Google results in a new tab. This experiment does not fetch weather, stock prices, maps, or news.</p><div className="how-flow"><span>Your query</span><ArrowRight size={15}/><span>Jev intent</span><ArrowRight size={15}/><span>A useful interface</span></div>{currentResult&&<p className="timing-details">Last live request: {currentResult.roundTripMs} ms round trip · {currentResult.model}{currentResult.timings?` · Budget check ${currentResult.timings.reserveMs} ms · Jev ${currentResult.timings.inferenceMs} ms · Settlement ${currentResult.timings.settleMs} ms`:''}</p>}<p className="about-small">A 150 ms typing pause, one live request at a time, and a shared US$5 allowance. Manual tools and labelled examples stay available if live routing stops. Retired Google operators are flagged; some older syntax may be ignored by Google.</p><a href="https://support.google.com/websearch/answer/2466433?hl=en" target="_blank" rel="noopener noreferrer">About Google search operators<ArrowUpRight size={14}/></a></section>}
+      {about && <section id="about-search" className="about-panel" aria-label="How Fluid Search works">
+        <div className="about-title"><h2>From a thought to a useful tool.</h2><button type="button" className="icon-button" aria-label="Close explanation" onClick={() => { setAbout(false); aboutButton.current?.focus(); }}><X size={18} /></button></div>
+        <p>{privacy} This is an independent experiment, not affiliated with Google.</p>
+        <p>TypeSafe Jev chooses an interface from the meaning of your search. Type <code>/</code> to explore every tool immediately. Selecting one is labelled “Selected by you”; editing its query returns to automatic routing. Explicit search operators are recognized on your device.</p>
+        <div className="how-flow"><span>Your query</span><ArrowRight size={15} /><span>Jev intent</span><ArrowRight size={15} /><span>A useful interface</span></div>
+        <p>Calculators, clocks, color controls, the orbit lab and game run on your device. Knowledge cards cover a small set of examples; their source buttons explain the data. Weather loads a real forecast for Singapore or Tokyo. Currency conversion uses daily ECB reference rates. Stocks, places and news link to Google for current results. The map illustration is schematic.</p>
+        <p>The orbit lab is a prebuilt Newtonian model, not an AI-generated simulation or a model of black holes. Nothing in this demo generates answers or executes AI tools. Enter opens your query on Google in a new tab.</p>
+        {currentResult && <p className="timing-details">Last live request: {currentResult.roundTripMs} ms round trip · {currentResult.model}{currentResult.timings ? ` · Budget check ${currentResult.timings.reserveMs} ms · Jev ${currentResult.timings.inferenceMs} ms · Settlement ${currentResult.timings.settleMs} ms` : ''}</p>}
+        <p className="about-small">A 150 ms typing pause, one live request at a time, and a shared US$5 allowance. No keyword rules pretend to be Jev. The / menu works even when live routing is unavailable. Timers and games are kept only while their panel is open; nothing is saved. Metronome audio starts only when you press Start.</p>
+        <label className="about-picker">Keep a tool selected <select aria-label="Choose search tool" value={manual ?? 'auto'} onChange={e => { setManual(e.target.value === 'auto' ? null : e.target.value as ModeId); if(e.target.value === 'auto') setSelection(null); }}><option value="auto">Auto</option>{EXAMPLES.map(m => <option key={m} value={m}>{SEARCH_MODES[m].label}</option>)}</select></label>
+        <a href="https://github.com/anishfn/shapeshift" target="_blank" rel="noopener noreferrer">Interaction inspiration: ShapeShift<ArrowUpRight size={14} /></a>
+      </section>}
     </main>
-    <footer className="site-footer"><span>An independent experiment. Not affiliated with Google.</span><a href="https://typesafe.ai" target="_blank" rel="noopener noreferrer">Built with <strong>TypeSafe Jev</strong><ArrowUpRight size={13}/></a></footer>
+    <footer className="site-footer"><a href="https://typesafe.ai" target="_blank" rel="noopener noreferrer">Built with <strong>TypeSafe Jev</strong><ArrowUpRight size={13} /></a></footer>
   </div>;
 }

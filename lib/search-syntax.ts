@@ -184,6 +184,11 @@ function scanSearchSyntax(draft: string): ParsedSearchSyntax & { openQuote: bool
 
 /** Local, literal syntax only. Natural-language intent is left to Jev. */
 export function parseSearchSyntax(draft: string): ParsedSearchSyntax {
+  // Arithmetic uses the same * and () characters as search filters. Let Jev
+  // classify numeric expressions; do not turn a multiplication into a wildcard.
+  if (/^[\d\s()+\-*/.^%×÷]+$/.test(draft) && /\d/.test(draft)) {
+    return { mode: null, tokens: [], deprecated: [] };
+  }
   const { mode, tokens, deprecated } = scanSearchSyntax(draft);
   return { mode, tokens, deprecated };
 }

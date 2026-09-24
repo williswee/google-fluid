@@ -1,29 +1,37 @@
 # Fluid Search
 
-A white Google-style search bar that takes the shape of the query. Ordinary language is classified by **TypeSafe Jev**; the same input unfolds into twelve useful search tools. This replaces the earlier ChatGPT composer prototype.
+A white Google-style search bar that takes the shape of the query. Ordinary language is classified by **TypeSafe Jev**; the same input unfolds into 21 useful search interfaces. This replaces the earlier ChatGPT composer prototype.
 
 Try it at [chatgptfluid.vercel.app](https://chatgptfluid.vercel.app). The existing URL and private repository are retained during the pivot. This is an independent experiment, not affiliated with Google or TypeSafe.
 
 ## What to try
 
-| Query | Interface |
+Type `/` in the search bar (or tap its `/` button) to browse all 21 interfaces and 28 prepared queries. Filter the list, navigate with arrows, and press Enter. Escape restores the draft and cursor. Choosing a tool is immediate and explicitly labelled **Selected by you**; editing the query returns to Jev.
+
+| Try | What you can do |
 | --- | --- |
-| will I need an umbrella in Tokyo tomorrow | Forecast period controls |
-| 10 km in miles | Working local unit converter |
-| quiet cafes in Singapore | Place categories and Google Maps link |
-| what does serendipity mean | Definition, synonyms and etymology |
-| AAPL stock performance | Price, news, earnings and comparisons |
-| Dune Part Two showtimes | Showtimes, trailer, reviews and cast |
-| latest news about reusable rockets | News and recency controls |
-| climate change report filetype:pdf | Selectable document formats |
-| design systems site:github.com | Website scope editor |
-| solar energy after:2024-01-01 before:2025-01-01 | Date range controls |
-| "jaguar speed" -car | Exact phrases and exclusions |
-| why do cats purr | General web search |
+| `24 * 18 + 6` / `split $84 between 3 people with a 15% tip` | Calculate and adjust a tip or split |
+| `set a timer for 5 minutes` / `start a stopwatch` | Start, pause, reset, record laps |
+| `metronome at 80 bpm` | Set tempo and explicitly start sound |
+| `color picker #4285f4` / `color picker coral` | Adjust RGB, choose a color and copy its hex |
+| `10 km in miles` / `100 USD to EUR` | Convert local units or use a dated ECB rate |
+| `will I need an umbrella in Tokyo tomorrow` | Real seven-day forecast, sunrise, units and day selection |
+| `what does serendipity mean` / `define:ephemeral` | Meaning, original example and related words |
+| `Dune Part Two` / `Interstellar` | Film facts, cast and movie-night timing |
+| `Earth vs Mars` | Compare days/years/moons and calculate Mars age |
+| `show me how gravity affects an orbit` | Adjust mass/radius in a Newtonian orbit model |
+| `play tic-tac-toe` | Play two-player X/O with undo and reset |
+| `do a barrel roll` / `askew` | Replay a bounded visual toy |
+| `quiet cafes in Singapore` / `AAPL stock performance` | Refine Maps or market searches |
+| `latest news about reusable rockets` | Choose news recency |
+| `climate report filetype:pdf` / `design systems site:github.com` | Edit document or website filters |
+| `solar energy after:2024-01-01` / `"jaguar speed" -car` | Dates, exact words and exclusions |
 
-**Jev** means a live intent classification, with measured browser request time. **Search syntax** means deterministic local parsing, including partial prefixes such as `site:`. **Selected** means the visitor chose the tool or refinement. **Example** means an explicitly labelled fallback with no live prediction. The UI never substitutes keyword rules and calls them Jev.
+**Jev** means a real intent decision with measured round-trip time. **Search syntax** means local parsing, including incomplete prefixes such as `site:`. **Selected by you** means an explicit visitor choice. No keyword fallback pretends to be Jev. Numeric arithmetic bypasses search-operator parsing so multiplication is not mistaken for a wildcard.
 
-The converter computes compatible length, weight and temperature units on-device. Other controls refine a search or open Google results on explicit visitor action. No weather, market, map, film, dictionary or news results are fetched or invented. Currency rates are looked up on Google. `cache:` and `related:` are flagged as retired; older Boolean and field syntax may not be honored by Google. See [Google's supported operators](https://support.google.com/websearch/answer/2466433?hl=en) and [documentation updates](https://developers.google.com/search/updates).
+Utilities run on-device. Weather supports Singapore/Tokyo and loads Open-Meteo data through a fixed-city endpoint. Currency supports USD/EUR/GBP/SGD through daily ECB reference rates via Frankfurter. No query text or amount is sent to those data providers. Curated dictionary, film and planet entries expose their sources in collapsed disclosures; unsupported entities keep the original Google query. Stocks, maps and news remain real outbound searches. The orbit lab is a prebuilt educational model, not generative AI or relativistic physics. `cache:` and `related:` are flagged as retired.
+
+Inspired by [ShapeShift](https://github.com/anishfn/shapeshift/tree/5e24166dcbde6e794f0bd5b1b4bd395aaee5fc19): discoverable slash commands, intent-to-widget mapping, and deterministic interactions after intent classification. These components were independently implemented; no source code or assets were copied. We do not adopt its silent offline keyword fallback or saved-card history.
 
 ## Run locally
 
@@ -39,11 +47,11 @@ Default configuration disables live inference. To connect it, apply the isolated
 
 ## Architecture
 
-`components/FluidSearch.tsx` owns the anchored input, comparison, provenance and examples. `SearchTools.tsx` renders distinct functional controls. `lib/search-syntax.ts` parses and edits explicit operators without changing unrelated text. `lib/conversion.ts` contains deterministic unit math.
+`components/FluidSearch.tsx` owns the anchored input, comparison, provenance, slash palette and the How it works disclosure. `lib/search-presets.ts` is the shared discovery registry. `SearchTools.tsx` renders distinct functional controls. `lib/search-syntax.ts` parses and edits explicit operators without changing unrelated text. `lib/conversion.ts` contains deterministic unit math. UtilityTools, KnowledgeTools and PlayTools isolate each interactive family. CurrencyTool uses a validated fixed-currency endpoint; neither external-data endpoint accepts drafts.
 
 Natural-language drafts dispatch after a 150 ms pause. `hooks/useIntent.ts` permits one request in flight, coalesces edits, ignores obsolete responses and retains exact-draft results in tab memory only. Dispatched calls finish accounting. IME composition and oversized drafts do not trigger inference.
 
-`POST /api/intent` accepts `{ draft: string }`, limited to 2,000 UTF-8 bytes. The official server-only SDK asks one Choice question using `jev-1.13.0`, no automatic retries and a five-second provider timeout. The result includes mode, probabilities for all twelve routes, model, source (`live`), server latency and reserve/inference/settlement timings. The confidence gate remains 0.70 with a 0.20 winning margin; ambiguity returns general. Effort/model previews from the chat prototype were removed.
+`POST /api/intent` accepts `{ draft: string }`, limited to 2,000 UTF-8 bytes. The official server-only SDK asks one Choice question using `jev-1.13.0`, no automatic retries and a five-second provider timeout. The result includes mode, probabilities for all 21 routes, model, source (`live`), server latency and reserve/inference/settlement timings. The confidence gate remains 0.70 with a 0.20 winning margin; ambiguity returns general. Effort/model previews from the chat prototype were removed.
 
 `GET /api/status` reports configuration readiness, not guaranteed budget or provider availability. The browser distinguishes immediate typing feedback from the confirmed route. The expanding panel is measured independently of the input, uses one bounded 280 ms height transition, and respects reduced motion.
 
@@ -53,7 +61,7 @@ The same **US$5 total Jev allowance** covers visitors, development, evaluation a
 
 Vercel Hobby runs the API in `icn1` alongside the existing Seoul Supabase database. API secrets stay in encrypted server environment variables. WAF and database rate limits remain in place. See [operations](docs/OPERATIONS.md) and [budget design](supabase/README.md).
 
-The app stores no query text or conversation history. Live natural-language drafts are sent to TypeSafe as you type; the notice appears beside the field. Explicit syntax, local conversions and offline examples do not call Jev. Hosting/provider metadata processing is outside the app's prompt storage policy.
+The app stores no query text or conversation history. Live natural-language drafts are sent to TypeSafe as you type; the notice lives inside How it works and is also linked to the input for assistive technology. Explicit syntax, palette choices and widget edits do not call Jev. Weather and exchange endpoints fetch only whitelisted city/currency identifiers, with 15-minute and one-hour caching respectively. Metronome audio requires an explicit click and stops on unmount; timers/games are not persisted. Hosting/provider metadata processing is outside the app's prompt storage policy.
 
 ## Verification
 
@@ -73,7 +81,7 @@ npm run evaluate -- --base-url http://127.0.0.1:3000 --split held-out
 node scripts/measure-interaction.mjs https://chatgptfluid.vercel.app evaluation/results/new-search-browser-check.json
 ```
 
-The new `search-v1` evaluation has separate 24-case development and held-out sets covering all twelve routes. Both first runs completed 24/24 correctly. These small authored English sets are acceptance checks, not broad accuracy claims. Reports distinguish local endpoint latency from public browser measurements. The browser script checks eight live decisions and four local-syntax transitions, without mocks or retries. Existing report files are never overwritten. See [current delivery](docs/DELIVERY.md).
+The `search-v2` development and held-out sets each contain 42 cases, two per route. Both are evaluated through the protected endpoint. Reports distinguish local endpoint latency from public browser measurements; these small authored English sets are acceptance checks, not broad accuracy claims. Historical search-v1 reports remain unchanged. See [current delivery](docs/DELIVERY.md) for actual results.
 
 ## Previous prototype
 

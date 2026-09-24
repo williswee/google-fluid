@@ -5,7 +5,7 @@ export const SEARCH_MODES: Record<ModeId, { label: string; hint: string; example
   weather: { label: 'Weather', hint: 'A forecast, shaped around your plans.', example: 'will I need an umbrella in Tokyo tomorrow' },
   finance: { label: 'Stocks', hint: 'Follow the company. Find the context.', example: 'AAPL stock performance' },
   places: { label: 'Places', hint: 'Somewhere worth going.', example: 'quiet cafes in Singapore' },
-  movies: { label: 'Movies', hint: 'Find your next watch.', example: 'Dune Part Two showtimes' },
+  movies: { label: 'Movies', hint: 'Find your next watch.', example: 'Dune Part Two' },
   convert: { label: 'Convert', hint: 'A different unit. The same idea.', example: '10 km in miles' },
   define: { label: 'Dictionary', hint: 'Find just the right meaning.', example: 'what does serendipity mean' },
   documents: { label: 'Documents', hint: 'The right information. In the right format.', example: 'climate change report filetype:pdf' },
@@ -13,6 +13,35 @@ export const SEARCH_MODES: Record<ModeId, { label: string; hint: string; example
   news: { label: 'News', hint: 'Catch up on what is happening.', example: 'latest news about reusable rockets' },
   date: { label: 'Date range', hint: 'Put a little time around your search.', example: 'solar energy after:2024-01-01 before:2025-01-01' },
   precise: { label: 'Fine-tune', hint: 'A few details make all the difference.', example: '"jaguar speed" -car' },
+  calculate: { label: 'Calculator', hint: 'A little less mental maths.', example: '24 * 18 + 6' },
+  timer: { label: 'Timer', hint: 'Make a little time.', example: 'set a timer for 5 minutes' },
+  stopwatch: { label: 'Stopwatch', hint: 'See how long it takes.', example: 'start a stopwatch' },
+  metronome: { label: 'Metronome', hint: 'Find your rhythm.', example: 'metronome at 80 bpm' },
+  color: { label: 'Color picker', hint: 'Find your shade.', example: 'color picker #4285f4' },
+  compare: { label: 'Compare', hint: 'See both sides.', example: 'Earth vs Mars' },
+  science: { label: 'Orbit lab', hint: 'A little space to experiment.', example: 'show me how gravity affects an orbit' },
+  game: { label: 'Tic-tac-toe', hint: 'Your move.', example: 'play tic-tac-toe' },
+  play: { label: 'Easter eggs', hint: 'A small surprise.', example: 'do a barrel roll' },
 };
 
-export const EXAMPLES: ModeId[] = ['weather', 'convert', 'places', 'define', 'documents', 'finance', 'movies', 'site', 'news', 'date', 'precise', 'general'];
+export const EXAMPLES: ModeId[] = ['calculate','timer','convert','weather','color','stopwatch','metronome','define','movies','compare','science','game','play','places','finance','documents','site','news','date','precise','general'];
+
+export type SearchExample = { id: string; mode: ModeId; query: string };
+const alternatives: Partial<Record<ModeId, string>> = {
+  convert: '100 USD to EUR',
+  calculate: 'split $84 between 3 people with a 15% tip',
+  weather: 'sunrise in Singapore tomorrow',
+  color: 'color picker coral',
+  movies: 'Interstellar',
+  define: 'define:ephemeral',
+  play: 'askew',
+};
+export const SEARCH_EXAMPLES: SearchExample[] = EXAMPLES.flatMap(mode => [
+  { id: mode, mode, query: SEARCH_MODES[mode].example },
+  ...(alternatives[mode] ? [{ id: `${mode}-2`, mode, query: alternatives[mode]! }] : []),
+]);
+export function filterExamples(filter: string): SearchExample[] {
+  const words = filter.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  return SEARCH_EXAMPLES.filter(item => words.every(word =>
+    `${SEARCH_MODES[item.mode].label} ${item.query}`.toLowerCase().includes(word)));
+}

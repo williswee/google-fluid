@@ -1,23 +1,23 @@
 {
   "schemaVersion": 1,
-  "dataset": "search-v1",
+  "dataset": "search-v2",
   "split": "held-out",
   "language": "en",
-  "description": "Authored English search-intent cases for the twelve-mode fluid search demo; not user data. Separate from the archived five-mode composer datasets.",
+  "description": "Authored English search-intent cases for the twenty-one-mode Fluid Search demo; not user data. Two cases per mode in each disjoint split. Includes explicit negation, topic mentions and ambiguity. Separate from historical search-v1 reports and archived composer datasets.",
   "cases": [
     {
       "id": "search-held-out-general-01",
       "expected": "general",
       "scenario": "ambiguous single topic",
-      "draft": "apple",
-      "rationale": "The topic alone does not distinguish a company, fruit, quote, or source restriction."
+      "draft": "mercury",
+      "rationale": "The topic could mean a planet, element, deity or title; it does not clearly request any specialized tool."
     },
     {
       "id": "search-held-out-general-02",
       "expected": "general",
-      "scenario": "mention without requesting mode",
-      "draft": "Explain how a stock exchange works; no live prices needed.",
-      "rationale": "The user requests an explanation and explicitly excludes live pricing."
+      "scenario": "trick mention without animation",
+      "draft": "Explain what a barrel roll is, without animating anything.",
+      "rationale": "The user requests an explanation and explicitly rejects the visual trick."
     },
     {
       "id": "search-held-out-weather-01",
@@ -172,6 +172,132 @@
       "scenario": "remove unwanted term",
       "draft": "Coffee brewing guides with every espresso result excluded",
       "rationale": "The user explicitly removes an unwanted topic from the results."
+    },
+    {
+      "id": "search-held-out-calculate-01",
+      "expected": "calculate",
+      "scenario": "division and addition",
+      "draft": "What is 81 / 9 + 6?",
+      "rationale": "The request is arithmetic, without converting one unit to another."
+    },
+    {
+      "id": "search-held-out-calculate-02",
+      "expected": "calculate",
+      "scenario": "shared bill arithmetic",
+      "draft": "Split $132 among 6 friends and add a 10% tip",
+      "rationale": "The user asks for a bill total and per-person arithmetic."
+    },
+    {
+      "id": "search-held-out-timer-01",
+      "expected": "timer",
+      "scenario": "cooking countdown",
+      "draft": "Give me a 12 minute countdown for the pasta",
+      "rationale": "A cooking countdown uses the timer, not a count-up stopwatch."
+    },
+    {
+      "id": "search-held-out-timer-02",
+      "expected": "timer",
+      "scenario": "combined units countdown",
+      "draft": "Start a 1 minute 30 second tea timer",
+      "rationale": "The requested countdown combines minutes and seconds."
+    },
+    {
+      "id": "search-held-out-stopwatch-01",
+      "expected": "stopwatch",
+      "scenario": "explicit elapsed measurement",
+      "draft": "Measure elapsed time for this task with a stopwatch",
+      "rationale": "The user requests count-up elapsed-time measurement."
+    },
+    {
+      "id": "search-held-out-stopwatch-02",
+      "expected": "stopwatch",
+      "scenario": "lap timing",
+      "draft": "Let me record laps on a stopwatch",
+      "rationale": "Lap recording is an explicit stopwatch use."
+    },
+    {
+      "id": "search-held-out-metronome-01",
+      "expected": "metronome",
+      "scenario": "instrument practice tempo",
+      "draft": "I need a metronome at 96 bpm for guitar practice",
+      "rationale": "A regular music-practice tempo requests the metronome."
+    },
+    {
+      "id": "search-held-out-metronome-02",
+      "expected": "metronome",
+      "scenario": "audible beat wording",
+      "draft": "Play a regular click at 60 beats per minute",
+      "rationale": "A regular tempo-controlled click is a metronome rather than a game or timer."
+    },
+    {
+      "id": "search-held-out-color-01",
+      "expected": "color",
+      "scenario": "colour picker adjustment",
+      "draft": "Let me adjust a coral colour",
+      "rationale": "The user wants to manipulate a supported named colour."
+    },
+    {
+      "id": "search-held-out-color-02",
+      "expected": "color",
+      "scenario": "alternative hex value",
+      "draft": "Inspect #2a9d8f in the colour picker",
+      "rationale": "The explicit hex and colour picker request is unambiguous."
+    },
+    {
+      "id": "search-held-out-compare-01",
+      "expected": "compare",
+      "scenario": "versus phrasing",
+      "draft": "Earth versus Mars: show the differences",
+      "rationale": "The supported pair and explicit difference request call for comparison."
+    },
+    {
+      "id": "search-held-out-compare-02",
+      "expected": "compare",
+      "scenario": "planet time comparison",
+      "draft": "What would days and years look like on Mars compared with Earth?",
+      "rationale": "The user requests a comparison of planetary day and year lengths, not a simulation."
+    },
+    {
+      "id": "search-held-out-science-01",
+      "expected": "science",
+      "scenario": "central mass experiment",
+      "draft": "Let me change a planet's mass and watch the satellite's orbit",
+      "rationale": "Changing central mass and seeing its effect is an interactive orbit experiment."
+    },
+    {
+      "id": "search-held-out-science-02",
+      "expected": "science",
+      "scenario": "orbital radius experiment",
+      "draft": "Visualize a circular orbit and let me adjust its radius",
+      "rationale": "The requested radius control matches the simplified orbit simulation."
+    },
+    {
+      "id": "search-held-out-game-01",
+      "expected": "game",
+      "scenario": "same device play",
+      "draft": "I want to play a two-player tic tac toe game here",
+      "rationale": "The user explicitly requests the supported local two-player game."
+    },
+    {
+      "id": "search-held-out-game-02",
+      "expected": "game",
+      "scenario": "playable board request",
+      "draft": "Open a noughts-and-crosses board so we can play",
+      "rationale": "A playable board is requested, rather than an explanation of the game."
+    },
+    {
+      "id": "search-held-out-play-01",
+      "expected": "play",
+      "scenario": "named search Easter egg",
+      "draft": "Show me the barrel roll Easter egg",
+      "rationale": "The user requests the visual trick itself."
+    },
+    {
+      "id": "search-held-out-play-02",
+      "expected": "play",
+      "scenario": "bounded tilt request",
+      "draft": "Tilt the search widget with the askew trick",
+      "rationale": "The request concerns a visual Easter egg rather than colour, search filtering or gameplay."
     }
   ]
 }

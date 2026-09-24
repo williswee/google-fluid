@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-24T02:06:20.811Z",
+  "generatedAt": "2026-09-24T02:44:32.771Z",
   "title": "Design System: Fluid Search",
   "extensions": {
     "shadows": [
@@ -49,7 +49,22 @@
       {
         "name": "reduced-motion",
         "value": "animation:none; transition-duration:.01ms; scroll-behavior:auto",
-        "purpose": "Disable motion and clear arrival transform/clip when reduced motion is preferred."
+        "purpose": "Disable transitions and geometric animation, including orbit and Easter eggs; functional numeric readouts and controls remain available."
+      },
+      {
+        "name": "orbit",
+        "value": "requestAnimationFrame; period from circular-orbit physics; time scale 600",
+        "purpose": "Satellite motion follows the current physical model and pauses through the control, page visibility or reduced-motion preference."
+      },
+      {
+        "name": "barrel-roll",
+        "value": "1.15s cubic-bezier(.16,1,.3,1)",
+        "purpose": "One user-triggered full rotation of the contained miniature; input and surrounding page stay still."
+      },
+      {
+        "name": "askew",
+        "value": ".55s cubic-bezier(.16,1,.3,1)",
+        "purpose": "One user-triggered -9deg tilt of the contained miniature, with reset."
       }
     ],
     "breakpoints": [
@@ -60,6 +75,14 @@
       {
         "name": "compact",
         "value": "700px"
+      },
+      {
+        "name": "stack-experiments",
+        "value": "560px"
+      },
+      {
+        "name": "stack-colour",
+        "value": "500px"
       },
       {
         "name": "narrow",
@@ -528,6 +551,174 @@
           "oklch(84% 0.0029 264.54)",
           "oklch(95% 0.0029 264.54)"
         ]
+      },
+      "utility-tint": {
+        "role": "primary",
+        "displayName": "Utility Tint",
+        "tonalRamp": [
+          "oklch(15% 0.0115 264.51)",
+          "oklch(26% 0.0115 264.51)",
+          "oklch(38% 0.0115 264.51)",
+          "oklch(49% 0.0115 264.51)",
+          "oklch(61% 0.0115 264.51)",
+          "oklch(72% 0.0115 264.51)",
+          "oklch(84% 0.0115 264.51)",
+          "oklch(95% 0.0115 264.51)"
+        ]
+      },
+      "metronome-accent": {
+        "role": "primary",
+        "displayName": "Metronome Accent",
+        "tonalRamp": [
+          "oklch(15% 0.1071 45.76)",
+          "oklch(26% 0.1071 45.76)",
+          "oklch(38% 0.1071 45.76)",
+          "oklch(49% 0.1071 45.76)",
+          "oklch(61% 0.1071 45.76)",
+          "oklch(72% 0.1071 45.76)",
+          "oklch(84% 0.1071 45.76)",
+          "oklch(95% 0.1071 45.76)"
+        ]
+      },
+      "metronome-tint": {
+        "role": "primary",
+        "displayName": "Metronome Tint",
+        "tonalRamp": [
+          "oklch(15% 0.0113 71.90)",
+          "oklch(26% 0.0113 71.90)",
+          "oklch(38% 0.0113 71.90)",
+          "oklch(49% 0.0113 71.90)",
+          "oklch(61% 0.0113 71.90)",
+          "oklch(72% 0.0113 71.90)",
+          "oklch(84% 0.0113 71.90)",
+          "oklch(95% 0.0113 71.90)"
+        ]
+      },
+      "color-accent": {
+        "role": "primary",
+        "displayName": "Color Accent",
+        "tonalRamp": [
+          "oklch(15% 0.1496 294.90)",
+          "oklch(26% 0.1496 294.90)",
+          "oklch(38% 0.1496 294.90)",
+          "oklch(49% 0.1496 294.90)",
+          "oklch(61% 0.1496 294.90)",
+          "oklch(72% 0.1496 294.90)",
+          "oklch(84% 0.1496 294.90)",
+          "oklch(95% 0.1496 294.90)"
+        ]
+      },
+      "color-tint": {
+        "role": "primary",
+        "displayName": "Color Tint",
+        "tonalRamp": [
+          "oklch(15% 0.0098 305.41)",
+          "oklch(26% 0.0098 305.41)",
+          "oklch(38% 0.0098 305.41)",
+          "oklch(49% 0.0098 305.41)",
+          "oklch(61% 0.0098 305.41)",
+          "oklch(72% 0.0098 305.41)",
+          "oklch(84% 0.0098 305.41)",
+          "oklch(95% 0.0098 305.41)"
+        ]
+      },
+      "science-accent": {
+        "role": "primary",
+        "displayName": "Science Accent",
+        "tonalRamp": [
+          "oklch(15% 0.1198 278.86)",
+          "oklch(26% 0.1198 278.86)",
+          "oklch(38% 0.1198 278.86)",
+          "oklch(49% 0.1198 278.86)",
+          "oklch(61% 0.1198 278.86)",
+          "oklch(72% 0.1198 278.86)",
+          "oklch(84% 0.1198 278.86)",
+          "oklch(95% 0.1198 278.86)"
+        ]
+      },
+      "science-tint": {
+        "role": "primary",
+        "displayName": "Science Tint",
+        "tonalRamp": [
+          "oklch(15% 0.0093 286.23)",
+          "oklch(26% 0.0093 286.23)",
+          "oklch(38% 0.0093 286.23)",
+          "oklch(49% 0.0093 286.23)",
+          "oklch(61% 0.0093 286.23)",
+          "oklch(72% 0.0093 286.23)",
+          "oklch(84% 0.0093 286.23)",
+          "oklch(95% 0.0093 286.23)"
+        ]
+      },
+      "play-accent": {
+        "role": "primary",
+        "displayName": "Play Accent",
+        "tonalRamp": [
+          "oklch(15% 0.0964 165.95)",
+          "oklch(26% 0.0964 165.95)",
+          "oklch(38% 0.0964 165.95)",
+          "oklch(49% 0.0964 165.95)",
+          "oklch(61% 0.0964 165.95)",
+          "oklch(72% 0.0964 165.95)",
+          "oklch(84% 0.0964 165.95)",
+          "oklch(95% 0.0964 165.95)"
+        ]
+      },
+      "play-tint": {
+        "role": "primary",
+        "displayName": "Play Tint",
+        "tonalRamp": [
+          "oklch(15% 0.0109 167.81)",
+          "oklch(26% 0.0109 167.81)",
+          "oklch(38% 0.0109 167.81)",
+          "oklch(49% 0.0109 167.81)",
+          "oklch(61% 0.0109 167.81)",
+          "oklch(72% 0.0109 167.81)",
+          "oklch(84% 0.0109 167.81)",
+          "oklch(95% 0.0109 167.81)"
+        ]
+      },
+      "play-ink": {
+        "role": "primary",
+        "displayName": "Play Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0625 240.09)",
+          "oklch(26% 0.0625 240.09)",
+          "oklch(38% 0.0625 240.09)",
+          "oklch(49% 0.0625 240.09)",
+          "oklch(61% 0.0625 240.09)",
+          "oklch(72% 0.0625 240.09)",
+          "oklch(84% 0.0625 240.09)",
+          "oklch(95% 0.0625 240.09)"
+        ]
+      },
+      "play-action": {
+        "role": "primary",
+        "displayName": "Play Action",
+        "tonalRamp": [
+          "oklch(15% 0.0876 241.25)",
+          "oklch(26% 0.0876 241.25)",
+          "oklch(38% 0.0876 241.25)",
+          "oklch(49% 0.0876 241.25)",
+          "oklch(61% 0.0876 241.25)",
+          "oklch(72% 0.0876 241.25)",
+          "oklch(84% 0.0876 241.25)",
+          "oklch(95% 0.0876 241.25)"
+        ]
+      },
+      "command-selected": {
+        "role": "primary",
+        "displayName": "Command Selected",
+        "tonalRamp": [
+          "oklch(15% 0.0132 262.38)",
+          "oklch(26% 0.0132 262.38)",
+          "oklch(38% 0.0132 262.38)",
+          "oklch(49% 0.0132 262.38)",
+          "oklch(61% 0.0132 262.38)",
+          "oklch(72% 0.0132 262.38)",
+          "oklch(84% 0.0132 262.38)",
+          "oklch(95% 0.0132 262.38)"
+        ]
       }
     }
   },
@@ -536,7 +727,7 @@
       "name": "Search action",
       "kind": "button",
       "refersTo": "search-button",
-      "description": "Circular submit action; enabled only for a valid non-composing query.",
+      "description": "Circular submit action; disabled for invalid/composing queries and while slash discovery is open.",
       "html": "<button class=\"ds-search-button\" aria-label=\"Search Google\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></button>",
       "css": ".ds-search-button{font-family:Geist,Arial,sans-serif;width:44px;height:44px;border:0;border-radius:50%;background:#1a73e8;color:white;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s,transform .15s}.ds-search-button:hover{background:#1559bc}.ds-search-button:active{transform:scale(.94)}.ds-search-button:disabled{background:#f1f3f4;color:#81868d;cursor:default}.ds-search-button:focus-visible,.ds-input:focus-visible,.ds-choice:focus-visible,.ds-nav button:focus-visible,.ds-chip:focus-visible,.ds-example:focus-visible{outline:3px solid #8ab4f8;outline-offset:3px}"
     },
@@ -552,7 +743,7 @@
       "name": "Tool choices",
       "kind": "button",
       "description": "Pressed choices use the current tool accent.",
-      "html": "<div class=\"ds-choices\" role=\"group\" aria-label=\"Forecast period\"><button class=\"ds-choice\" aria-pressed=\"true\">Today</button><button class=\"ds-choice\" aria-pressed=\"false\">Tomorrow</button></div>",
+      "html": "<div class=\"ds-choices\" role=\"group\" aria-label=\"Stock information\"><button class=\"ds-choice\" aria-pressed=\"true\">Price</button><button class=\"ds-choice\" aria-pressed=\"false\">News</button></div>",
       "css": ".ds-choices{display:flex;flex-wrap:wrap;gap:6px;padding:8px;background:var(--tint,#f5f8ff)}.ds-choice{font-family:Geist,Arial,sans-serif;min-height:44px;min-width:44px;font-size:11px;border:1px solid color-mix(in srgb,var(--accent,#1967d2) 15%,white);border-radius:8px;padding:8px 12px;background:#ffffff70;color:var(--ink,#202124);cursor:pointer;transition:background .15s,color .15s}.ds-choice[aria-pressed=true]{background:var(--accent,#1967d2);color:white;border-color:var(--accent,#1967d2)}.ds-choice:hover:not([aria-pressed=true]){background:white}.ds-search-button:focus-visible,.ds-input:focus-visible,.ds-choice:focus-visible,.ds-nav button:focus-visible,.ds-chip:focus-visible,.ds-example:focus-visible{outline:3px solid #8ab4f8;outline-offset:3px}"
     },
     {
@@ -570,21 +761,51 @@
       "css": ".ds-chip{font-family:Geist,Arial,sans-serif;display:flex;align-items:center;gap:7px;min-height:44px;min-width:44px;background:#fff9;border:1px solid color-mix(in srgb,var(--accent,#1967d2) 18%,white);border-radius:7px;color:var(--accent,#1967d2);font-size:11px;padding:8px 10px;text-align:left;cursor:pointer}.ds-chip span{overflow-wrap:anywhere}.ds-chip:hover{background:white}.ds-search-button:focus-visible,.ds-input:focus-visible,.ds-choice:focus-visible,.ds-nav button:focus-visible,.ds-chip:focus-visible,.ds-example:focus-visible{outline:3px solid #8ab4f8;outline-offset:3px}"
     },
     {
-      "name": "Example tile",
+      "name": "Slash discovery control",
+      "kind": "button",
+      "refersTo": "slash-button",
+      "description": "Opens the searchable tool menu without discarding the current query.",
+      "html": "<button class=\"ds-slash\" aria-label=\"Browse all search tools\" aria-expanded=\"false\"><span aria-hidden=\"true\">/</span></button>",
+      "css": ".ds-slash{font-family:Geist,Arial,sans-serif;width:44px;height:44px;display:grid;place-items:center;flex-shrink:0;border:0;background:none;border-radius:10px;color:#697078;cursor:pointer}.ds-slash span{border:1px solid #d9dde3;border-radius:5px;width:23px;height:25px;display:grid;place-items:center;font-size:15px;background:#fafbfc}.ds-slash:hover,.ds-slash[aria-expanded=true]{background:#f1f5fb;color:#1967d2}.ds-slash:focus-visible{outline:3px solid #8ab4f8;outline-offset:3px}"
+    },
+    {
+      "name": "Command option",
+      "kind": "nav",
+      "refersTo": "command-option",
+      "description": "Tool name and example query form one generous active option inside the scrolling slash menu.",
+      "html": "<div role=\"listbox\" aria-label=\"Search tools\"><button class=\"ds-command-option\" role=\"option\" aria-selected=\"true\"><svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><rect x=\"5\" y=\"3\" width=\"14\" height=\"18\" rx=\"2\"/><path d=\"M8 7h8M8 11h2m4 0h2m-8 4h2m4 0h2\"/></svg><span><strong>Calculator</strong><span>24 * 18 + 6</span></span><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></button></div>",
+      "css": ".ds-command-option{font-family:Geist,Arial,sans-serif;display:flex;align-items:center;gap:15px;padding:10px 15px;min-height:64px;width:100%;text-align:left;border:0;background:white;border-radius:10px;color:#53647b;cursor:pointer}.ds-command-option>span{display:flex;flex:1;flex-direction:column;gap:4px;min-width:0}.ds-command-option strong{font-size:13px;color:#202124;font-weight:500}.ds-command-option>span>span{font-size:12px;color:#62666c;overflow-wrap:anywhere}.ds-command-option>svg{flex-shrink:0}.ds-command-option[aria-selected=true]{background:#f0f5fe;color:#1967d2}.ds-command-option:focus-visible{outline:3px solid #8ab4f8;outline-offset:-3px}"
+    },
+    {
+      "name": "Clock utility",
+      "kind": "custom",
+      "refersTo": "utility-button",
+      "description": "A tabular clock reading and explicit start/reset controls within the tinted tool, shown in its ready state.",
+      "html": "<div class=\"ds-clock-tool\"><output class=\"ds-clock\" aria-label=\"Time remaining\">05:00</output><div class=\"ds-clock-actions\"><button class=\"ds-clock-start\" type=\"button\"><svg width=\"17\" height=\"17\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"m8 4 12 8-12 8z\"/></svg>Start timer</button><button type=\"button\">Reset</button></div></div>",
+      "css": ".ds-clock-tool{font-family:Geist,Arial,sans-serif;color:var(--ink,#202124)}.ds-clock{display:block;text-align:center;font-size:clamp(37px,8vw,64px);line-height:1.3;letter-spacing:-.035em;font-variant-numeric:tabular-nums;margin:24px 0}.ds-clock-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.ds-clock-actions button{font-family:Geist,Arial,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:9px 15px;border:1px solid #dce1e8;border-radius:9px;background:white;color:#39404b;font-size:13px;cursor:pointer}.ds-clock-actions .ds-clock-start{background:#1967d2;color:white;border-color:#1967d2}.ds-clock-actions button:hover{background:#edf2fa}.ds-clock-actions .ds-clock-start:hover{background:#1559bc}.ds-clock-actions button:focus-visible{outline:2px solid #1a73e8;outline-offset:3px}"
+    },
+    {
+      "name": "Dictionary reference and source",
       "kind": "card",
-      "refersTo": "example",
-      "description": "Compact interactive entry point into a search tool.",
-      "html": "<button class=\"ds-example\"><svg width=\"17\" height=\"17\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><circle cx=\"10.5\" cy=\"10.5\" r=\"7.5\"/><path d=\"m16 16 5 5\"/></svg><span>Try a search</span></button>",
-      "css": ".ds-example{font-family:Geist,Arial,sans-serif;display:flex;align-items:center;gap:9px;padding:10px 15px;min-height:48px;min-width:44px;background:white;border:1px solid #e5e8ec;border-radius:12px;font-size:12px;color:#575f69;text-align:left;cursor:pointer;transition:background .15s,border-color .15s,color .15s}.ds-example svg{color:#77808b;flex-shrink:0}.ds-example:hover{background:#f6f8fc;border-color:#c8d8f1;color:#1967d2}.ds-example.is-active{background:var(--tint,#f5f8ff);color:var(--accent,#1967d2)}.ds-search-button:focus-visible,.ds-input:focus-visible,.ds-choice:focus-visible,.ds-nav button:focus-visible,.ds-chip:focus-visible,.ds-example:focus-visible{outline:3px solid #8ab4f8;outline-offset:3px}"
+      "description": "A serif reference entry with a native expandable provenance disclosure; no extra raised card wrapper.",
+      "html": "<div class=\"ds-reference\"><h2>serendipity</h2><p>The fortunate discovery of something valuable when you were looking for something else.</p><details class=\"ds-source\"><summary>Source &amp; details</summary><div><p>Curated reference entry based on Merriam-Webster. Definition paraphrased for this demo; two entries are available locally.</p><a href=\"https://www.merriam-webster.com/dictionary/serendipity\" target=\"_blank\" rel=\"noopener noreferrer\">Merriam-Webster</a></div></details></div>",
+      "css": ".ds-reference{font-family:Geist,Arial,sans-serif;color:#593f31}.ds-reference h2{font:400 37px/1.35 Georgia,serif;color:#66371f;margin:0 0 18px;overflow-wrap:anywhere}.ds-reference>p{font:21px/1.55 Georgia,serif;max-width:50ch;margin:0}.ds-source{margin-top:16px;font-size:11px;color:#855d48}.ds-source summary{min-height:44px;display:flex;align-items:center;cursor:pointer;width:fit-content}.ds-source summary:hover{color:#a14621}.ds-source summary:focus-visible,.ds-source a:focus-visible{outline:2px solid #1967d2;outline-offset:3px;border-radius:4px}.ds-source>div{border-top:1px solid #e5d6ce;padding-top:10px;max-width:68ch}.ds-source p{margin:0 0 6px;line-height:1.7}.ds-source a{display:inline-flex;min-height:28px;align-items:center;color:inherit;text-underline-offset:3px}"
+    },
+    {
+      "name": "Orbit model control",
+      "kind": "input",
+      "description": "An adjustable model parameter with a visible value, full-height range target and scientific rather than decorative units.",
+      "html": "<label class=\"ds-model-range\"><span>Central mass <output>1.00 × Earth</output></span><input aria-label=\"Central mass in Earth masses\" type=\"range\" min=\".25\" max=\"3\" step=\".05\" value=\"1\"></label>",
+      "css": ".ds-model-range{font-family:Geist,Arial,sans-serif;display:block;margin-bottom:13px;font-size:11px;color:#35586e}.ds-model-range>span{display:flex;justify-content:space-between;gap:8px}.ds-model-range output{font-variant-numeric:tabular-nums;color:#244b65;font-weight:500;white-space:nowrap}.ds-model-range input{appearance:auto;display:block;padding:0;margin:2px 0 0;width:100%;min-width:0;min-height:44px;border:0;background:transparent;accent-color:#256087;cursor:pointer}.ds-model-range input:focus-visible{outline:3px solid #8ab4f8;outline-offset:3px}"
     }
   ],
   "narrative": {
     "northStar": "A search bar that takes the shape of your curiosity.",
-    "overview": "The user-pinned Google-style world uses a white canvas, a familiar multicolour wordmark, charcoal text and restrained blue actions. Fluid Search keeps its independent identity in the header and its non-affiliation notice in the footer. The former dark ChatGPT composer direction is superseded.\n\nThe query is the visual anchor. A softly tinted lower shell reveals one useful tool at a time, while compact examples invite exploration. The current implementation in `components/FluidSearch.tsx`, `components/SearchTools.tsx` and `app/globals.css` is the evidence for this system; home composition belongs in the surface brief.",
+    "overview": "The user-pinned Google-style world uses a white canvas, a familiar multicolour wordmark, charcoal text and restrained blue actions. Fluid Search retains its independent identity in the header. Privacy, affiliation and implementation details live in How it works; the footer is a quiet TypeSafe Jev attribution.\n\nThe query is the visual anchor. Its lower shell becomes one useful interface at a time. A slash control and searchable command menu make all 21 modes discoverable without a permanent example grid. Functional tools, curated knowledge and playful experiments share the same shell, with their own clear controls and source details.",
     "keyCharacteristics": [
-      "White space around a single search surface.",
-      "Familiar controls with intent-specific accents and restrained illustrations.",
-      "Visible source, pending state and disclosure beside the interaction."
+      "White space around one anchored search surface.",
+      "Discovery through the slash menu; detail through progressive disclosure.",
+      "Visible routing provenance and recognizably different, functional tool interiors."
     ],
     "rules": [
       {
@@ -600,13 +821,15 @@
     ],
     "dos": [
       "Do retain the white canvas, anchored query and independent Fluid Search identity.",
-      "Do keep provenance, privacy disclosure, readable muted text and visible keyboard focus.",
-      "Do preserve 44px targets and useful controls across responsive sizes.",
-      "Do describe external destinations and illustrative content honestly."
+      "Do keep slash discovery usable with pointer, keyboard and touch.",
+      "Do preserve routing provenance and make data sources and limitations accessible.",
+      "Do use 44px primary control targets, readable muted text and visible keyboard focus.",
+      "Do require an explicit action for audio and provide pause, stop, replay or reset where relevant."
     ],
     "donts": [
-      "Don't restore the superseded dark composer, model selector or capability trays.",
-      "Don't fabricate results or present local syntax parsing as a Jev decision.",
+      "Don't restore the superseded dark composer or permanent example-card grid.",
+      "Don't present selected tools, local syntax or reference content as Jev-generated results.",
+      "Don't invent retrieved data, hide failure states or turn fixture values into facts.",
       "Don't move the active input or require animation to understand state."
     ]
   }

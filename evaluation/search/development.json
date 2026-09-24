@@ -1,23 +1,23 @@
 {
   "schemaVersion": 1,
-  "dataset": "search-v1",
+  "dataset": "search-v2",
   "split": "development",
   "language": "en",
-  "description": "Authored English search-intent cases for the twelve-mode fluid search demo; not user data. Separate from the archived five-mode composer datasets.",
+  "description": "Authored English search-intent cases for the twenty-one-mode Fluid Search demo; not user data. Two cases per mode in each disjoint split. Includes explicit negation, topic mentions and ambiguity. Separate from historical search-v1 reports and archived composer datasets.",
   "cases": [
     {
       "id": "search-development-general-01",
       "expected": "general",
-      "scenario": "ordinary explanation",
-      "draft": "How do solar panels work?",
-      "rationale": "An ordinary explanation needs no specialized search controls."
+      "scenario": "game mention without play",
+      "draft": "What is the history of tic-tac-toe?",
+      "rationale": "Mentioning a game in a history question does not request a playable board."
     },
     {
       "id": "search-development-general-02",
       "expected": "general",
-      "scenario": "negated forecast request",
-      "draft": "Do not show me the weather forecast. Explain why clouds form.",
-      "rationale": "The requested action is an explanation and the forecast is negated."
+      "scenario": "explicitly negated timer",
+      "draft": "Don't start a timer; explain how a mechanical clock keeps time.",
+      "rationale": "The requested action is an explanation, and the timer is explicitly negated."
     },
     {
       "id": "search-development-weather-01",
@@ -172,6 +172,132 @@
       "scenario": "excluded meaning",
       "draft": "jaguar animal results without the car company",
       "rationale": "Excluding an unwanted meaning is the requested refinement."
+    },
+    {
+      "id": "search-development-calculate-01",
+      "expected": "calculate",
+      "scenario": "arithmetic expression",
+      "draft": "Calculate (18 + 7) * 4",
+      "rationale": "The user asks for numerical arithmetic, with no unit conversion."
+    },
+    {
+      "id": "search-development-calculate-02",
+      "expected": "calculate",
+      "scenario": "bill split with tip",
+      "draft": "Split $96 between 4 people with a 12% tip",
+      "rationale": "A bill split and percentage tip are local calculator operations."
+    },
+    {
+      "id": "search-development-timer-01",
+      "expected": "timer",
+      "scenario": "fixed duration countdown",
+      "draft": "Set a timer for 3 minutes",
+      "rationale": "A fixed countdown duration requests the timer rather than elapsed-time measurement."
+    },
+    {
+      "id": "search-development-timer-02",
+      "expected": "timer",
+      "scenario": "exercise countdown",
+      "draft": "Count down 45 seconds for my plank",
+      "rationale": "The user explicitly wants time to count down from a specified duration."
+    },
+    {
+      "id": "search-development-stopwatch-01",
+      "expected": "stopwatch",
+      "scenario": "run elapsed time",
+      "draft": "Start a stopwatch for my run",
+      "rationale": "The user requests a count-up stopwatch without a countdown duration."
+    },
+    {
+      "id": "search-development-stopwatch-02",
+      "expected": "stopwatch",
+      "scenario": "task elapsed time",
+      "draft": "Count up while I solve this puzzle",
+      "rationale": "Measuring elapsed time is a stopwatch task."
+    },
+    {
+      "id": "search-development-metronome-01",
+      "expected": "metronome",
+      "scenario": "named tempo tool",
+      "draft": "Set the metronome to 72 bpm",
+      "rationale": "An explicit metronome and tempo request belongs to the beat tool."
+    },
+    {
+      "id": "search-development-metronome-02",
+      "expected": "metronome",
+      "scenario": "music practice pulse",
+      "draft": "Give me a steady 110 beats per minute for piano practice",
+      "rationale": "A regular musical practice pulse is a metronome, not a countdown."
+    },
+    {
+      "id": "search-development-color-01",
+      "expected": "color",
+      "scenario": "named colour adjustment",
+      "draft": "Open a color picker for teal",
+      "rationale": "The user requests an editable colour picker for a supported named colour."
+    },
+    {
+      "id": "search-development-color-02",
+      "expected": "color",
+      "scenario": "hex inspection",
+      "draft": "Show me the color #7f3ac1",
+      "rationale": "Inspecting a valid hex colour belongs to the colour tool."
+    },
+    {
+      "id": "search-development-compare-01",
+      "expected": "compare",
+      "scenario": "side by side planet comparison",
+      "draft": "Compare Earth and Mars side by side",
+      "rationale": "The explicit comparison of the supported planet pair requests the comparison tool."
+    },
+    {
+      "id": "search-development-compare-02",
+      "expected": "compare",
+      "scenario": "specific planet differences",
+      "draft": "How do Earth and Mars differ in day length and moons?",
+      "rationale": "The user asks for differences between two planets rather than an orbit simulation."
+    },
+    {
+      "id": "search-development-science-01",
+      "expected": "science",
+      "scenario": "satellite orbit simulation",
+      "draft": "Let me simulate a satellite orbiting Earth",
+      "rationale": "The user requests an interactive gravitational orbit simulation."
+    },
+    {
+      "id": "search-development-science-02",
+      "expected": "science",
+      "scenario": "adjustable gravity model",
+      "draft": "Show an interactive model of how gravity changes an orbit",
+      "rationale": "The requested interactive model matches the prebuilt orbit tool."
+    },
+    {
+      "id": "search-development-game-01",
+      "expected": "game",
+      "scenario": "named playable game",
+      "draft": "Let's play tic-tac-toe",
+      "rationale": "The user asks to play the supported game rather than learn its history or rules."
+    },
+    {
+      "id": "search-development-game-02",
+      "expected": "game",
+      "scenario": "alternative game name",
+      "draft": "Start a game of noughts and crosses",
+      "rationale": "Noughts and crosses is the supported tic-tac-toe game."
+    },
+    {
+      "id": "search-development-play-01",
+      "expected": "play",
+      "scenario": "barrel roll action",
+      "draft": "Do a barrel roll",
+      "rationale": "This explicitly requests the bounded visual Easter egg."
+    },
+    {
+      "id": "search-development-play-02",
+      "expected": "play",
+      "scenario": "askew action",
+      "draft": "Make this little search window askew",
+      "rationale": "The user requests a visual tilt rather than a definition of askew."
     }
   ]
 }

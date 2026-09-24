@@ -168,3 +168,8 @@ describe('Google destination', () => {
     expect(result.hash).toBe('');
   });
 });
+
+
+it.each(['24 * 18 + 6', '(12 + 8) * 5', '18 / 3', '2^3'])('leaves arithmetic %s for Jev rather than exposing search filters', draft => {
+  expect(parseSearchSyntax(draft)).toEqual({ mode: null, tokens: [], deprecated: [] });
+});
