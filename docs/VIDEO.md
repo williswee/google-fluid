@@ -1,4 +1,35 @@
-# Reproducible demo recording
+# Google Fluid — 30-second demo
+
+The current film is `artifacts/google-fluid-demo-30s.mp4`: 1920 × 1080, 30 fps, H.264, exactly 30 seconds, captioned, landscape, without audio. It records https://googlefluid.vercel.app with real Jev decisions and a manually selected dinosaur game. Smooth editorial zooms focus on the query, full travel panels, color controls and gameplay. Typing and inference remain at normal speed.
+
+| Time | Scene |
+| --- | --- |
+| 0–7s | Type a Singapore-to-Tokyo flight query; Jev reveals the planner; select One way. |
+| 7–14s | Change to hotels in Tokyo; Jev replaces the flight controls; select Pool. |
+| 14–20.2s | Type a coral color-picker query; Jev reveals the tool; drag Blue to change the swatch. |
+| 20.2–27.4s | Open `/`, filter dinosaur examples, choose the runner, Start and jump; pull back to the empty search bar. |
+| 27.4–30s | Closing card: googlefluid.vercel.app and TypeSafe Jev credit. |
+
+The Jev badge stays visible during automatic routing. The game shows “Selected by you.” The trip controls prepare searches; no prices or availability are invented. A recording-only pointer and click rings make real interactions visible. Captions, a clear caption band, camera crops and the closing card are editorial additions; application state and API responses are untouched.
+
+## Reproduce or re-edit
+
+```sh
+node scripts/record-search-demo.mjs
+node scripts/record-search-demo.mjs --render /absolute/path/to/take.json
+```
+
+Recording requires Playwright Chromium, `ffmpeg-static`, a macOS Arial font (or an updated font path in the script), and live inference enabled at the public origin. Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` to reuse an installed Chromium. Live requests pass through the existing shared budget guard. The recorder verifies the three expected real decisions, source labels and gameplay, and stops if a scene exceeds its timing window. There are no automatic retries. Re-editing an existing take makes no network or inference requests.
+
+The alignment marker is removed before the story. The encoder locates it, trims setup/teardown, performs camera moves without speeding up the capture, and verifies full decode, duration, resolution and codec. Captures and MP4s remain ignored local artifacts. Companion files are `google-fluid-demo-30s.vtt`, `google-fluid-demo-30s-poster.png`, and `google-fluid-demo-30s.json`. Timestamped raw footage and capture logs are under `artifacts/recordings/`.
+
+Recorded 24 September 2026. The delivered take contains three Jev requests: Flights, Hotels and Color. Their measured request-to-confirmed-UI times were 833, 892 and 703 ms (including assertion overhead); server times were 672, 723 and 582 ms. A first take was retained but discarded because it ended gameplay before a visible jump. Total recording attempts used six protected Jev requests; final editing used none. These measurements describe this capture, not a general latency guarantee.
+
+---
+
+# Historical ChatGPT composer recording
+
+The sections below document the former interface and its existing 45–60-second artifacts. That recorder does not apply to the current Google Fluid site.
 
 The recorder captures the actual browser at 1920 × 1080 and produces a captioned, landscape H.264 MP4 lasting 45–60 seconds. Its default storyboard aims for 58 seconds. It does not mock responses, change application state, speed up inference, or hide failed live requests.
 

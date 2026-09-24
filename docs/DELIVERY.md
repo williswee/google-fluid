@@ -1,3 +1,11 @@
+# Current video — 24 September 2026
+
+Delivered `artifacts/google-fluid-demo-30s.mp4`: exactly 30.00 seconds, 1920×1080 H.264 at 30 fps, captions and no audio. Recorded the current https://googlefluid.vercel.app deployment. Three actual Jev decisions reveal Flights, Hotels and Color; the `/` menu opens a playable dinosaur runner with a visible jump. Editorial zooms follow the query and controls; the closing card includes the public URL and TypeSafe Jev credit. No response mocks, state injection or time compression.
+
+Final capture: `artifacts/recordings/search-2026-09-24T06-44-38-641Z/take.json`. Server times: 672/723/582 ms. Request-to-confirmed-UI times (including assertion overhead): 833/892/703 ms. No page errors; three paid requests in the delivered take. A prior take was discarded because gameplay had no visible jump, bringing the recording session to six protected requests through the existing shared allowance. Re-editing reused the raw footage without inference. Verified full MP4 decode, codec, resolution and duration; visually reviewed scene frames, zoom framing, readable captions, provenance badges and the airborne dinosaur. Companion VTT, poster and metadata are alongside the MP4. Media remains local and ignored; the reproducible recorder and documentation are in the private repository.
+
+---
+
 # Current address — 24 September 2026
 
 Public demo: https://googlefluid.vercel.app. The previous https://chatgptfluid.vercel.app address returns a permanent 308 redirect, preserving paths and query strings. Both domains are verified and configured on the existing Vercel project, so future production deployments retain the new address. The deployment, environment variables, shared budget and private repository remain unchanged.
