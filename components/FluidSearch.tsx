@@ -192,6 +192,7 @@ export default function FluidSearch() {
         <label className="about-picker">Keep a tool selected <select aria-label="Choose search tool" value={manual ?? 'auto'} onChange={e => { setManual(e.target.value === 'auto' ? null : e.target.value as ModeId); if(e.target.value === 'auto') setSelection(null); }}><option value="auto">Auto</option>{EXAMPLES.map(m => <option key={m} value={m}>{SEARCH_MODES[m].label}</option>)}</select></label>
         </div>
         <div className="notes-section"><h3>Credits</h3>
+        <p className="notes-credit">Built by <a href="https://williswee.com/" target="_blank" rel="noopener noreferrer">Willis</a> using <a href="https://openai.com/codex/" target="_blank" rel="noopener noreferrer">Codex</a>.</p>
         <p className="notes-credit">Inspired by <a href="https://github.com/anishfn/shapeshift" target="_blank" rel="noopener noreferrer">ShapeShift</a>, the open-source fluid interface by <a href="https://github.com/anishfn" target="_blank" rel="noopener noreferrer">Anish Gupta (@anishfn)</a>. Its slash discovery and intent-driven widgets helped shape this experiment.</p>
         <p className="about-small">Our dinosaur runner is an original implementation inspired by <a href="https://blog.google/products-and-platforms/products/chrome/chrome-dino/" target="_blank" rel="noopener noreferrer">Chrome’s offline dinosaur game</a>. You can also play it on this demo’s 404 page. It starts only when you choose to play.</p>
         </div>
