@@ -1,0 +1,52 @@
+{
+  "at": "2026-09-24T04:02:26.593Z",
+  "url": "https://chatgptfluid.vercel.app",
+  "context": "Public build control regression check. No routing mocks, paid inference or synthetic provider results; all tool choices explicit. No latency benchmark.",
+  "errors": [],
+  "inferenceRequests": 0,
+  "checks": [
+    {
+      "id": "notes-select",
+      "arrow": "calc(100% - 12px) 50%",
+      "rightPadding": "36px",
+      "width": 170,
+      "appearance": "none",
+      "keyboardTypeahead": true,
+      "forcedColors": true
+    },
+    {
+      "id": "palette",
+      "uniqueExamples": 43,
+      "keyboardWrap": true,
+      "emptyRecovery": true
+    },
+    {
+      "id": "knowledge-query-sync",
+      "dictionary": true,
+      "movie": true
+    },
+    {
+      "id": "date-validation",
+      "invalidBlocked": true,
+      "repaired": true
+    },
+    {
+      "id": "timer-recovery",
+      "keyboardReset": true
+    },
+    {
+      "id": "finite-conversion",
+      "overflowHandled": true
+    },
+    {
+      "id": "mobile-and-hint-focus",
+      "noOverflow": true,
+      "focusedHintStable": true
+    }
+  ],
+  "status": "passed",
+  "deployment": "https://chatgptfluid-onoijnz6r-williswees-projects.vercel.app",
+  "deploymentId": "dpl_DVDgo8n4bdrToSW17R1cgnGnVDJq",
+  "implementationCommit": "1416bbe",
+  "keyboardVerificationLimit": "The macOS headless shell did not commit ArrowDown selection on either the app or an isolated native HTML select. Native typeahead, focus, selectOption changes and the forced-colors fallback were verified. The two initial stopped checks incurred no inference requests."
+}

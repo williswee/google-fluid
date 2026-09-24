@@ -16,6 +16,10 @@ Travel, shopping, stock, media, map, clock, knowledge, converter, game and refin
 
 The one static design scan retained the documented Geist/serif treatments and bounded 280ms panel-height transition. Advisory documentation mismatches were not treated as authorization to change the visual system or repair unrelated metadata. No provider, budget, secret, hosting-tier or repository-visibility changes. Video remains deferred.
 
+Production verified: https://chatgptfluid.vercel.app. Deployment https://chatgptfluid-onoijnz6r-williswees-projects.vercel.app (`dpl_DVDgo8n4bdrToSW17R1cgnGnVDJq`), implementation commit `1416bbe`, READY. Seven hosted checks passed: Notes dropdown spacing/typeahead/forced-colors, 43 unique slash examples with navigation/recovery, dictionary/film query synchronization, date-range blocking/recovery, keyboard timer reset, finite conversion, and mobile fit/focused hint stability. No page errors or inference requests. Report: `evaluation/results/search-controls-polish-production.json`.
+
+Native ArrowDown menu selection could not be exercised by this macOS headless shell; an isolated plain HTML select reproduced the same limitation. Native typeahead and selection changes were verified instead. This is a browser-automation limitation, not a custom-keyboard replacement in the app.
+
 ---
 
 # Historical delivery — expanded search tools, 24 September 2026
