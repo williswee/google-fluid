@@ -6,6 +6,8 @@ Fixed native Enter activation for utility controls, suppressed ticking clock ann
 
 Verification: 310 unit/integration tests and 44 browser scenarios pass; production build passes. One batched visual review at 1440, 813, 390 and 320px covered landing, palette, calculator, color, dinosaur and Notes. No overflow or page errors; reduced motion works at all four widths. One narrow Notes-diagram alignment correction was confirmed on desktop and mobile. Browser inference was mocked for interaction checks; no fresh routing benchmark is claimed.
 
+Production verified: https://chatgptfluid.vercel.app. Deployment https://chatgptfluid-mkjxkujzf-williswees-projects.vercel.app (`dpl_9SzqP7ZDKZqbkiKZtZ4TSyEE3J8k`), implementation commit `ab37aa1`, READY. Public browser checks passed for desktop/mobile layout, updated placeholder, Enter activation, Notes focus restoration and invalid color copy prevention. No page errors or inference requests. Report: `evaluation/results/search-polish-production.json`.
+
 ---
 
 # Historical delivery — quieter chrome and Dinosaur run, 24 September 2026
