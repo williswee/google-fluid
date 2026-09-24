@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-24T03:19:42.609Z",
+  "generatedAt": "2026-09-24T03:45:31.485Z",
   "title": "Design System: Fluid Search",
   "extensions": {
     "shadows": [
@@ -44,7 +44,7 @@
       {
         "name": "reduced-motion",
         "value": "animation:none; transition-duration:.01ms; scroll-behavior:auto",
-        "purpose": "Disable transitions and geometric animation, including orbit and Easter eggs; functional numeric readouts and controls remain available."
+        "purpose": "Disable nonessential transitions, orbit/Easter-egg animation and automatic idle-tip rotation. Numeric readouts remain available; explicitly started dinosaur gameplay retains Pause."
       },
       {
         "name": "orbit",
@@ -70,6 +70,16 @@
         "name": "command-option-feedback",
         "value": "background-color .12s ease-out, color .12s ease-out",
         "purpose": "The active slash option changes colour inside its scrollable list."
+      },
+      {
+        "name": "idle-tip-rotation",
+        "value": "6000ms interval",
+        "purpose": "One clickable empty-state tip rotates only while active, onscreen, visible, unpaused, unengaged and motion is allowed."
+      },
+      {
+        "name": "idle-tip-reveal",
+        "value": ".2s ease-out",
+        "purpose": "Opacity .3 to 1 when the hint changes; disabled with reduced motion."
       }
     ],
     "breakpoints": [
@@ -92,6 +102,22 @@
       {
         "name": "narrow",
         "value": "440px"
+      },
+      {
+        "name": "stack-discovery",
+        "value": "540px"
+      },
+      {
+        "name": "adapt-travel",
+        "value": "520px"
+      },
+      {
+        "name": "stack-video-duration",
+        "value": "390px"
+      },
+      {
+        "name": "stack-flight-route",
+        "value": "360px"
       }
     ],
     "colorMeta": {
@@ -738,6 +764,146 @@
           "oklch(84% 0.1083 259.79)",
           "oklch(95% 0.1083 259.79)"
         ]
+      },
+      "flights-accent": {
+        "role": "primary",
+        "displayName": "Flights Accent",
+        "tonalRamp": [
+          "oklch(15% 0.1224 254.16)",
+          "oklch(26% 0.1224 254.16)",
+          "oklch(38% 0.1224 254.16)",
+          "oklch(49% 0.1224 254.16)",
+          "oklch(61% 0.1224 254.16)",
+          "oklch(72% 0.1224 254.16)",
+          "oklch(84% 0.1224 254.16)",
+          "oklch(95% 0.1224 254.16)"
+        ]
+      },
+      "flights-tint": {
+        "role": "primary",
+        "displayName": "Flights Tint",
+        "tonalRamp": [
+          "oklch(15% 0.0108 256.69)",
+          "oklch(26% 0.0108 256.69)",
+          "oklch(38% 0.0108 256.69)",
+          "oklch(49% 0.0108 256.69)",
+          "oklch(61% 0.0108 256.69)",
+          "oklch(72% 0.0108 256.69)",
+          "oklch(84% 0.0108 256.69)",
+          "oklch(95% 0.0108 256.69)"
+        ]
+      },
+      "hotels-accent": {
+        "role": "primary",
+        "displayName": "Hotels Accent",
+        "tonalRamp": [
+          "oklch(15% 0.0900 46.15)",
+          "oklch(26% 0.0900 46.15)",
+          "oklch(38% 0.0900 46.15)",
+          "oklch(49% 0.0900 46.15)",
+          "oklch(61% 0.0900 46.15)",
+          "oklch(72% 0.0900 46.15)",
+          "oklch(84% 0.0900 46.15)",
+          "oklch(95% 0.0900 46.15)"
+        ]
+      },
+      "hotels-tint": {
+        "role": "primary",
+        "displayName": "Hotels Tint",
+        "tonalRamp": [
+          "oklch(15% 0.0103 67.71)",
+          "oklch(26% 0.0103 67.71)",
+          "oklch(38% 0.0103 67.71)",
+          "oklch(49% 0.0103 67.71)",
+          "oklch(61% 0.0103 67.71)",
+          "oklch(72% 0.0103 67.71)",
+          "oklch(84% 0.0103 67.71)",
+          "oklch(95% 0.0103 67.71)"
+        ]
+      },
+      "shopping-accent": {
+        "role": "primary",
+        "displayName": "Shopping Accent",
+        "tonalRamp": [
+          "oklch(15% 0.1310 305.35)",
+          "oklch(26% 0.1310 305.35)",
+          "oklch(38% 0.1310 305.35)",
+          "oklch(49% 0.1310 305.35)",
+          "oklch(61% 0.1310 305.35)",
+          "oklch(72% 0.1310 305.35)",
+          "oklch(84% 0.1310 305.35)",
+          "oklch(95% 0.1310 305.35)"
+        ]
+      },
+      "shopping-tint": {
+        "role": "primary",
+        "displayName": "Shopping Tint",
+        "tonalRamp": [
+          "oklch(15% 0.0114 308.33)",
+          "oklch(26% 0.0114 308.33)",
+          "oklch(38% 0.0114 308.33)",
+          "oklch(49% 0.0114 308.33)",
+          "oklch(61% 0.0114 308.33)",
+          "oklch(72% 0.0114 308.33)",
+          "oklch(84% 0.0114 308.33)",
+          "oklch(95% 0.0114 308.33)"
+        ]
+      },
+      "images-accent": {
+        "role": "primary",
+        "displayName": "Images Accent",
+        "tonalRamp": [
+          "oklch(15% 0.0748 319.64)",
+          "oklch(26% 0.0748 319.64)",
+          "oklch(38% 0.0748 319.64)",
+          "oklch(49% 0.0748 319.64)",
+          "oklch(61% 0.0748 319.64)",
+          "oklch(72% 0.0748 319.64)",
+          "oklch(84% 0.0748 319.64)",
+          "oklch(95% 0.0748 319.64)"
+        ]
+      },
+      "images-tint": {
+        "role": "primary",
+        "displayName": "Images Tint",
+        "tonalRamp": [
+          "oklch(15% 0.0095 320.55)",
+          "oklch(26% 0.0095 320.55)",
+          "oklch(38% 0.0095 320.55)",
+          "oklch(49% 0.0095 320.55)",
+          "oklch(61% 0.0095 320.55)",
+          "oklch(72% 0.0095 320.55)",
+          "oklch(84% 0.0095 320.55)",
+          "oklch(95% 0.0095 320.55)"
+        ]
+      },
+      "video-accent": {
+        "role": "primary",
+        "displayName": "Video Accent",
+        "tonalRamp": [
+          "oklch(15% 0.1255 22.60)",
+          "oklch(26% 0.1255 22.60)",
+          "oklch(38% 0.1255 22.60)",
+          "oklch(49% 0.1255 22.60)",
+          "oklch(61% 0.1255 22.60)",
+          "oklch(72% 0.1255 22.60)",
+          "oklch(84% 0.1255 22.60)",
+          "oklch(95% 0.1255 22.60)"
+        ]
+      },
+      "video-tint": {
+        "role": "primary",
+        "displayName": "Video Tint",
+        "tonalRamp": [
+          "oklch(15% 0.0098 25.07)",
+          "oklch(26% 0.0098 25.07)",
+          "oklch(38% 0.0098 25.07)",
+          "oklch(49% 0.0098 25.07)",
+          "oklch(61% 0.0098 25.07)",
+          "oklch(72% 0.0098 25.07)",
+          "oklch(84% 0.0098 25.07)",
+          "oklch(95% 0.0098 25.07)"
+        ]
       }
     }
   },
@@ -784,9 +950,9 @@
       "name": "Command option",
       "kind": "nav",
       "refersTo": "command-option",
-      "description": "Tool name and example query form an active option in the viewport-aware slash list; keyboard navigation scrolls this list without moving the page.",
-      "html": "<div role=\"listbox\" aria-label=\"Search tools\"><button class=\"ds-command-option\" role=\"option\" aria-selected=\"true\"><svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><rect x=\"5\" y=\"3\" width=\"14\" height=\"18\" rx=\"2\"/><path d=\"M8 7h8M8 11h2m4 0h2m-8 4h2m4 0h2\"/></svg><span><strong>Calculator</strong><span>24 * 18 + 6</span></span><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></button></div>",
-      "css": ".ds-command-option{font-family:Geist,Arial,sans-serif;display:flex;align-items:center;gap:15px;padding:10px 15px;min-height:64px;width:100%;text-align:left;border:0;background:white;border-radius:10px;color:#53647b;cursor:pointer;transition:background-color .12s ease-out,color .12s ease-out}.ds-command-option>span{display:flex;flex:1;flex-direction:column;gap:4px;min-width:0}.ds-command-option strong{font-size:13px;color:#202124;font-weight:500}.ds-command-option>span>span{font-size:12px;color:#62666c;overflow-wrap:anywhere}.ds-command-option>svg{flex-shrink:0}.ds-command-option[aria-selected=true]{background:#f0f5fe;color:#1967d2}.ds-command-option:focus-visible{outline:2px solid #1967d2;outline-offset:-3px}"
+      "description": "Distinct example name and editable query form an active option in the viewport-aware slash list; all 43 examples remain searchable across 27 modes.",
+      "html": "<div role=\"listbox\" aria-label=\"Search tools\"><button class=\"ds-command-option\" role=\"option\" aria-selected=\"true\"><svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><rect x=\"5\" y=\"3\" width=\"14\" height=\"18\" rx=\"2\"/><path d=\"M8 7h8M8 11h2m4 0h2m-8 4h2m4 0h2\"/></svg><span><strong>Tip &amp; bill split</strong><span>split $84 between 3 people with a 15% tip</span></span><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></button></div>",
+      "css": ".ds-command-option{font-family:Geist,Arial,sans-serif;display:flex;align-items:center;gap:15px;padding:10px 15px;min-height:64px;width:100%;text-align:left;border:0;background:white;border-radius:10px;color:#53647b;cursor:pointer;transition:background-color .12s ease-out,color .12s ease-out}.ds-command-option>span{display:flex;flex:1;flex-direction:column;gap:4px;min-width:0}.ds-command-option strong{font-size:14px;color:#202124;font-weight:500}.ds-command-option>span>span{font-size:12px;color:#62666c;overflow-wrap:anywhere}.ds-command-option>svg{flex-shrink:0}.ds-command-option[aria-selected=true]{background:#f0f5fe;color:#1967d2}.ds-command-option:focus-visible{outline:2px solid #1967d2;outline-offset:-3px}"
     },
     {
       "name": "Clock utility",
@@ -807,23 +973,30 @@
       "name": "Orbit model control",
       "kind": "input",
       "description": "An adjustable model parameter with a visible value, full-height range target and scientific rather than decorative units.",
-      "html": "<label class=\"ds-model-range\"><span>Central mass <output>1.00 \u00d7 Earth</output></span><input aria-label=\"Central mass in Earth masses\" type=\"range\" min=\".25\" max=\"3\" step=\".05\" value=\"1\"></label>",
+      "html": "<label class=\"ds-model-range\"><span>Central mass <output>1.00 × Earth</output></span><input aria-label=\"Central mass in Earth masses\" type=\"range\" min=\".25\" max=\"3\" step=\".05\" value=\"1\"></label>",
       "css": ".ds-model-range{font-family:Geist,Arial,sans-serif;display:block;margin-bottom:13px;font-size:11px;color:#35586e}.ds-model-range>span{display:flex;justify-content:space-between;gap:8px}.ds-model-range output{font-variant-numeric:tabular-nums;color:#244b65;font-weight:500;white-space:nowrap}.ds-model-range input{appearance:auto;display:block;padding:0;margin:2px 0 0;width:100%;min-width:0;min-height:44px;border:0;background:transparent;accent-color:#256087;cursor:pointer}.ds-model-range input:focus-visible{outline:3px solid #8ab4f8;outline-offset:3px}"
     },
     {
       "name": "Notes panel",
       "kind": "custom",
       "description": "Sectioned footer disclosure. Opening focuses its heading; Close or Escape returns focus to the opening footer button or source badge.",
-      "html": "<section class=\"ds-notes\" aria-label=\"Fluid Search notes\"><div class=\"ds-notes-title\"><h2 tabindex=\"-1\">Notes</h2><button type=\"button\" aria-label=\"Close notes\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"m18 6-12 12M6 6l12 12\"/></svg></button></div><div class=\"ds-notes-section\"><h3>How routing works</h3><p>TypeSafe Jev chooses an interface from the meaning of your search.</p></div><div class=\"ds-notes-section\"><h3>Tools &amp; data</h3><p>Calculators, clocks, color controls, the orbit lab and game run on your device.</p></div><div class=\"ds-notes-section\"><h3>Controls &amp; limits</h3><p>The / menu works even when live routing is unavailable.</p></div><div class=\"ds-notes-section\"><h3>Credits</h3><p>Inspired by ShapeShift, the open-source fluid interface by Anish Gupta (@anishfn).</p></div></section>",
+      "html": "<section class=\"ds-notes\" aria-label=\"Fluid Search notes\"><div class=\"ds-notes-title\"><h2 tabindex=\"-1\">Notes</h2><button type=\"button\" aria-label=\"Close notes\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"m18 6-12 12M6 6l12 12\"/></svg></button></div><div class=\"ds-notes-section\"><h3>How routing works</h3><p>TypeSafe Jev chooses an interface from the meaning of your search.</p></div><div class=\"ds-notes-section\"><h3>Tools &amp; data</h3><p>Calculators, clocks, color controls, the orbit lab and game run on your device. Travel, shopping and media controls prepare searches. Image previews are curated references; maps load only when you choose.</p></div><div class=\"ds-notes-section\"><h3>Controls &amp; limits</h3><p>The / menu works even when live routing is unavailable.</p></div><div class=\"ds-notes-section\"><h3>Credits</h3><p>Inspired by ShapeShift, the open-source fluid interface by Anish Gupta (@anishfn).</p></div></section>",
       "css": ".ds-notes{font-family:Geist,Arial,sans-serif;color:#596471;background:#fafbfc;border:1px solid #e5e7eb;border-radius:18px;padding:24px 28px;max-width:760px;text-align:left}.ds-notes-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.ds-notes-title h2{font-size:20px;letter-spacing:-.3px;font-weight:500;margin:0;color:#202124}.ds-notes-title h2:focus{outline:0}.ds-notes-title button{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;border:0;border-radius:50%;background:none;color:#202124;cursor:pointer;transition:background-color .15s ease-out,color .15s ease-out}.ds-notes-title button:hover{background:#f1f3f4}.ds-notes-title button:active{background:#e8eef7}.ds-notes-title button:focus-visible{outline:2px solid #1967d2;outline-offset:3px}.ds-notes-section{margin-top:24px;padding-top:20px;border-top:1px solid #e5e7eb}.ds-notes-section h3{font-size:14px;font-weight:500;margin:0 0 10px;color:#202124}.ds-notes p{font-size:13px;line-height:1.75;max-width:70ch;margin:10px 0 0}@media(max-width:440px){.ds-notes{padding:18px}.ds-notes-title h2{font-size:19px}}"
+    },
+    {
+      "name": "Idle search tip",
+      "kind": "custom",
+      "description": "One quiet clickable hint under the empty query, with a 44px Pause/Resume control; hover and focus pause its six-second rotation.",
+      "html": "<div class=\"ds-search-hints\" aria-label=\"Search tips\"><button class=\"ds-search-hint\" type=\"button\"><span>Try <strong>flights from Singapore to Tokyo</strong></span></button><button class=\"ds-hint-pause\" type=\"button\" aria-label=\"Pause search tips\"><svg width=\"13\" height=\"13\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><rect x=\"5\" y=\"4\" width=\"4\" height=\"16\" rx=\"1\"/><rect x=\"15\" y=\"4\" width=\"4\" height=\"16\" rx=\"1\"/></svg></button></div>",
+      "css": ".ds-search-hints{font-family:Geist,Arial,sans-serif;display:flex;justify-content:center;align-items:center;gap:2px;margin:12px auto 0;max-width:540px;min-height:48px;color:#62666c}.ds-search-hints button{font:inherit;border:0;background:transparent;cursor:pointer}.ds-search-hints .ds-search-hint{min-height:44px;padding:6px 8px;font-size:12px;line-height:1.6;text-align:center;border-radius:8px;min-width:0}.ds-search-hint strong{font-weight:500;color:#4d5663}.ds-search-hint:hover strong{color:var(--blue,#1967d2)}.ds-search-hints .ds-hint-pause{display:grid;place-items:center;min-width:44px;min-height:44px;color:#697078;border-radius:50%}.ds-hint-pause:hover{background:#f3f6fb}.ds-search-hints button:focus-visible{outline:2px solid #1967d2;outline-offset:3px}"
     }
   ],
   "narrative": {
     "northStar": "A search bar that takes the shape of your curiosity.",
-    "overview": "The user-pinned Google-style world uses a white canvas, a familiar multicolour wordmark, charcoal text and restrained blue actions. The central wordmark is the only top identity; no header brand or view switch. Privacy, affiliation and implementation details live in Notes; the footer contains Notes and a quiet TypeSafe Jev attribution.\n\nThe query is the visual anchor. Its lower shell becomes one useful interface at a time. A slash control and searchable command menu make all 22 modes discoverable without a permanent example grid. Functional tools, curated knowledge and playful experiments share the same shell, with their own clear controls and source details.",
+    "overview": "The user-pinned Google-style world uses a white canvas, a familiar multicolour wordmark, charcoal text and restrained blue actions. Fluid Search retains its independent identity in the central wordmark. Privacy, affiliation and implementation details live in Notes; its labelled button shares the footer with a quiet TypeSafe Jev attribution.\n\nThe query is the visual anchor. Its lower shell becomes one useful interface at a time. A slash control and searchable command menu make all 27 modes discoverable through 43 distinctly named examples, without a permanent example grid. One quiet clickable tip helps visitors discover these capabilities while the query is empty. Functional tools, editable planners, curated references and playful experiments share the same shell, with their own clear controls and source details.",
     "keyCharacteristics": [
       "White space around one anchored search surface.",
-      "Discovery through the slash menu; detail through progressive disclosure.",
+      "Discovery through the slash menu and quiet idle tips; detail through progressive disclosure.",
       "Visible routing provenance and recognizably different, functional tool interiors."
     ],
     "rules": [

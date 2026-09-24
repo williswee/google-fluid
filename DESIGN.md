@@ -48,6 +48,16 @@ colors:
   play-ink: "#244b65"
   play-action: "#256087"
   command-selected: "#f0f5fe"
+  flights-accent: "#225c9e"
+  flights-tint: "#f2f7fe"
+  hotels-accent: "#8b5033"
+  hotels-tint: "#fcf6f0"
+  shopping-accent: "#7950a2"
+  shopping-tint: "#f8f4fc"
+  images-accent: "#76557e"
+  images-tint: "#faf5fb"
+  video-accent: "#a14343"
+  video-tint: "#fff6f5"
 typography:
   query:
     fontFamily: "Geist, Arial, sans-serif"
@@ -142,19 +152,19 @@ components:
 
 **Creative North Star: "A search bar that takes the shape of your curiosity."**
 
-The user-pinned Google-style world uses a white canvas, a familiar multicolour wordmark, charcoal text and restrained blue actions. Fluid Search retains its independent identity in the central wordmark. Privacy, affiliation and implementation details live in Notes; the footer is a quiet TypeSafe Jev attribution.
+The user-pinned Google-style world uses a white canvas, a familiar multicolour wordmark, charcoal text and restrained blue actions. Fluid Search retains its independent identity in the central wordmark. Privacy, affiliation and implementation details live in Notes; its labelled button shares the footer with a quiet TypeSafe Jev attribution.
 
-The query is the visual anchor. Its lower shell becomes one useful interface at a time. A slash control and searchable command menu make all 22 modes discoverable without a permanent example grid. Functional tools, curated knowledge and playful experiments share the same shell, with their own clear controls and source details.
+The query is the visual anchor. Its lower shell becomes one useful interface at a time. A slash control and searchable command menu make all 27 modes discoverable through 43 distinctly named examples, without a permanent example grid. One quiet clickable tip helps visitors discover these capabilities while the query is empty. Functional tools, editable planners, curated references and playful experiments share the same shell, with their own clear controls and source details.
 
 **Key Characteristics:**
 
 - White space around one anchored search surface.
-- Discovery through the slash menu; detail through progressive disclosure.
+- Discovery through the slash menu and quiet idle tips; detail through progressive disclosure.
 - Visible routing provenance and recognizably different, functional tool interiors.
 
 ## Colors
 
-Blue leads actions, calculator and clock tools. Weather and dictionary use warm hues; stocks and places use green; movies and colour controls use violet; documents use red; dates use rose; precision uses slate. Orbit uses a pale violet shell with blue scientific controls. Games and Easter eggs use pale green. The Earth/Mars comparison pairs blue and terracotta values.
+Blue leads actions, calculator and clock tools. Weather and dictionary use warm hues; stocks and places use green; movies and colour controls use violet; documents use red; dates use rose; precision uses slate. Orbit uses a pale violet shell with blue scientific controls. Games and Easter eggs use pale green. Flights use cool blue, hotels warm brown, shopping and images muted violet, and video warm red. The Earth/Mars comparison pairs blue and terracotta values. Photography and loaded maps retain their source colours inside their own bounded viewport.
 
 Intent colour stays in the lower tool, icon, selection and related controls. White fields and subdued separators keep dense tools legible. The colour picker alone makes its chosen colour the working material, with black or white swatch text selected for contrast. Multicolour brand letters remain an identity treatment.
 
@@ -162,15 +172,15 @@ Intent colour stays in the lower tool, icon, selection and related controls. Whi
 
 ## Typography
 
-Geist is locally bundled at regular, medium and semibold weights, with Arial and sans-serif fallbacks. Its familiar workhorse character is retained. Georgia gives dictionary terms, definitions and examples a distinct reference-book voice.
+Geist is locally bundled at regular, medium and semibold weights, with Arial and sans-serif fallbacks. Its familiar workhorse character is retained. Georgia gives dictionary terms, definitions and examples a distinct reference-book voice; the news heading and query preview use the same serif voice for an editorial treatment.
 
-The query uses the desktop and mobile tokens; narrow-screen text remains 16px and its placeholder is 14px. Tool titles step from 19px to 17px or 16px. The wordmark steps from 78px to 65px to 61px. Palette rows pair a medium-weight 14px tool name with a 12px example. Tabular numerals stabilize converter, calculator, clock, weather, comparison and orbit readings. Large numerals express an actual result or changing measurement, not general decoration.
+The query uses the desktop and mobile tokens; narrow-screen text remains 16px and its placeholder is 14px. Tool titles use 19–20px on desktop and 16–18px in compact layouts. The wordmark steps from 78px to 65px to 61px. Palette rows pair a medium-weight 14px example name with a 12px query. The single idle tip is 12px with a medium-weight query. Tabular numerals stabilize converter, calculator, clock, weather, comparison, orbit, budget and growth readings. Large numerals express an actual result or changing measurement, not general decoration.
 
 ## Layout
 
-The main column is centred and at most 760px wide. Below 700px, its side clearance is 16px. Notes remains a labelled footer button on every screen size.
+The main column is centred and at most 760px wide. Below 700px, its side clearance is 16px. Notes remains a labelled footer button on every screen size. The empty-state tip sits beneath the query in a reserved, centred row; it disappears while typing, browsing the slash menu or reading Notes.
 
-The command menu lives inside the lower shell. Its scrollable list is capped by 390px, 49svh and the space below it in the visual viewport. Keyboard navigation scrolls the list itself to reveal the active row, without scrolling the page. Keyboard guidance hides on narrow screens. Tool-specific layouts use keypads, paired values, tabs, fields, an illustration beside controls, or a playable board. Colour controls stack below 500px; orbit and game layouts stack below 560px. Forecast days retain a minimum 44px width and scroll horizontally when needed. Four document-format tiles remain in a row.
+The command menu lives inside the lower shell. Its scrollable list is capped by 390px, 49svh and the space below it in the visual viewport. Keyboard navigation scrolls the list itself to reveal the active row, without scrolling the page. Keyboard guidance hides on narrow screens. Tool-specific layouts use keypads, paired values, tabs, fields, an illustration beside controls, or a playable board. Colour controls stack below 500px; orbit and game layouts stack below 560px. Forecast days retain a minimum 44px width and scroll horizontally when needed. Four document-format tiles remain in a row. Image controls stack below the preview at 540px; travel date and budget groups adapt at 520px, with flight endpoints stacking at 360px. Finance and news fields reflow at 560px. Image frames, charts and map viewports stay contained in the same lower panel.
 
 **The Anchored Query Rule.** Tool changes affect the lower shell. The textarea grows only with its content, up to 112px; inference must not reposition its caret.
 
@@ -186,7 +196,9 @@ The pill-like search shell becomes slightly squarer when open and clips its lowe
 
 The search field has an intent icon, growing textarea, clear control, slash control and blue submit arrow. Empty, oversized, composing and open-menu states disable submission. The shell carries focus-within feedback and an explicit 2px blue outline when the query has keyboard focus. Shared controls use the same 2px focus outline with a 3px offset; command rows inset it inside their rounded edge. Widget-specific focus treatments remain local. Brief colour transitions and pressed fills give shared controls visible feedback. The former Classic/Fluid switch and header identity are removed. Notes and the TypeSafe credit share the footer.
 
-The slash menu filters tool names and examples while preserving the underlying query. Arrow keys move the active option, Enter selects it, and Escape restores the prior draft and caret. Pointer selection produces the same result. Selection fills an editable example and opens its tool immediately, including during a routing outage. A persistent manual selector lives in Notes.
+The slash menu filters tool names, distinct example names and queries while preserving the underlying query. Arrow keys move the active option, Enter selects it, and Escape restores the prior draft and caret. Pointer selection produces the same result. Selection fills an editable example and opens its tool immediately, including during a routing outage. A persistent manual selector lives in Notes.
+
+The empty-state tip begins with slash discovery, then rotates through selected examples every six seconds. Clicking the initial tip opens the menu; clicking an example fills the query and selects its tool. Hover or focus pauses rotation, as do document hiding and leaving the viewport. An explicit Pause/Resume control is available when motion is allowed. Reduced motion keeps the initial tip static and removes the automatic reveal. The hint is not a live announcement region.
 
 Routing badges remain visible above the tool: **Jev** with measured timing, **Search syntax · instant**, or **Selected by you**. Pending edits show Reading or Updating while retaining the previous tool. The badge opens Notes. That disclosure contains draft transmission, non-affiliation, source behaviour, diagnostics and the persistent selector. A screen-reader description still associates privacy status with the query. Errors and retry actions remain beside the shell.
 
@@ -198,9 +210,13 @@ Tool families preserve their own working affordances:
 - **Knowledge:** weather has city/day/temperature controls, loading, retry and source disclosure; the large temperature is the daily high. Dictionary tabs use serif reading text. Film tabs combine original illustration, facts and a runtime planner. Planet comparison uses paired values, relative bars and an editable age conversion. Supported examples and external-search paths stay explicit.
 - **Conversion:** paired amount and result with selectors and swap. Unit calculations are local. Currency values use dated daily ECB reference rates with an expandable rate/source explanation and visible failure handling.
 - **Experiments:** the prebuilt orbit model pairs an original SVG scene with mass/radius sliders and computed readings, pause/reset, and model details. Tic-tac-toe has a playable two-person board, turn/result state, undo and reset. Barrel roll and askew affect only a contained miniature, with explicit play/replay/reset.
-- **Search refinements:** removable syntax chips, file-format tiles, source/date fields and exact/excluded terms edit the query. Stocks, places and news use explicit external result links. Their decorative illustrations do not imply retrieved data.
+- **Travel and shopping:** flights use editable endpoints, a swap action, trip type, dates, passengers and cabin. Hotels combine destination, stay dates, nights, guests, rooms, class and amenity toggles. Shopping pairs the product query with a budget range, currency, condition, category and sort preference. Inline errors block unusable searches; expandable search details show how choices become the outgoing Google query. These are search planners, not quotes or availability listings.
+- **Finance:** pressed tabs switch between stock research and an editable compound-growth scenario. Stock controls collect a ticker or asset, research view and time horizon before opening current information externally. The local growth chart compares calculated balance with contributions; its details state the compounding assumptions and excluded costs. It is labelled illustrative, never a market forecast.
+- **Discovery:** video duration choices use a small film-strip treatment beside source and posting-date controls. The preview describes the search, not a retrieved video. Images pair shape, colour and layout controls with credited NASA Earth or Moon references; unrelated queries retain image-search controls without an unrelated default photo. Preview layout stays local, while shape and colour travel to Google Images. Source details and image-load recovery remain available. Maps offer Singapore/Tokyo and city/closer views, with an explicit Load map action before any OpenStreetMap iframe is mounted. Loaded maps retain attribution and a larger-map link. The destination/category search stays independent of the preview area.
+- **News:** a serif masthead and query preview frame topic, coverage type, recency, source and region controls. Current coverage opens externally; no local headlines or results are implied.
+- **Search refinements:** removable syntax chips, file-format tiles, source/date fields and exact/excluded terms edit the query. All outbound actions identify their destination and preserve the visitor’s query and preferences.
 
-The lower panel uses its measured content height and a 280ms transition with `cubic-bezier(.16,1,.3,1)`; this localized layout animation is an accepted tradeoff. Arrival lasts 240ms and tint changes last 300ms. Pending feedback is temporary. Reduced motion removes transitions and geometric animation; orbit calculations and clock readouts remain useful. Orbit movement can be paused, and Easter eggs are bounded to one user-triggered motion.
+The lower panel uses its measured content height and a 280ms transition with `cubic-bezier(.16,1,.3,1)`; this localized layout animation is an accepted tradeoff. Arrival lasts 240ms and tint changes last 300ms. Pending feedback is temporary. Reduced motion removes nonessential transitions and geometric animation, including automatic search-tip rotation; orbit calculations and clock readouts remain useful. Dinosaur motion necessary for play begins only after an explicit Start and retains Pause. Orbit movement can be paused, and Easter eggs are bounded to one user-triggered motion.
 
 ## Do's and Don'ts
 
