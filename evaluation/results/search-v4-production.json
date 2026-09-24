@@ -1,0 +1,138 @@
+{
+  "recordedAt": "2026-09-24T03:46:58.544Z",
+  "url": "https://chatgptfluid.vercel.app",
+  "context": "Eight authored live browser route checks, no mocks or retries. Timing includes the real request; no general accuracy or latency claim. The same shared budget applies.",
+  "cases": [
+    {
+      "mode": "flights",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "serverLatencyMs": 1381,
+      "inputToConfirmedModeMs": 1717,
+      "roundTripMs": 1525,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "mode": "hotels",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "serverLatencyMs": 338,
+      "inputToConfirmedModeMs": 662,
+      "roundTripMs": 479,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "mode": "shopping",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "serverLatencyMs": 363,
+      "inputToConfirmedModeMs": 715,
+      "roundTripMs": 538,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "mode": "video",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "serverLatencyMs": 348,
+      "inputToConfirmedModeMs": 654,
+      "roundTripMs": 480,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "mode": "images",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "serverLatencyMs": 324,
+      "inputToConfirmedModeMs": 654,
+      "roundTripMs": 486,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "mode": "finance",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "serverLatencyMs": 744,
+      "inputToConfirmedModeMs": 1590,
+      "roundTripMs": 1418,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "mode": "news",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "serverLatencyMs": 349,
+      "inputToConfirmedModeMs": 644,
+      "roundTripMs": 473,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "mode": "places",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "serverLatencyMs": 403,
+      "inputToConfirmedModeMs": 679,
+      "roundTripMs": 511,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    }
+  ],
+  "pageErrors": [],
+  "hintVisible": true,
+  "palette": {
+    "count": 43,
+    "unique": 43
+  },
+  "nasaImageLoaded": true,
+  "growthZeroRateVerified": true,
+  "map": {
+    "explicitLoad": true,
+    "status": 200
+  },
+  "mobile": [
+    {
+      "title": "Round-trip flights",
+      "overflow": false
+    },
+    {
+      "title": "City stays",
+      "overflow": false
+    },
+    {
+      "title": "Headphone finder",
+      "overflow": false
+    },
+    {
+      "title": "Nature videos",
+      "overflow": false
+    },
+    {
+      "title": "Earth imagery",
+      "overflow": false
+    },
+    {
+      "title": "Compound growth",
+      "overflow": false
+    },
+    {
+      "title": "Technology news",
+      "overflow": false
+    },
+    {
+      "title": "City parks",
+      "overflow": false
+    }
+  ],
+  "status": "passed",
+  "deployment": "https://chatgptfluid-ntk7tyenn-williswees-projects.vercel.app",
+  "deploymentId": "dpl_ysVk2XvYcXgGCbdvydFXf16KBNVK",
+  "implementationCommit": "d4ed76f",
+  "deployedCommit": "49c8d09"
+}

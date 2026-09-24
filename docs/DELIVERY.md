@@ -28,6 +28,10 @@ Verification:
 
 The shared US$5 allowance, atomic accounting, request controls, secrets, Vercel Hobby tier and repository visibility remain unchanged. Video work is deferred.
 
+Production verified at https://chatgptfluid.vercel.app. Deployment https://chatgptfluid-ntk7tyenn-williswees-projects.vercel.app (`dpl_ysVk2XvYcXgGCbdvydFXf16KBNVK`), implementation commit `d4ed76f`, deployed commit `49c8d09`, READY.
+
+All eight requested public-browser tool families routed correctly through real Jev, with intact drafts, selection and input bounds. Request round trips were 473–1525 ms; measured input-to-confirmed-mode times were 644–1717 ms, including the typing pause. These are eight sequential smoke checks, not a performance guarantee. The live NASA preview loaded, OpenStreetMap returned HTTP200 only after Load map, and zero-rate compound growth produced the correct value. All43 slash titles were unique; all eight panels fit390px; no page errors. Report: `evaluation/results/search-v4-production.json`.
+
 ---
 
 # Historical delivery — Impeccable polish, 24 September 2026
