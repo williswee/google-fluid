@@ -14,7 +14,7 @@ const font = '/System/Library/Fonts/Supplemental/Arial.ttf';
 const playbackRate = 1.3;
 const footageDuration = 27.5;
 const captureDuration = footageDuration * playbackRate;
-const outputStem = 'google-fluid-demo-30s-v2';
+const outputStem = 'google-fluid-demo-30s-v3';
 const endCopy = 'Fluid search that changes shape :)';
 const cues = [
   [0, 4.3, 'Start with a trip.'],
@@ -72,10 +72,6 @@ async function render(manifestPath) {
     await writeFile(textfile, cue[2]);
     filter.push(`drawtext=fontfile='${font}':textfile='${textfile}':fontsize=34:fontcolor=0x202124:x=(w-tw)/2:y=40:enable='between(t,${cue[0]},${cue[1]})':alpha='min(1,(t-${cue[0]})/0.18)'`);
   }
-  // The requested speedup is disclosed during footage, never on the minimal end card.
-  const speedFile = path.join(path.dirname(manifestPath), 'speed.txt');
-  await writeFile(speedFile, '1.3× playback');
-  filter.push(`drawtext=fontfile='${font}':textfile='${speedFile}':fontsize=21:fontcolor=0x71757a:x=w-tw-48:y=47:enable='lt(t,${footageDuration})'`);
   // Freeze the final recorded frame beneath the closing editorial overlay.
   filter.push(`drawbox=x=0:y=0:w=iw:h=ih:color=white:t=fill:enable='gte(t,${footageDuration})'`);
   const endFile = path.join(path.dirname(manifestPath), 'end.txt');
@@ -91,7 +87,7 @@ async function render(manifestPath) {
   await run(['-y', '-i', output, '-vf', 'fps=1/2,scale=480:-1,tile=3x5', '-frames:v', '1', path.join(artifacts, `${outputStem}-contact.png`)]);
   const allCues = [...cues, [footageDuration, 30, endCopy]];
   await writeFile(path.join(artifacts, `${outputStem}.vtt`), 'WEBVTT\n\n' + allCues.map(([a,b,text])=>`${stamp(a)} --> ${stamp(b)}\n${text}`).join('\n\n') + '\n');
-  await writeFile(path.join(artifacts, `${outputStem}.json`), JSON.stringify({...manifest, output, duration:30, width:1920, height:1080, fps:30, playbackRate, captureDuration, trimStart:start, camera, captions:allCues, verified:true}, null, 2)+'\n');
+  await writeFile(path.join(artifacts, `${outputStem}.json`), JSON.stringify({...manifest, output, duration:30, width:1920, height:1080, fps:30, playbackRate, playbackLabel:false, capture:manifest.capture.replace('with an on-screen playback label', 'without a playback label'), captureDuration, trimStart:start, camera, captions:allCues, verified:true}, null, 2)+'\n');
   console.log(`Verified: ${output}`);
 }
 async function record() {
@@ -206,7 +202,7 @@ async function record() {
     await at(captureDuration);
     await wait(250);
     if(errors.length) throw new Error(errors.join('; '));
-    const manifest={version:2,recordedAt:new Date().toISOString(),baseUrl:base,decisions,paidRequests:requests.size,jumps,errors,capture:'Actual live browser captured continuously at 1×, then played at the requested 1.3× speed with an on-screen playback label. All six routes use real Jev responses. Editorial camera crops, visible pointer, captions and end card. No mocked/replayed responses or modified application state.',rawVideo:await video.path()};
+    const manifest={version:2,recordedAt:new Date().toISOString(),baseUrl:base,decisions,paidRequests:requests.size,jumps,errors,capture:'Actual live browser captured continuously at 1×, then played at the requested 1.3× speed without a playback label. All six routes use real Jev responses. Editorial camera crops, visible pointer, captions and end card. No mocked/replayed responses or modified application state.',rawVideo:await video.path()};
     await writeFile(path.join(take,'take.json'),JSON.stringify(manifest,null,2));
   } catch (error) {
     errors.push(error.message);

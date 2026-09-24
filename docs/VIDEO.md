@@ -1,6 +1,6 @@
 # Google Fluid — revised 30-second demo
 
-The current film is `artifacts/google-fluid-demo-30s-v2.mp4`: exactly 30 seconds, 1920 × 1080, 30 fps, H.264, landscape, captions and no audio. It records the public site at https://googlefluid.vercel.app. All six searches receive real Jev decisions. The 35.75-second capture plays at the user-requested **1.3× speed**, followed by a 2.5-second end card. A small playback label stays visible during the footage.
+The current film is `artifacts/google-fluid-demo-30s-v3.mp4`: exactly 30 seconds, 1920 × 1080, 30 fps, H.264, landscape, captions and no audio. It records the public site at https://googlefluid.vercel.app. All six searches receive real Jev decisions. The 35.75-second capture plays at the user-requested **1.3× speed**, followed by a 2.5-second end card. The playback label was removed at the user’s request; speed, timing, zooms, captions and footage are unchanged from v2.
 
 | Finished time | Scene |
 | --- | --- |
@@ -23,7 +23,7 @@ node scripts/record-search-demo.mjs --render /absolute/path/to/v2/take.json
 
 The recorder requires Playwright Chromium, `ffmpeg-static`, Arial on macOS, and live inference at the public origin. Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` to use an installed Chromium. Each real request uses the same shared budget guard as the site. The recorder checks all six routes, the loaded Earth image, tomorrow's forecast, the dictionary entry and real gameplay. A failed route or scene stops the take; there are no automatic retries. Re-editing makes no network or inference requests.
 
-The encoder trims the removable black alignment marker, applies the uniform speedup, adds the camera and captions, and verifies a complete decode with exactly 30 seconds of 1080p H.264 video. Companion VTT captions, poster, contact sheet and JSON metadata use the same `google-fluid-demo-30s-v2` stem. Raw footage and capture logs remain under `artifacts/recordings/`. All media stays local and excluded from Git.
+The encoder trims the removable black alignment marker, applies the uniform speedup, adds the camera and captions, and verifies a complete decode with exactly 30 seconds of 1080p H.264 video. Companion VTT captions, poster, contact sheet and JSON metadata use the same `google-fluid-demo-30s-v3` stem. Raw footage and capture logs remain under `artifacts/recordings/`. All media stays local and excluded from Git.
 
 See the current entry in [DELIVERY.md](DELIVERY.md) for the take, measured decision times and checks. Earlier edits below are retained as historical records; they are not the current film.
 

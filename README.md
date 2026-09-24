@@ -96,7 +96,7 @@ The header has no brand link or Classic/Fluid switch. **Notes** lives beside the
 
 ## Demo video
 
-The current 30-second, captioned 1080p film is `artifacts/google-fluid-demo-30s-v2.mp4`. It follows flights → hotels → Earth images → Singapore sunrise → serendipity → the dinosaur game, with six real Jev decisions, focused zooms and 1.3× playback. It ends with “Fluid search that changes shape :)”. See [recording and editing instructions](docs/VIDEO.md). Raw footage and final media stay local and are excluded from Git.
+The current 30-second, captioned 1080p film is `artifacts/google-fluid-demo-30s-v3.mp4`. It follows flights → hotels → Earth images → Singapore sunrise → serendipity → the dinosaur game, with six real Jev decisions, focused zooms and 1.3× playback. It ends with “Fluid search that changes shape :)”. See [recording and editing instructions](docs/VIDEO.md). Raw footage and final media stay local and are excluded from Git.
 
 ## Previous prototype
 
