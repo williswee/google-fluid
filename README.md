@@ -81,7 +81,7 @@ npm run evaluate -- --base-url http://127.0.0.1:3000 --split held-out
 node scripts/measure-interaction.mjs https://chatgptfluid.vercel.app evaluation/results/new-search-browser-check.json
 ```
 
-The `search-v2` development and held-out sets each contain 42 cases, two per route. Both are evaluated through the protected endpoint. Reports distinguish local endpoint latency from public browser measurements; these small authored English sets are acceptance checks, not broad accuracy claims. Historical search-v1 reports remain unchanged. See [current delivery](docs/DELIVERY.md) for actual results.
+The `search-v2` development and held-out sets each contain 42 cases, two per route. Both completed 42/42 correct through the protected endpoint. The public browser check passed all 21 routes (17 real Jev and four local syntax), preserving input and selection; its live-request median was 445 ms, excluding debounce and rendering. Reports distinguish local endpoint latency from public browser measurements; these small authored English sets are acceptance checks, not broad accuracy claims. Historical search-v1 reports remain unchanged. See [current delivery](docs/DELIVERY.md) for actual results.
 
 ## Previous prototype
 

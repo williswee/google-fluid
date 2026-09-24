@@ -1,0 +1,373 @@
+{
+  "recordedAt": "2026-09-24T02:46:25.606Z",
+  "baseUrl": "https://chatgptfluid.vercel.app",
+  "dataset": "search-v2-browser",
+  "context": "Twenty-one authored production browser smoke cases: seventeen real Jev requests and four explicit local-syntax transitions. No fixtures, retries, or fake results. Round trip excludes typing pause and subsequent rendering; acknowledgement is input-to-next-frame pending feedback.",
+  "cases": [
+    {
+      "id": "calculate",
+      "expected": "calculate",
+      "mode": "calculate",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 623,
+        "inferenceMs": 478,
+        "settleMs": 80
+      },
+      "serverLatencyMs": 1183,
+      "ackMs": 3,
+      "dispatchAfterInputMs": 153,
+      "roundTripMs": 1586,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "timer",
+      "expected": "timer",
+      "mode": "timer",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 133,
+        "inferenceMs": 437,
+        "settleMs": 62
+      },
+      "serverLatencyMs": 638,
+      "ackMs": 10,
+      "dispatchAfterInputMs": 153,
+      "roundTripMs": 1308,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "stopwatch",
+      "expected": "stopwatch",
+      "mode": "stopwatch",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 65,
+        "inferenceMs": 219,
+        "settleMs": 62
+      },
+      "serverLatencyMs": 346,
+      "ackMs": 4,
+      "dispatchAfterInputMs": 152,
+      "roundTripMs": 458,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "metronome",
+      "expected": "metronome",
+      "mode": "metronome",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 212,
+        "inferenceMs": 483,
+        "settleMs": 52
+      },
+      "serverLatencyMs": 752,
+      "ackMs": 15,
+      "dispatchAfterInputMs": 152,
+      "roundTripMs": 964,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "color",
+      "expected": "color",
+      "mode": "color",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 51,
+        "inferenceMs": 202,
+        "settleMs": 64
+      },
+      "serverLatencyMs": 318,
+      "ackMs": 1,
+      "dispatchAfterInputMs": 152,
+      "roundTripMs": 422,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "compare",
+      "expected": "compare",
+      "mode": "compare",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 50,
+        "inferenceMs": 208,
+        "settleMs": 49
+      },
+      "serverLatencyMs": 307,
+      "ackMs": 2,
+      "dispatchAfterInputMs": 153,
+      "roundTripMs": 423,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "science",
+      "expected": "science",
+      "mode": "science",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 50,
+        "inferenceMs": 221,
+        "settleMs": 49
+      },
+      "serverLatencyMs": 321,
+      "ackMs": 13,
+      "dispatchAfterInputMs": 156,
+      "roundTripMs": 425,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "game",
+      "expected": "game",
+      "mode": "game",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 51,
+        "inferenceMs": 194,
+        "settleMs": 49
+      },
+      "serverLatencyMs": 294,
+      "ackMs": 8,
+      "dispatchAfterInputMs": 153,
+      "roundTripMs": 433,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "play",
+      "expected": "play",
+      "mode": "play",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 51,
+        "inferenceMs": 221,
+        "settleMs": 63
+      },
+      "serverLatencyMs": 336,
+      "ackMs": 15,
+      "dispatchAfterInputMs": 152,
+      "roundTripMs": 445,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "weather",
+      "expected": "weather",
+      "mode": "weather",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 47,
+        "inferenceMs": 214,
+        "settleMs": 50
+      },
+      "serverLatencyMs": 312,
+      "ackMs": 13,
+      "dispatchAfterInputMs": 153,
+      "roundTripMs": 415,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "convert",
+      "expected": "convert",
+      "mode": "convert",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 49,
+        "inferenceMs": 235,
+        "settleMs": 50
+      },
+      "serverLatencyMs": 334,
+      "ackMs": 14,
+      "dispatchAfterInputMs": 153,
+      "roundTripMs": 438,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "places",
+      "expected": "places",
+      "mode": "places",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 49,
+        "inferenceMs": 176,
+        "settleMs": 49
+      },
+      "serverLatencyMs": 275,
+      "ackMs": 5,
+      "dispatchAfterInputMs": 154,
+      "roundTripMs": 381,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "define",
+      "expected": "define",
+      "mode": "define",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 47,
+        "inferenceMs": 200,
+        "settleMs": 48
+      },
+      "serverLatencyMs": 295,
+      "ackMs": 9,
+      "dispatchAfterInputMs": 153,
+      "roundTripMs": 470,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "finance",
+      "expected": "finance",
+      "mode": "finance",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 53,
+        "inferenceMs": 226,
+        "settleMs": 49
+      },
+      "serverLatencyMs": 328,
+      "ackMs": 8,
+      "dispatchAfterInputMs": 154,
+      "roundTripMs": 457,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "movies",
+      "expected": "movies",
+      "mode": "movies",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 48,
+        "inferenceMs": 222,
+        "settleMs": 49
+      },
+      "serverLatencyMs": 319,
+      "ackMs": 14,
+      "dispatchAfterInputMs": 152,
+      "roundTripMs": 426,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "news",
+      "expected": "news",
+      "mode": "news",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 47,
+        "inferenceMs": 178,
+        "settleMs": 47
+      },
+      "serverLatencyMs": 273,
+      "ackMs": 4,
+      "dispatchAfterInputMs": 152,
+      "roundTripMs": 377,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "documents",
+      "expected": "documents",
+      "mode": "documents",
+      "source": "local-syntax",
+      "localModePaintMs": 7,
+      "inferenceRequests": 0,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "site",
+      "expected": "site",
+      "mode": "site",
+      "source": "local-syntax",
+      "localModePaintMs": 11,
+      "inferenceRequests": 0,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "date",
+      "expected": "date",
+      "mode": "date",
+      "source": "local-syntax",
+      "localModePaintMs": 7,
+      "inferenceRequests": 0,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "precise",
+      "expected": "precise",
+      "mode": "precise",
+      "source": "local-syntax",
+      "localModePaintMs": 15,
+      "inferenceRequests": 0,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    },
+    {
+      "id": "general",
+      "expected": "general",
+      "mode": "general",
+      "source": "live",
+      "model": "jev-1.13.0",
+      "timings": {
+        "reserveMs": 47,
+        "inferenceMs": 198,
+        "settleMs": 48
+      },
+      "serverLatencyMs": 294,
+      "ackMs": 13,
+      "dispatchAfterInputMs": 153,
+      "roundTripMs": 530,
+      "inferenceRequests": 1,
+      "inputBoundsPreserved": true,
+      "selectionPreserved": true
+    }
+  ],
+  "pageErrors": [],
+  "mobileFits": true
+}

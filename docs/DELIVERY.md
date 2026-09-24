@@ -20,7 +20,13 @@ Open-Meteo supplies actual weather through a fixed-city endpoint. Frankfurter su
 
 Same Vercel Hobby project, private repo, Seoul region, encrypted secrets and US$5 shared ledger. No allowance reset, new paid provider or upgrade. No new video work.
 
-Production smoke measurements are added after deployment below.
+## Public deployment verified
+
+Production: https://chatgptfluid.vercel.app. Deployment https://chatgptfluid-67wsgbq1h-williswees-projects.vercel.app (`dpl_HipvTwxFNHdDKdvBXwiKzgQxvhUD`), implementation commit `409be46`.
+
+All 21 public-browser routes passed with intact drafts, caret/selection and input bounds: 17 real Jev decisions and four local-syntax transitions. No page errors or mobile overflow. Live request round trips were 377–1586 ms, median 438 ms; these exclude the 152–156 ms typing pause and panel reveal. Syntax transitions painted in 7–15 ms and made no inference calls. This is a small sequential smoke check, not a worldwide latency guarantee. Full record: `evaluation/results/search-v2-production-browser.json`.
+
+Hosted weather returned seven actual Tokyo forecast days; hosted currency returned the dated ECB USD/EUR reference rate. No fixtures were used for these production checks. GitHub visibility verified PRIVATE. Existing budget enforcement and credentials are unchanged.
 
 ---
 
