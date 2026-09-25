@@ -6,9 +6,7 @@ Try it at [googlefluid.vercel.app](https://googlefluid.vercel.app). The previous
 
 ## Demo
 
-<video src="google-fluid-demo-30s-v3.mp4" controls width="100%" playsinline></video>
-
-[Watch the 30-second demo](google-fluid-demo-30s-v3.mp4)
+https://github.com/user-attachments/assets/a8cfea55-44bc-4eb4-bf78-6b82fa6b9968
 
 Thirty seconds, 1080p, captions, no audio. Six live searches on the public site: flights, hotels, Earth images, Singapore sunrise, serendipity, then the dinosaur game. It ends with “Fluid search that changes shape :)”.
 
