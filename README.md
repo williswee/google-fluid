@@ -8,8 +8,6 @@ Try it at [googlefluid.vercel.app](https://googlefluid.vercel.app). The previous
 
 https://github.com/user-attachments/assets/a8cfea55-44bc-4eb4-bf78-6b82fa6b9968
 
-Thirty seconds, 1080p, captions, no audio. Six live searches on the public site: flights, hotels, Earth images, Singapore sunrise, serendipity, then the dinosaur game. It ends with “Fluid search that changes shape :)”.
-
 ## What to try
 
 Type `/` in the search bar (or tap its `/` button) to browse all 27 interfaces and 43 prepared queries. Filter the list, navigate with arrows, and press Enter. Escape restores the draft and cursor. Every example has a distinct title, including Calculator / Tip & bill split and Unit converter / Currency converter. Choosing a tool is immediate and explicitly labelled **Selected by you**; editing the query returns to Jev.
