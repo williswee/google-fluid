@@ -4,6 +4,14 @@ A white Google-style search bar that takes the shape of the query. Ordinary lang
 
 Try it at [googlefluid.vercel.app](https://googlefluid.vercel.app). The previous address redirects here; the repository remains private. This is an independent experiment, not affiliated with Google or TypeSafe.
 
+## Demo
+
+<video src="google-fluid-demo-30s-v3.mp4" controls width="100%" playsinline></video>
+
+[Watch the 30-second demo](google-fluid-demo-30s-v3.mp4)
+
+Thirty seconds, 1080p, captions, no audio. Six live searches on the public site: flights, hotels, Earth images, Singapore sunrise, serendipity, then the dinosaur game. It ends with “Fluid search that changes shape :)”.
+
 ## What to try
 
 Type `/` in the search bar (or tap its `/` button) to browse all 27 interfaces and 43 prepared queries. Filter the list, navigate with arrows, and press Enter. Escape restores the draft and cursor. Every example has a distinct title, including Calculator / Tip & bill split and Unit converter / Currency converter. Choosing a tool is immediate and explicitly labelled **Selected by you**; editing the query returns to Jev.
